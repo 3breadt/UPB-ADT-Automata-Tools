@@ -16,3 +16,9 @@ Debug/
 Debug-OSX/
 Release/
 Release-OSX/
+
+#Doxygen
+Docs/
+
+#Finder files
+.DS_Store

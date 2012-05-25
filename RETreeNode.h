@@ -10,6 +10,15 @@
 
 using namespace std;
 
+#include <string>
+
+/**
+ * @brief Represents nodes in the regular expression tree.
+ *
+ * A node can either be an operator or a literal. Operator nodes
+ * link to one or two nodes which act as operands.
+ * @author Daniel Dreibrodt, Konstantin Steinmiller
+ */
 class RETreeNode {
 
 public:

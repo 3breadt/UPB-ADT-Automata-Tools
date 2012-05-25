@@ -1,12 +1,11 @@
 /*
- * RETreeNode.cpp
- *
- *  Created on: 25.05.2012
- *      Author: Daniel Dreibrodt, Konstantin Steinmiller
+ * @file RETreeNode.cpp
+ * @author Daniel Dreibrodt, Konstantin Steinmiller
  */
-
-#include "RETreeNode.h"
 #include <stddef.h>
+#include <string>
+#include "RETreeNode.h"
+#include "RegularExpression.h"
 
 using namespace std;
 
@@ -49,7 +48,7 @@ void RETreeNode::setContent(string c) {
 /**
  * Checks whether the given node represents an operator.
  * @author Daniel Dreibrodt, Konstantin Steinmiller
- * @return Returns true only if a child node is present and the content of the node is a valid opertor.
+ * @return Returns true only if a child node is present and the content of the node is a valid operator.
  */
 bool RETreeNode::isOperator() {
 	return (p_left != NULL && RegularExpression::isOperator(content));

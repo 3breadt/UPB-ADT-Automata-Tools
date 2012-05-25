@@ -1,16 +1,17 @@
 /*
- * REReader.cpp
- *
- *  Created on: 25.05.2012
- *      Author: daniel
+ * @file REReader.cpp
+ * @author Daniel Dreibrodt, Konstantin Steinmiller
  */
 
 #include "REReader.h"
-#include <iostream.h>
-#include <fstream.h>
+#include <string>
+#include <iostream>
+#include <fstream>
 
 /**
  * Reads a file and parses the regular expression in it.
+ * The file must contain only a single line, which in turn contains the regular expression.
+ * @see RegularExpression
  * @author Daniel Dreibrodt, Konstantin Steinmiller
  * @return The regular expression defined in the given file.
  */
