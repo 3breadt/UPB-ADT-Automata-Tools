@@ -10,11 +10,18 @@
  **/
 
 #include <iostream>
+#include <string>
+#include "RegularExpression.hpp"
+#include "REReader.hpp"
+#include "REWriter.hpp"
 
 using namespace std;
 
-int main() {
-	cout << "Test\n";
+int main(int argc, const char* argv[] ) {
+	string filename = argv[0];
+	RegularExpression *re = REReader::read(filename);
+	string output = REWriter::writeToString(re);
+	cout << output << "\n";
 }
 
 

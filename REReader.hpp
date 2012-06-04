@@ -7,7 +7,7 @@
 
 using namespace std;
 
-#include "RegularExpression.h"
+#include "RegularExpression.hpp"
 
 #ifndef REREADER_H_
 #define REREADER_H_
@@ -25,6 +25,12 @@ class REReader {
 public:
 	static RegularExpression *read(string filename);
 	static RegularExpression *parse(char string[], int len);
+
+private:
+	static RETreeNode *parseNode(char string[], int *pos, int len);
+	static RETreeNode *parseNode(RETreeNode *left, char string[], int *pos, int len);
+	static RETreeNode *parseLiteral(char str[], int *pos, int len);
+
 };
 
 #endif /* REREADER_H_ */

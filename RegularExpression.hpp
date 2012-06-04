@@ -10,7 +10,7 @@
 
 using namespace std;
 
-#include "RETreeNode.h"
+#include "RETreeNode.hpp"
 
 /**
  * @brief This class represents regular expressions.
@@ -40,6 +40,8 @@ public:
 	RegularExpression();
 	virtual ~RegularExpression();
 	void setTreeRoot(RETreeNode *p_tR);
+    RETreeNode *getTreeRoot();
+
 	/** String representation of the boolean or operator **/
 	static const string re_orOp;
 	/** String representation of the concatenation operator **/
@@ -50,7 +52,6 @@ public:
 	static const string re_lParen;
 	/** String representation of the closing parenthesis **/
 	static const string re_rParen;
-
 
 	/**
 	 * Checks whether a given string is a valid operator in the

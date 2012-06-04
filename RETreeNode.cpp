@@ -4,8 +4,8 @@
  */
 #include <stddef.h>
 #include <string>
-#include "RETreeNode.h"
-#include "RegularExpression.h"
+#include "RETreeNode.hpp"
+#include "RegularExpression.hpp"
 
 using namespace std;
 
