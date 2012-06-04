@@ -16,6 +16,10 @@ using namespace std;
  */
 RETreeNode::RETreeNode(string c) {
 	content = c;
+	if(content.compare("<epsilon>")==0) {
+		//empty literal
+		content = "";
+	}
 	p_left = NULL;
 	p_right = NULL;
 }
@@ -98,4 +102,12 @@ void RETreeNode::setRight(RETreeNode *p_r) {
 		throw "Node ("+content+") does not represent an operator. Cannot add right child: "+p_r->getContent();
 }
 
-
+/**
+ * Determines whether this tree node represents an empty literal,
+ * which is usually represented by the epsilon symbol.
+ * @return Whether the content of this tree node is empty.
+ * @author Daniel Dreibrodt
+ */
+bool RETreeNode::isEmpty() {
+	return content.length()==0;
+}

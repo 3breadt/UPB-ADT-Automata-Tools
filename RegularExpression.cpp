@@ -12,12 +12,12 @@ const string RegularExpression::re_lParen = "(";
 const string RegularExpression::re_rParen = ")";
 
 RegularExpression::RegularExpression() {
-	// TODO Auto-generated constructor stub
+	p_treeRoot = NULL;
 
 }
 
 RegularExpression::~RegularExpression() {
-	// TODO Auto-generated destructor stub
+
 }
 
 void RegularExpression::setTreeRoot(RETreeNode *p_tR) {

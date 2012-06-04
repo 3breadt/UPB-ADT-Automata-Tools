@@ -13,9 +13,9 @@
 using namespace std;
 
 /**
- * Writes regular expressions to strings and files.
+ * @brief Writes regular expressions to strings and files.
  * @author Daniel Dreibrodt
- */
+ **/
 class REWriter {
 public:
 	static string writeToString(RegularExpression *re);

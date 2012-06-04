@@ -47,7 +47,11 @@ string REWriter::writeToString(RETreeNode *rn) {
 		}
 	}
 
-	s += rn->getContent();
+	if(rn->isEmpty()) {
+		s += "<epsilon>";
+	} else {
+		s += rn->getContent();
+	}
 
 	if(rn->isOperator()) {
 		if(rn->getRight() != NULL) {

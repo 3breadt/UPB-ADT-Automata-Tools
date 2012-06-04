@@ -31,6 +31,7 @@ public:
 	void setRight(RETreeNode *p_r);
 	string getContent();
 	void setContent(string c);
+	bool isEmpty();
 
 private:
 	//Contains the operand or the value of the literal represented by this node.
