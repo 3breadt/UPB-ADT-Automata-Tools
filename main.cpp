@@ -19,7 +19,7 @@ using namespace std;
 
 int main(int argc, const char* argv[] ) {
 	try {
-		RegularExpression *re = REReader::read("C:\\bsp.txt");
+		RegularExpression *re = REReader::read(argv[1]);
 		string output = REWriter::writeToString(re);
 		cout << output << "\n";
 	} catch(int i) {
