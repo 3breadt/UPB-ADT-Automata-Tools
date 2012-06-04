@@ -12,9 +12,14 @@
 
 using namespace std;
 
+/**
+ * Writes regular expressions to strings and files.
+ * @author Daniel Dreibrodt
+ */
 class REWriter {
 public:
 	static string writeToString(RegularExpression *re);
+	static void writeToFile(RegularExpression *re, const char* filename);
 private:
 	static string writeToString(RETreeNode *rn);
 };

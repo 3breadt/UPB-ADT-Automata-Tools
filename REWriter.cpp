@@ -8,15 +8,28 @@
 #include "REWriter.hpp"
 #include "RegularExpression.hpp"
 #include "RETreeNode.hpp"
+#include <fstream>
 
 /**
  * Creates a string representation of the given regular expression.
  * @param re The regular expression.
  * @return The string representation of the regular expression.
+ * @author Daniel Dreibrodt
  */
 string REWriter::writeToString(RegularExpression *re) {
 	RETreeNode *root = re->getTreeRoot();
 	return writeToString(root);
+}
+
+/**
+ * Writes a string representation of the given regular expression into a file.
+ * @param re The regular expression.
+ * @author Daniel Dreibrodt
+ */
+void REWriter::writeToFile(RegularExpression *re, const char *filename) {
+	ofstream file(filename, std::ios_base::binary);
+	file << writeToString(re);
+	file.close();
 }
 
 /**
