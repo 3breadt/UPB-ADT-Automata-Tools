@@ -5,6 +5,7 @@
 
 #include "REReader.hpp"
 #include "RETreeNode.hpp"
+#include <cstring>
 #include <string>
 #include <iostream>
 #include <fstream>
@@ -17,18 +18,9 @@
  * @return The regular expression defined in the given file.
  */
 RegularExpression *REReader::read(string filename) {
-	ifstream file;
-	file.open(filename.c_str(), ios::in);
-	char buffer[1024];
-	if(file.good()) {
-		file.read(buffer, 1024);
-		int pos = file.tellg();
-		file.close();
-		return REReader::parse(buffer, pos);
-	} else {
-		file.close();
-		throw "File could not be opened!";
-	}
+	ifstream file (filename.c_str());
+	string str((istreambuf_iterator<char>(file)), istreambuf_iterator<char>());
+	return parse(str.c_str(), str.length());
 }
 
 /**
@@ -36,7 +28,7 @@ RegularExpression *REReader::read(string filename) {
  * @author Daniel Dreibrodt, Konstantin Steinmiller
  * @return The regular expression defined in the given string.
  */
-RegularExpression *REReader::parse(char string[], int len) {
+RegularExpression *REReader::parse(const char *string, int len) {
 	RegularExpression *re = new RegularExpression();
 	int pos = 0;
 	re->setTreeRoot(parseNode(string, &pos, len));
@@ -51,17 +43,18 @@ RegularExpression *REReader::parse(char string[], int len) {
  * @param pos The position of the parser in the regular expression
  * @param len The length of the whole regular expression string
  */
-RETreeNode *REReader::parseNode(RETreeNode *left, char string[], int *pos, int len) {
+RETreeNode *REReader::parseNode(RETreeNode *left, const char string[], int *pos, int len) {
 	if(*pos>=len) {
 		//end of string reached
 		return left;
 	}
     switch(string[*pos]) {
     	case '(' : {
-    		throw -1;
+    		throw "Read '(' but that is not allowed there!";
     		break;
     	}
     	case ')' : {
+    		(*pos)++;
     		return left;
     		break;
     	}
@@ -102,7 +95,7 @@ RETreeNode *REReader::parseNode(RETreeNode *left, char string[], int *pos, int l
     }
 }
 
-RETreeNode *REReader::parseNode(char string[], int *pos, int len) {
+RETreeNode *REReader::parseNode(const char string[], int *pos, int len) {
 	if(*pos>=len) {
 		//end of string reached
 		return NULL;
@@ -115,19 +108,19 @@ RETreeNode *REReader::parseNode(char string[], int *pos, int len) {
     		break;
     	}
     	case ')' : {
-    		throw -1;
+    		throw "Read ')' but that is not allowed there!";
     		break;
     	}
     	case '|' : {
-    		throw -1;
+    		throw "Read '|' but that is not allowed there!";
     		break;
     	}
     	case '.' : {
-    		throw -1;
+    		throw "Read '.' but that is not allowed there!";
     		break;
     	}
     	case '*' : {
-    		throw -1;
+    		throw "Read '*' but that is not allowed there!";
     		break;
     	}
     	case ' ' : {
@@ -143,7 +136,7 @@ RETreeNode *REReader::parseNode(char string[], int *pos, int len) {
     }
 }
 
-RETreeNode *REReader::parseLiteral(char str[], int *pos, int len) {
+RETreeNode *REReader::parseLiteral(const char str[], int *pos, int len) {
 	string s = "";
 	while(1) {
 		s += str[*pos];

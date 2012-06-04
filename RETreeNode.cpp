@@ -16,6 +16,8 @@ using namespace std;
  */
 RETreeNode::RETreeNode(string c) {
 	content = c;
+	p_left = NULL;
+	p_right = NULL;
 }
 
 RETreeNode::~RETreeNode() {
@@ -51,7 +53,7 @@ void RETreeNode::setContent(string c) {
  * @return Returns true only if a child node is present and the content of the node is a valid operator.
  */
 bool RETreeNode::isOperator() {
-	return (p_left != NULL && RegularExpression::isOperator(content));
+	return (p_left != NULL || RegularExpression::isOperator(content));
 }
 
 /**
@@ -81,7 +83,7 @@ void RETreeNode::setLeft(RETreeNode *p_l) {
 	if(isOperator())
 		p_left = p_l;
 	else
-		throw "Node does not represent an operator. Cannot add children.";
+		throw "Node ("+content+") does not represent an operator. Cannot add left child: "+p_l->getContent();
 }
 
 /**
@@ -93,7 +95,7 @@ void RETreeNode::setRight(RETreeNode *p_r) {
 	if(isOperator())
 		p_right = p_r;
 	else
-		throw "Node does not represent an operator. Cannot add children.";
+		throw "Node ("+content+") does not represent an operator. Cannot add right child: "+p_r->getContent();
 }
 
 

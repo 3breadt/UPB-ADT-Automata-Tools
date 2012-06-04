@@ -8,7 +8,8 @@
 #ifndef REWRITER_HPP_
 #define REWRITER_HPP_
 
-#include "RegularExpression.hpp";
+#include "RegularExpression.hpp"
+
 using namespace std;
 
 class REWriter {

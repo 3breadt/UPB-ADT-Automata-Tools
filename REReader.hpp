@@ -24,12 +24,12 @@ class REReader {
 
 public:
 	static RegularExpression *read(string filename);
-	static RegularExpression *parse(char string[], int len);
+	static RegularExpression *parse(const char string[], int len);
 
 private:
-	static RETreeNode *parseNode(char string[], int *pos, int len);
-	static RETreeNode *parseNode(RETreeNode *left, char string[], int *pos, int len);
-	static RETreeNode *parseLiteral(char str[], int *pos, int len);
+	static RETreeNode *parseNode(const char string[], int *pos, int len);
+	static RETreeNode *parseNode(RETreeNode *left, const char string[], int *pos, int len);
+	static RETreeNode *parseLiteral(const char str[], int *pos, int len);
 
 };
 

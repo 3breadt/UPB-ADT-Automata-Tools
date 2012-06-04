@@ -18,10 +18,18 @@
 using namespace std;
 
 int main(int argc, const char* argv[] ) {
-	string filename = argv[0];
-	RegularExpression *re = REReader::read(filename);
-	string output = REWriter::writeToString(re);
-	cout << output << "\n";
+	try {
+		RegularExpression *re = REReader::read("C:\\bsp.txt");
+		string output = REWriter::writeToString(re);
+		cout << output << "\n";
+	} catch(int i) {
+		cout << "Error: " << i << "\n";
+	} catch(char const* c) {
+		cout << "Error: " << c << "\n";
+	} catch(string & s) {
+		cout << "Error: " << s << "\n";
+	}
+
 }
 
 

@@ -59,11 +59,11 @@ public:
 	 * @author Daniel Dreibrodt, Konstantin Steinmiller
 	 */
 	static inline bool isOperator(string s) {
-		return s.compare(RegularExpression::re_andOp)
-			|| s.compare(RegularExpression::re_orOp)
-			|| s.compare(RegularExpression::re_starOp)
-			|| s.compare(RegularExpression::re_lParen)
-			|| s.compare(RegularExpression::re_rParen);
+		return s.compare(RegularExpression::re_andOp)==0
+			|| s.compare(RegularExpression::re_orOp)==0
+			|| s.compare(RegularExpression::re_starOp)==0
+			|| s.compare(RegularExpression::re_lParen)==0
+			|| s.compare(RegularExpression::re_rParen)==0;
 	}
 
 private:
