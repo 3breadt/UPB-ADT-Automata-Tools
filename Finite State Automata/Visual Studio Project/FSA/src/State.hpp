@@ -16,12 +16,12 @@ class State{
 
 	friend class Transition;
 	friend class FinalStateAutomata;
+	static int stateCount;
 
 private:
 	string name;
 	bool startState;
 	bool finalState;
-	static int stateCount;
 
 public:
 	State();

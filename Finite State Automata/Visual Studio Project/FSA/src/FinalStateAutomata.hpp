@@ -35,8 +35,8 @@ public:
 	void addTransition(string input);
 	void removeTransition(string beginingState,string edge, string finalState);
     void outputTransitionList();
-    void read();						//TODO
-	void write();						//TODO
+    void read(string p_szFileName);
+	void write(string p_szFileName);
 	void testEdge(string testEdge);
 
 

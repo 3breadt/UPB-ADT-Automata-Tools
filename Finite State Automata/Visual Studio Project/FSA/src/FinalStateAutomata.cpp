@@ -8,6 +8,8 @@
 #include "FinalStateAutomata.hpp"
 #include<string>
 #include<cstring>
+#include<iostream>
+#include<fstream>
 
 using namespace std;
 
@@ -321,14 +323,86 @@ void FinalStateAutomata::outputTransitionList( )
 	}
 }
 
-void FinalStateAutomata::read()//TODO
+void FinalStateAutomata::read(string p_szFileName)
 {
-
+	ifstream ifsFile;
+	ifsFile.open(p_szFileName.c_str(), ios.in);
+	string szLine;
+	bool bStates;
+	bool bTransitions;
+  
+	while(getline(ifsFile, szLine))
+	{
+	if(strcmp(szLine.c_str(), "<States>")) {
+		bStates = true;
+    }
+    if(strcmp(szLine.c_str(), "</States>")) {
+		bStates = false;
+    }
+    if(strcmp(szLine.c_str(), "<Transitions>")) {
+		bTransitions = true;
+    }
+  }
 }
 
-void FinalStateAutomata::write()//TODO
+void FinalStateAutomata::write(string p_szFileName)
 {
+	ofstream ofsFile;
+	State *stateStart = NULL;
+	State *stateFinal = NULL;
 
+	ofsFile.open(p_szFileName.c_str());
+
+	if(!ofsFile.is_open()) {
+		cout << "ERROR: Couldn't access file for writing.";
+		return;
+	}
+	  
+	ofsFile << "<States>\n";
+
+	for(int idx=0; idx<State::stateCount; idx++)
+	{
+		if(stateList[idx] == NULL) {
+			continue;
+		}
+		ofsFile << stateList[idx]->name << endl;
+
+		if(stateList[idx]->startState) {
+			stateStart = stateList[idx];
+		}
+
+		if(stateList[idx]->finalState) {
+			stateFinal = stateList[idx];
+		}
+	}
+	  
+	ofsFile << "</States>\n";
+
+	if(stateStart != NULL) {
+		ofsFile << "<StartState>\n";
+		ofsFile << stateStart->name << endl;
+		ofsFile << "</StartState>\n";
+	}
+	
+	if(stateFinal != NULL) {
+		ofsFile << "<FinalState\n";
+		ofsFile << stateFinal->name << endl;
+		ofsFile << "</FinalState>\n";
+	}
+
+	ofsFile << "<Transitions>\n";
+	  
+	for(int idx=0; idx<Transition.transitionCount; idx++)
+	{
+		if(transitionList[idx] == NULL) {
+			continue;
+		}
+		ofsFile << transitionList[idx]->output() << endl;
+	}
+
+	ofsFile << "</Transitions>\n";
+	  
+	ofsFile.close();
 }
 
 /* Testing an edge

@@ -16,12 +16,12 @@ using namespace std;
 class Transition{
 
 	friend class FinalStateAutomata;
+	static int transitionCount;
 
 private:
 	State begining;
 	State finish;
 	string edge;
-	static int transitionCount;
 
 public:
 	Transition(State begining, State finish, string edge);

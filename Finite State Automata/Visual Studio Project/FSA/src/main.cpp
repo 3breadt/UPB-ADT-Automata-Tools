@@ -38,7 +38,6 @@ int main()
 	test.addTransition("three","edge","four");
 	test.addTransition("two edge1 one");
 
-
 	test.outputTransitionList();
 	test.testEdge("edge");
 	cout<<"StateList nach Transitions einfuegung."<< endl;
@@ -48,6 +47,9 @@ int main()
 	test.getStartState();
 
 	test.removeState("two");
+
+	test.write("blabla.txt");
+
 	test.outputStateList();
 	test.outputTransitionList();
 
