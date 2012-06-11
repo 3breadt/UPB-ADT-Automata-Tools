@@ -24,6 +24,7 @@ private:
 	static int transitionCount;
 
 public:
+
 	Transition(State begining, State finish, string edge);
 	Transition(string input);
 	string output();

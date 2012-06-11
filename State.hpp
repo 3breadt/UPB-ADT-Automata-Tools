@@ -24,11 +24,12 @@ private:
 	static int stateCount;
 
 public:
-	State();
+	State();// Hier wahr kein State();
 	State(string name);
 	State(string name, bool startState, bool finalState);
 	void setStartState();
 	void setFinalState();
+	int giveStateCount();
 	string output();
 };
 
