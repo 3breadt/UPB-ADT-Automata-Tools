@@ -11,6 +11,11 @@
 *.la
 *.a
 
+#Visual Studio
+*.user
+*.suo
+*.ncb
+
 #Eclipse
 Debug/
 Debug-OSX/
