@@ -1,0 +1,19 @@
+[Start]
+<expression>
+[Terminals]
+number
+(
+)
++
+-
+*
+/
+[NonTerminals]
+<expression>
+[Productions]
+<expression> --> number
+<expression> --> ( <expression> )
+<expression> --> <expression> + <expression>
+<expression> --> <expression> - <expression>
+<expression> --> <expression> * <expression>
+<expression> --> <expression> / <expression>
