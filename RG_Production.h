@@ -14,6 +14,8 @@
 
 using namespace std;
 
+#define   PRODUCTIONARROW  "-->"
+
 /**
  * @class Production
  * @brief Represents a Production as an element of a Context-Free Grammar
@@ -38,6 +40,8 @@ public:
 	void setLeftSide(string s);
 	Substitution* getSubstitution();
 	void readProductionFromLine(string line, string productionArrow);
+	void printProduction();
+	string toString();
 };
 
 

@@ -84,6 +84,32 @@ void Substitution::setRawString(string s)
 	this->rawString = s ;
 }
 
+string Substitution::getRawString()
+{
+	return this->rawString ;
+}
+
+DynArray<flaggedString>* Substitution::getDecodedSubstitution()
+{
+	return &(this->decodedSubstitution);
+}
+
+string Substitution::toString()
+{
+	int decodedSubstitutionArrayLength;
+	string s ="";
+	decodedSubstitutionArrayLength = this->getDecodedSubstitution()->getLength() ;
+
+	for(int i=0 ; i < decodedSubstitutionArrayLength-1; i++)
+	{
+		s += (*(this->getDecodedSubstitution()))[i].s + " ";
+	}
+	s += (*(this->getDecodedSubstitution()))[decodedSubstitutionArrayLength-1].s;
+
+	return s ;
+
+
+}
 
 
 

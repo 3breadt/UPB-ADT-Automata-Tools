@@ -13,10 +13,7 @@
 
 using namespace std;
 
-/**
- * @struct flaggedString
- * @brief defines a string with a flag to specify if it is a terminal or not.
- */
+
 struct flaggedString {
 
 	string s;
@@ -41,8 +38,13 @@ public:
 	void decode(DynArray<string> referenceTerminals, DynArray<string> referenceNonTerminals);
 	void setRawString(string s);
 
+	string getRawString();
+	DynArray<flaggedString>* getDecodedSubstitution();
 
-public:
+	string toString();
+
+
+private:
 
 	/** the substitution in a string form without any editing  */
 	string rawString;

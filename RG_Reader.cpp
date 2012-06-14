@@ -23,7 +23,6 @@ using namespace std;
 #define   NONTERMINALS 2
 #define   PRODUCTIONS  3
 
-#define   PRODUCTIONARROW  "-->"
 
 //Prototypes
 int _lineIsTag(string s);

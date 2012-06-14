@@ -95,6 +95,22 @@ void Production::readProductionFromLine(string line, string productionArrow)
 
 	}
 }
+/**
+ * @brief returns a string form of the Production
+ * @return Production as a string
+ */
+string Production::toString()
+{
+	return this->left + " " + PRODUCTIONARROW + " " + this->getSubstitution()->toString() ;
+}
+/**
+ *@brief prints the Production
+ */
+void Production::printProduction()
+{
+	//cout << this->left << " --> " << this->getSubstitution()->toString() << endl;
+	cout << this->toString() << endl;
+}
 
 
 
