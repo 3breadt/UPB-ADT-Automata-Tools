@@ -166,7 +166,7 @@ void FinalStateAutomata::getStartState()
 	cout<<endl;
 }
 
-/* Output the names of all finalStates
+/** Output the names of all finalStates 
  *
  * for each state element in stateList, that isn't null, check there property of startState,
  * if it's true, then output there name on console*/
