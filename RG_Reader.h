@@ -1,8 +1,8 @@
-/*
- * Reader.h
+/**
+ * @file RG_Substitution.h
+ * @author Yacine Smaoui, Florian Hemmelgarn
  *
- *  Created on: 7 juin 2012
- *      Author: yessine
+ * @brief Definition of the Reader class
  */
 
 #ifndef READER_H_

@@ -1,10 +1,9 @@
-/*
- * Reader.cpp
+/**
+ * @file RG_Substitution.h
+ * @author Yacine Smaoui, Florian Hemmelgarn
  *
- *  Created on: 7 juin 2012
- *      Author: yessine
+ * @brief Implementation of the Reader class
  */
-
 
 #include "RG_Reader.h"
 #include "RG_Production.h"

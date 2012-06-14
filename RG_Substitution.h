@@ -1,8 +1,8 @@
-/*
- * Substitution.h
+/**
+ * @file RG_Substitution.h
+ * @author Yacine Smaoui, Florian Hemmelgarn
  *
- *  Created on: 7 juin 2012
- *      Author: yessine
+ * @brief Definition of the Substitution class
  */
 
 #ifndef SUBSTITUTION_H_
@@ -13,6 +13,10 @@
 
 using namespace std;
 
+/**
+ * @struct flaggedString
+ * @brief defines a string with a flag to specify if it is a terminal or not.
+ */
 struct flaggedString {
 
 	string s;
@@ -20,6 +24,14 @@ struct flaggedString {
 
 };
 
+/**
+ * @class Substitution
+ * @brief defines the right side of a Production in a Grammar
+ *
+ * composed of:
+ *  A RawString : the substitution in a string form without any editing.
+ *  and a DecodedSubstitution: a DynArray containing the different Terminals and Non-Terminals composing the Substitution
+ */
 class Substitution
 {
 public:
@@ -32,7 +44,9 @@ public:
 
 public:
 
+	/** the substitution in a string form without any editing  */
 	string rawString;
+	/** a DynArray containing the different Terminals and Non-Terminals composing the Substitution */
 	DynArray<flaggedString> decodedSubstitution;
 
 };

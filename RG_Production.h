@@ -1,8 +1,8 @@
-/*
- * Production.h
+/**
+ * @file RG_Production.h
+ * @author Yacine Smaoui, Florian Hemmelgarn
  *
- *  Created on: 7 juin 2012
- *      Author: yessine
+ * @brief Definition of the Production class
  */
 
 #ifndef PRODUCTION_H_
@@ -14,6 +14,14 @@
 
 using namespace std;
 
+/**
+ * @class Production
+ * @brief Represents a Production as an element of a Context-Free Grammar
+ *
+ * When a Production is used in a context-free Grammar,
+ * it substitutes the left side with what is in the right Side.
+ * The structure of this class is based on this function.
+ */
 class Production
 {
 public:
@@ -23,7 +31,7 @@ public:
 public:
 
 	string left;
-	Substitution* right;   // a composition
+	Substitution* right;
 
 public:
 	void setSubstitution(Substitution* subs);

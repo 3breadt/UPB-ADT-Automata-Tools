@@ -1,15 +1,17 @@
-/*
- * Production.cpp
+/**
+ * @file RG_Production.cpp
+ * @author Yacine Smaoui, Florian Hemmelgarn
  *
- *  Created on: 7 juin 2012
- *      Author: yessine
+ * @brief Implementation of the Production class
  */
-
 
 #include "RG_Production.h"
 
 #include <sstream>
 
+/**
+ * @brief Constructor
+ */
 Production::Production()
 {
 	#ifdef DEBUG
@@ -17,6 +19,10 @@ Production::Production()
 	#endif
 
 }
+
+/**
+ * @brief Destructor
+ */
 Production::~Production()
 {
 	#ifdef DEBUG
@@ -24,21 +30,41 @@ Production::~Production()
 	#endif
 }
 
+/**
+ * @brief A setter Method to set the Production's Substitution (the right Side).
+ * @param subs a pointer on a Substitution Object.
+ */
 void Production::setSubstitution(Substitution* subs)
 {
 	this->right = subs;
 }
 
+/**
+ * @brief A setter Method to set the Production's left Side.
+ * @param s A Non-Terminal Symbol.
+ */
 void Production::setLeftSide(string s)
 {
 	this->left = s ;
 }
 
+/**
+ * @brief A getter Method
+ * @return a pointer on the Production's Substitution.
+ */
 Substitution* Production::getSubstitution()
 {
 	return this->right ;
 }
 
+/**
+ * @brief called by the Reader
+ *
+ * Separates the read Production line into a left side string and a right side string.
+ *
+ * @param line a string containing the whole Production (directly read from file).
+ * @param productionArrow the Separating Symbol between the left and right Side of a production
+ */
 void Production::readProductionFromLine(string line, string productionArrow)
 {
 	stringstream stream;
