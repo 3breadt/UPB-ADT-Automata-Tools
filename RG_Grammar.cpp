@@ -9,13 +9,17 @@
 
 Grammar::Grammar()
 {
+	#ifdef DEBUG
 	cout << "****Grammar constructor called" << endl ;
+	#endif
 
 }
 
 Grammar::~Grammar()
 {
+	#ifdef DEBUG
 	cout << "**Grammar destructor called: destructing Grammar" << endl ;
+	#endif
 }
 
 void Grammar::addProduction(Production* prod)
@@ -44,7 +48,9 @@ void Grammar::processGrammarProductions()
 	for(i=0; i<this->Productions.getLength(); i++)
 	{
 		Productions[i]->getSubstitution()->decode(this->Terminals, this->NonTerminals);
+		#ifdef DEBUG
 		cout << "substitution decoded" << endl ;
+		#endif
 	}
 }
 

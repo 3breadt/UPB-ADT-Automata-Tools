@@ -12,12 +12,16 @@
 
 Production::Production()
 {
+	#ifdef DEBUG
 	cout << "****Production constructor called: constructing Production" << endl ;
+	#endif
 
 }
 Production::~Production()
 {
+	#ifdef DEBUG
 	cout << "**Production destructor called: destructing Production" << endl ;
+	#endif
 }
 
 void Production::setSubstitution(Substitution* subs)

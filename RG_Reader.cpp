@@ -31,12 +31,17 @@ int _lineIsTag(string s);
 
 RGReader::RGReader(string filename) : fileName(filename)
 {
+	#ifdef DEBUG
 	cout << "****Reader constructor called" << endl ;
+	#endif
+
 }
 
 RGReader::~RGReader()
 {
+	#ifdef DEBUG
 	cout << "**Reader destructor called" << endl ;
+	#endif
 }
 
 Grammar* RGReader::Read()
@@ -46,7 +51,9 @@ Grammar* RGReader::Read()
 	ifstream file (fileName.c_str());
 	string line = "";
 
+	#ifdef DEBUG
 	cout << "filename: " << fileName.c_str() << endl ;
+	#endif
 
 	if(!file)
 	{
@@ -56,10 +63,14 @@ Grammar* RGReader::Read()
 	while(!file.eof())
 	{
 		getline(file,line);
+		#ifdef DEBUG
 		cout << "line: " << line << endl ;
+		#endif
 		if(_lineIsTag(line))
 		{
+			#ifdef DEBUG
 			cout << "line is Tag : " << line << endl ;
+			#endif
 			if(line.compare("[Start]")==0)
 			{
 				tag = STARTSYMBOL ;
@@ -81,8 +92,11 @@ Grammar* RGReader::Read()
 		else
 		{
 
+			#ifdef DEBUG
 			cout << "line is not a Tag: " << line << endl ;
 			cout << "TagCode: " << tag << endl;
+			#endif
+
 			if(tag == STARTSYMBOL)
 			{
 				grammar->setStartSymbol(line) ;

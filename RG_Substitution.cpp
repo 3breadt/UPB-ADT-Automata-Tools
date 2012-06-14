@@ -12,12 +12,16 @@
 
 Substitution::Substitution()
 {
+	#ifdef DEBUG
 	cout << "****Substitution constructor called: constructing substitution" << endl ;
+	#endif
 }
 
 Substitution::~Substitution()
 {
+	#ifdef DEBUG
 	cout << "**Substitution destructor called" << endl ;
+	#endif
 }
 
 void Substitution::decode(DynArray<string> referenceTerminals, DynArray<string> referenceNonTerminals)
@@ -26,12 +30,16 @@ void Substitution::decode(DynArray<string> referenceTerminals, DynArray<string> 
 	flaggedString fString;
 
 	stream << this->rawString;
+	#ifdef DEBUG
 	cout << "Substitution rawString is :" << this->rawString << endl ;
+	#endif
 
 	while (!stream.eof()) {
 		stream >> fString.s;
 
+		#ifdef DEBUG
 		cout << "fString.s is :" << fString.s  <<endl ;
+		#endif
 
 		if (referenceTerminals.exist(fString.s))
 		{

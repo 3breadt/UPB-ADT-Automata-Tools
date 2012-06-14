@@ -39,7 +39,9 @@ template <class T > DynArray<T>::DynArray()
 		: uiMaxSize(2) , uiSize(0)
 {
 	pArray = new T [uiMaxSize];
+	#ifdef DEBUG
 	cout << "****DynArray constructor called" << endl ;
+	#endif
 }
 
 template <class T > DynArray<T>::~DynArray()
