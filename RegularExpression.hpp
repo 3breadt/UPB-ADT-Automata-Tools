@@ -40,7 +40,7 @@ public:
 	RegularExpression();
 	virtual ~RegularExpression();
 	void setTreeRoot(RETreeNode *p_tR);
-    RETreeNode *getTreeRoot();
+	RETreeNode *getTreeRoot();
 
 	/** String representation of the boolean or operator **/
 	static const string re_orOp;

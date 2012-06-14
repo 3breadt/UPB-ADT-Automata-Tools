@@ -25,7 +25,13 @@ RETreeNode::RETreeNode(string c) {
 }
 
 RETreeNode::~RETreeNode() {
-	// TODO Auto-generated destructor stub
+	if(p_left != NULL) {
+		delete p_left;
+	}
+	if(p_right != NULL) {
+		delete p_right;
+	}
+	delete content;
 }
 
 /**

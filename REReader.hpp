@@ -30,7 +30,6 @@ private:
 	static RETreeNode *parseNode(const char string[], int *pos, int len);
 	static RETreeNode *parseNode(RETreeNode *left, const char string[], int *pos, int len);
 	static RETreeNode *parseLiteral(const char str[], int *pos, int len);
-
 };
 
 #endif /* REREADER_H_ */

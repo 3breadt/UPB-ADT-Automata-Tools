@@ -13,11 +13,11 @@ const string RegularExpression::re_rParen = ")";
 
 RegularExpression::RegularExpression() {
 	p_treeRoot = NULL;
-
 }
 
 RegularExpression::~RegularExpression() {
-
+	if(p_treeRoot != NULL)
+		delete p_treeRoot;
 }
 
 void RegularExpression::setTreeRoot(RETreeNode *p_tR) {
