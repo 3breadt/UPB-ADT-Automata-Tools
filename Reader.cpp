@@ -6,10 +6,10 @@
  */
 
 
-#include "../Header/Reader.h"
-#include "../Header/Production.h"
+#include "Reader.h"
+#include "Production.h"
 
-#include "../Header/Substitution.h"
+#include "Substitution.h"
 
 #include <fstream>
 #include <sstream>

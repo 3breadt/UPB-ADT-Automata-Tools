@@ -326,7 +326,7 @@ void FinalStateAutomata::outputTransitionList( )
 void FinalStateAutomata::read(string p_szFileName)
 {
 	ifstream ifsFile;
-	ifsFile.open(p_szFileName.c_str(), ios.in);
+	ifsFile.open(p_szFileName.c_str(), ios::in);
 	string szLine;
 	bool bStates;
 	bool bTransitions;
@@ -392,7 +392,7 @@ void FinalStateAutomata::write(string p_szFileName)
 
 	ofsFile << "<Transitions>\n";
 	  
-	for(int idx=0; idx<Transition.transitionCount; idx++)
+	for(int idx=0; idx<Transition::transitionCount; idx++)
 	{
 		if(transitionList[idx] == NULL) {
 			continue;

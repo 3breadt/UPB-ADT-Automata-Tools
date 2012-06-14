@@ -31,7 +31,6 @@ RETreeNode::~RETreeNode() {
 	if(p_right != NULL) {
 		delete p_right;
 	}
-	delete content;
 }
 
 /**
