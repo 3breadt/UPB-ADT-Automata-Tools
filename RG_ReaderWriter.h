@@ -12,15 +12,16 @@
 
 
 
-class RGReader
+class RGReaderWriter
 {
 private:
 	string fileName;
 public:
-	RGReader(string fileName);
-	~RGReader();
+	RGReaderWriter(string fileName);
+	~RGReaderWriter();
 
 	Grammar* Read();
+	void write(Grammar* g);
 	void setFileName(string fileName);
 };
 

@@ -5,7 +5,7 @@
  * @brief Implementation of the Reader class
  */
 
-#include "RG_Reader.h"
+#include "RG_ReaderWriter.h"
 #include "RG_Production.h"
 
 #include "RG_Substitution.h"
@@ -27,7 +27,7 @@ using namespace std;
 //Prototypes
 int _lineIsTag(string s);
 
-RGReader::RGReader(string filename) : fileName(filename)
+RGReaderWriter::RGReaderWriter(string filename) : fileName(filename)
 {
 	#ifdef DEBUG
 	cout << "****Reader constructor called" << endl ;
@@ -35,14 +35,14 @@ RGReader::RGReader(string filename) : fileName(filename)
 
 }
 
-RGReader::~RGReader()
+RGReaderWriter::~RGReaderWriter()
 {
 	#ifdef DEBUG
 	cout << "**Reader destructor called" << endl ;
 	#endif
 }
 
-Grammar* RGReader::Read()
+Grammar* RGReaderWriter::Read()
 {
 	Grammar* grammar = new Grammar();
 	int tag= -1;
@@ -133,4 +133,45 @@ int _lineIsTag(string s)
 		return 1;
 	}
 	return 0;
+}
+
+/**
+ * @brief write the Grammar g into a file
+ *
+ * Before calling, set a new FileName for the reader if needed.
+ *
+ * @param g the Grammar to write
+ */
+void RGReaderWriter::write(Grammar* g)
+{
+	ofstream oFile (fileName.c_str());
+
+	if(!oFile)
+	{
+		cerr << "Sorry, can't open file for writing!";
+		exit(1);
+	}
+	oFile << "[Start]" << endl;
+	oFile << g->getStartSymbol() << endl;
+	oFile << "[Terminals]" << endl;
+	for(unsigned int i=0; i< g->getTerminals().getLength() ; i++ )
+	{
+		oFile << (g->getTerminals())[i] << endl;
+	}
+	oFile << "[NonTerminals]" << endl;
+	for(unsigned int i=0; i<g->getNonTerminals().getLength(); i++)
+	{
+		oFile << (g->getNonTerminals())[i] << endl;
+	}
+	oFile << "[Productions]" << endl;
+	for(unsigned int i=0; i<g->getProductions().getLength()-1; i++)
+	{
+		oFile << (g->getProductions())[i]->toString() << endl;
+	}
+	oFile << (g->getProductions())[g->getProductions().getLength()-1]->toString() ;
+}
+
+void RGReaderWriter::setFileName(string fileName )
+{
+	this->fileName = fileName ;
 }
