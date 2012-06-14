@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <iostream>
 #include <sstream>
-#include "Substitution.h"
+#include "RG_Substitution.h"
 
 Substitution::Substitution()
 {

@@ -5,7 +5,7 @@
  *      Author: yessine
  */
 
-#include "Grammar.h"
+#include "RG_Grammar.h"
 
 Grammar::Grammar()
 {

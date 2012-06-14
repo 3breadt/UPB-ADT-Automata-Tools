@@ -9,7 +9,7 @@
 #define SUBSTITUTION_H_
 
 #include <string>
-#include "DynArray.h"
+#include "RG_DynArray.h"
 
 using namespace std;
 

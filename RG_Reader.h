@@ -8,17 +8,17 @@
 #ifndef READER_H_
 #define READER_H_
 
-#include "Grammar.h"
+#include "RG_Grammar.h"
 
 
 
-class Reader
+class RGReader
 {
 private:
 	string fileName;
 public:
-	Reader(string fileName);
-	~Reader();
+	RGReader(string fileName);
+	~RGReader();
 
 	Grammar* Read();
 	void setFileName(string fileName);

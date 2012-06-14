@@ -10,7 +10,7 @@
 
 #include <iostream>
 
-#include "Substitution.h"
+#include "RG_Substitution.h"
 
 using namespace std;
 

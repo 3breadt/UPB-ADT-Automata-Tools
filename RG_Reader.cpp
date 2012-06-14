@@ -6,10 +6,10 @@
  */
 
 
-#include "Reader.h"
-#include "Production.h"
+#include "RG_Reader.h"
+#include "RG_Production.h"
 
-#include "Substitution.h"
+#include "RG_Substitution.h"
 
 #include <fstream>
 #include <sstream>
@@ -29,17 +29,17 @@ using namespace std;
 //Prototypes
 int _lineIsTag(string s);
 
-Reader::Reader(string filename) : fileName(filename)
+RGReader::RGReader(string filename) : fileName(filename)
 {
 	cout << "****Reader constructor called" << endl ;
 }
 
-Reader::~Reader()
+RGReader::~RGReader()
 {
 	cout << "**Reader destructor called" << endl ;
 }
 
-Grammar* Reader::Read()
+Grammar* RGReader::Read()
 {
 	Grammar* grammar = new Grammar();
 	int tag= -1;
