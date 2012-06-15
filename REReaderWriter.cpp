@@ -1,9 +1,9 @@
 /*
- * @file REReader.cpp
+ * @file REReaderWriter.cpp
  * @author Daniel Dreibrodt, Konstantin Steinmiller
  */
 
-#include "REReader.hpp"
+#include "REReaderWriter.hpp"
 #include "RETreeNode.hpp"
 #include <cstring>
 #include <string>
@@ -17,7 +17,7 @@
  * @author Daniel Dreibrodt, Konstantin Steinmiller
  * @return The regular expression defined in the given file.
  */
-RegularExpression *REReader::read(string filename) {
+RegularExpression *REReaderWriter::read(string filename) {
 	ifstream file (filename.c_str());
 	string str((istreambuf_iterator<char>(file)), istreambuf_iterator<char>());
 	return parse(str.c_str(), str.length());
@@ -28,7 +28,7 @@ RegularExpression *REReader::read(string filename) {
  * @author Daniel Dreibrodt, Konstantin Steinmiller
  * @return The regular expression defined in the given string.
  */
-RegularExpression *REReader::parse(const char *string, int len) {
+RegularExpression *REReaderWriter::parse(const char *string, int len) {
 	RegularExpression *re = new RegularExpression();
 	int pos = 0;
 	re->setTreeRoot(parseNode(string, &pos, len));
@@ -44,7 +44,7 @@ RegularExpression *REReader::parse(const char *string, int len) {
  * @return The root node of the expression tree.
  * @author Daniel Dreibrodt, Konstantin Steinmiller
  */
-RETreeNode *REReader::parseNode(const char string[], int *pos, int len) {
+RETreeNode *REReaderWriter::parseNode(const char string[], int *pos, int len) {
 	if(*pos>=len) {
 		//end of string reached
 		return NULL;
@@ -95,7 +95,7 @@ RETreeNode *REReader::parseNode(const char string[], int *pos, int len) {
  * @return The new root node of the expression tree.
  * @author Daniel Dreibrodt, Konstantin Steinmiller
  */
-RETreeNode *REReader::parseNode(RETreeNode *left, const char string[], int *pos, int len) {
+RETreeNode *REReaderWriter::parseNode(RETreeNode *left, const char string[], int *pos, int len) {
 	if(*pos>=len) {
 		//end of string reached, return last known tree root
 		return left;
@@ -156,7 +156,7 @@ RETreeNode *REReader::parseNode(RETreeNode *left, const char string[], int *pos,
  * @param len The input string length
  * @return A node containing the literal.
  */
-RETreeNode *REReader::parseLiteral(const char str[], int *pos, int len) {
+RETreeNode *REReaderWriter::parseLiteral(const char str[], int *pos, int len) {
 	string s = "";
 	while(1) {
 		s += str[*pos];
@@ -170,4 +170,57 @@ RETreeNode *REReader::parseLiteral(const char str[], int *pos, int len) {
 		}
 	}
 	return new RETreeNode(s);
+}
+
+/**
+ * Creates a string representation of the given regular expression.
+ * @param re The regular expression.
+ * @return The string representation of the regular expression.
+ * @author Daniel Dreibrodt
+ */
+string REReaderWriter::writeToString(RegularExpression *re) {
+	RETreeNode *root = re->getTreeRoot();
+	return writeToString(root);
+}
+
+/**
+ * Writes a string representation of the given regular expression into a file.
+ * @param re The regular expression.
+ * @author Daniel Dreibrodt
+ */
+void REReaderWriter::writeToFile(RegularExpression *re, const char *filename) {
+	ofstream file(filename, std::ios_base::binary);
+	file << writeToString(re);
+	file.close();
+}
+
+/**
+ * Converts a regular expression tree to a string by performing
+ * an inorder tree walk.
+ * @param The node of the regular expression tree.
+ * @return The string representation of the regular expression specified by the given node.
+ */
+string REReaderWriter::writeToString(RETreeNode *rn) {
+	string s = "";
+	if(rn->isOperator()) {
+		s += "(";
+		if(rn->getLeft() != NULL) {
+			s += writeToString(rn->getLeft());
+		}
+	}
+
+	if(rn->isEmpty()) {
+		s += "<epsilon>";
+	} else {
+		s += rn->getContent();
+	}
+
+	if(rn->isOperator()) {
+		if(rn->getRight() != NULL) {
+			s += writeToString(rn->getRight());
+		}
+		s += ")";
+	}
+
+	return s;
 }
