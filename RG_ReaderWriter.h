@@ -2,7 +2,7 @@
  * @file RG_Substitution.h
  * @author Yacine Smaoui, Florian Hemmelgarn
  *
- * @brief Definition of the Reader class
+ * @brief Definition of the Reader class. Allows to read from a file.
  */
 
 #ifndef READER_H_
