@@ -16,10 +16,15 @@ using namespace std;
 
 /**
  * @class Grammar
- * @brief Represents a Context Free Grammar (or Regular Grammar)
+ * @brief Represents a Grammar
  *
- * A context Free Grammar is defined through its Terminals, Non-Terminals and the Start Symbol.
+ * (the fact that the Grammar is a Regular Grammar or not is checked (if wanted) after reading (or creating )
+ * with the method Grammar::checkIfRegular()
+ *
+ * A Grammar is defined through its Terminals, Non-Terminals and the Start Symbol.
  * For this purpose, the chosen container class is a Dynamic Array defined in DynArray.h
+ *
+ * see checkIfRegular() for more information about a REGULAR Grammar
  */
 class Grammar
 {

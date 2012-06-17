@@ -2,7 +2,7 @@
  * @file RG_Grammar.cpp
  * @author Yacine Smaoui, Florian Hemmelgarn
  *
- * @brief implementation of the Context Free Grammar class
+ * @brief implementation of the Grammar class
  */
 
 #include "RG_Grammar.h"
@@ -11,7 +11,7 @@
 #define DEBUG
 
 /**
- * @brief Contructor.
+ * @brief Constructor.
  */
 Grammar::Grammar()
 {
@@ -122,6 +122,21 @@ DynArray<Production*> Grammar::getProductions()
 	return this->Productions;
 }
 
+/**
+ * @brief checks if the Grammar is regular or not. the information is stored in isRegular .
+ *
+ * we use in the project a right-linear regular Grammar.
+ *
+ * a Grammar is said to be right-linear if every production in P is of the form:
+ *
+ * A --> x B  or
+ *
+ * A --> x
+ *
+ * where A and B are Non-Terminals
+ * and x is any string of Terminals or the empty string
+ *
+ */
 void Grammar::checkIfRegular()
 {
 	for(unsigned int i=0 ; i < this->getProductions().getLength(); i++ ) // For every Production
