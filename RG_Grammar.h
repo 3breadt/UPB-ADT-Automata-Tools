@@ -33,9 +33,11 @@ private:
 	/** a Dynamic array container to store the NonTerminals of the Grammar */
 	DynArray<string> NonTerminals;
 	/** a dynamic array container to store the Productions of the Grammar */
-	DynArray<Production*> Productions;   //composition
+	DynArray<Production*> Productions;
 	/** the Start symbol of the Grammar */
 	string StartSymbol;
+	/** 1 if Grammar is Regular */
+	int isRegular;
 
 public:
 	void addProduction(Production* prod);
@@ -48,6 +50,10 @@ public:
 	DynArray<string> getNonTerminals();
 	string getStartSymbol();
 	DynArray<Production*> getProductions();
+
+	void checkIfRegular();
+
+	void initConvert();
 };
 
 

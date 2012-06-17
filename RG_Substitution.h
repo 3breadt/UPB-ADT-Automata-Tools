@@ -43,6 +43,12 @@ public:
 
 	string toString();
 
+	flaggedString getSymbol(int index);
+	int symbolIsTerminal(int index);
+	string getSymbolstring(int index);
+	int getDecodedSubstitutionLength();
+
+
 
 private:
 

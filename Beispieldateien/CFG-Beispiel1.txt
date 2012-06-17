@@ -1,19 +1,15 @@
 [Start]
 <expression>
 [Terminals]
-number
-(
-)
-+
--
-*
-/
+a
+b
+c
+d
 [NonTerminals]
 <expression>
 [Productions]
-<expression> --> number
-<expression> --> ( <expression> )
-<expression> --> <expression> + <expression>
-<expression> --> <expression> - <expression>
-<expression> --> <expression> * <expression>
-<expression> --> <expression> / <expression>
+<expression> --> a
+<expression> --> b <expression>
+<expression> --> a b <expression>
+<expression> --> c d a b <expression>
+<expression> --> d <expression> a

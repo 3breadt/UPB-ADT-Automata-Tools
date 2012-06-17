@@ -6,6 +6,9 @@
  */
 
 #include "RG_Grammar.h"
+#include <stdlib.h>
+
+#define DEBUG
 
 /**
  * @brief Contructor.
@@ -119,3 +122,48 @@ DynArray<Production*> Grammar::getProductions()
 	return this->Productions;
 }
 
+void Grammar::checkIfRegular()
+{
+	for(unsigned int i=0 ; i < this->getProductions().getLength(); i++ ) // For every Production
+	{
+		/**
+		 * check if the First Symbol of the Substitution is a Terminal
+		 */
+		if(this->getProductions()[i]->getSubstitution()->symbolIsTerminal(0) != 1  /*TODO and not <epsilon> */ ) //First Symbol in Substitution is not a Terminal
+		{
+			this->isRegular = 0 ;
+#ifdef DEBUG
+			this->getProductions()[i]->printProduction();
+			cout << "Grammar is not regular: First Substitution Symbol of Production "<<i<<" is not a Terminal" << endl;
+#endif
+			return;
+		}
+
+		/**
+		 * check if the Form of the Substitution corresponds to a Regular Grammar Form
+		 */
+		for(int j=1 ; j< this->getProductions()[i]->getSubstitution()->getDecodedSubstitutionLength(); j++) // For every symbol in a Substitution
+		{
+			if(this->getProductions()[i]->getSubstitution()->symbolIsTerminal(j) == 0  //the actual symbol is not a Terminal
+					&& this->getProductions()[i]->getSubstitution()->getDecodedSubstitutionLength()-1 > j) // there is more symbols after this NonTerminal
+			{
+				this->isRegular = 0 ;
+#ifdef DEBUG
+				this->getProductions()[i]->printProduction();
+			cout << "Grammar is not regular: Substitution of Production "<<i<<" doesn't correspond to regular grammar form" << endl;
+#endif
+				return;
+			}
+		}
+	}
+}
+
+void Grammar::initConvert()
+{
+	this->checkIfRegular();
+	if(this->isRegular == 0)
+	{
+		cerr << "Grammar is not Regular, cannot Convert" << endl ;
+		exit(1);
+	}
+}

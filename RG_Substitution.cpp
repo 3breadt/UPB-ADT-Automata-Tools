@@ -111,6 +111,24 @@ string Substitution::toString()
 
 }
 
+flaggedString Substitution::getSymbol(int index)
+{
+	return (*(this->getDecodedSubstitution()))[index] ;
+}
 
+int Substitution::symbolIsTerminal(int index)
+{
+	return this->getSymbol(index).isTerminal ;
+}
+
+string Substitution::getSymbolstring(int index)
+{
+	return this->getSymbol(index).s ;
+}
+
+int Substitution::getDecodedSubstitutionLength()
+{
+	return this->getDecodedSubstitution()->getLength();
+}
 
 
