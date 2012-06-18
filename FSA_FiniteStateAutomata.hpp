@@ -11,16 +11,17 @@
 #include <iostream>
 #include "FSA_State.hpp"
 #include "FSA_Transition.hpp"
+#include <vector>
 
 
 using namespace std;
 
 class FiniteStateAutomata{
 private:
-	State** stateList;
-	Transition** transitionList;
-	static int automataStateCount;
-	static int automataTransitionCount;
+	//State** stateList;
+	//Transition** transitionList;
+	vector<State*> vecStateList;
+	vector<Transition*> vecTransitionList;
 
 public:
 	FiniteStateAutomata();

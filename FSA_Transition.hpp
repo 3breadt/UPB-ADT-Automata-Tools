@@ -16,7 +16,6 @@ using namespace std;
 class Transition{
 
 	friend class FiniteStateAutomata;
-	static int transitionCount;
 
 private:
 	State begining;

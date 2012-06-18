@@ -9,7 +9,6 @@
 
 using namespace std;
 
-int State::stateCount = 0;		// Counts the number off created states, not necessary till now, but can be used to check that all created states are added t
 /* default Constructor, needed to use the constructor of transition*/
 State::State()
 {
@@ -22,7 +21,6 @@ State::State(string name)
 	this-> name = name;
 	startState = false;
 	finalState = false;
-	stateCount++;
 }
 /* Cnstructor
  * Parameters: three strings containing the name of the constructed state and the boolean startState

@@ -10,9 +10,6 @@
 #include<string>
 #include<cstring>
 
-
-
-int Transition::transitionCount = 0;		// Counts the number of created transition, isn't necessary till now
 /*Constructor*/
 Transition::Transition(State begining, State finish, string edge)
 {
@@ -20,7 +17,6 @@ Transition::Transition(State begining, State finish, string edge)
 	 this->begining = begining;
 	 this->finish = finish;
 	 this->edge = edge;
-	 transitionCount++;
 }
 
 

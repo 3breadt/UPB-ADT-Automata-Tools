@@ -16,7 +16,6 @@ class State{
 
 	friend class Transition;
 	friend class FiniteStateAutomata;
-	static int stateCount;
 
 private:
 	string name;

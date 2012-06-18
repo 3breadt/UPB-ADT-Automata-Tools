@@ -10,32 +10,31 @@
 #include<cstring>
 #include<iostream>
 #include<fstream>
+#include<vector>
 
 using namespace std;
 
 /* number of States and Transitions that can be build for this final state automata
  * so final state automata can save listLength Sate and listLength Transitions*/
 int listLength = 100;
-int FiniteStateAutomata::automataStateCount =0; 		// counts the number of states, added to FSA
-int FiniteStateAutomata::automataTransitionCount =0;	// counts the number of transition, added to FSA
 
 /* Constructor for FSA*/
 FiniteStateAutomata :: FiniteStateAutomata()
 {
 
-	stateList = new State* [listLength];			// a list of element state, including all states of FSA
+	/*stateList = new State* [listLength];			// a list of element state, including all states of FSA
 	transitionList = new Transition* [listLength];	// a list of element transition, including all transitions of FSA
 	for(int i=0; i<listLength; i++)					// initialisation
 		{
 			stateList[i] = NULL;
 			transitionList[i] = NULL;
-		}
+		}*/
 }
 
 /* Destructor for FSA*/
 FiniteStateAutomata::~FiniteStateAutomata()
 {
-	for(int i=0; i<listLength; i++)
+	/*for(int i=0; i<listLength; i++)
 		{
 			if(stateList[i]!= NULL)				// Checking value of each stateList element for it's existing, nearly each method has to do this check
 			{
@@ -47,7 +46,27 @@ FiniteStateAutomata::~FiniteStateAutomata()
 			}
 		}
 	delete stateList;
-	delete transitionList;
+	delete transitionList;*/
+
+	vecStateList.clear();
+	vecTransitionList.clear();
+
+	/*
+	int iStateListSize = vecStateList.size();
+	int iTransitionListSize = vecTransitionList.size();
+
+
+	for(std::vector<State>::iterator it = vecStateList.begin(); it != vecStateList.end(); ++it) {
+		delete *it;
+	}
+
+	for(std::vector<Transition>::iterator it = vecTransitionList.begin(); it != vecTransitionList.end(); ++it) {
+		delete *it;
+	}
+
+	delete vecStateList;
+	delete vecTransitionList;*/
+
 }
 
 /* Add a new state to FSA
@@ -58,7 +77,9 @@ void FiniteStateAutomata::addState(string stateName)
 {
 	State *newState = new State(stateName);
 
-	for(int i=0; i<listLength; i++)
+	addState(newState);
+
+	/*for(int i=0; i<listLength; i++)
 	{
 		if(stateList[i] == NULL)
 		{
@@ -69,7 +90,7 @@ void FiniteStateAutomata::addState(string stateName)
 
 	}
 	cout << "Statelist is full." << endl;
-	delete newState;
+	delete newState;*/
 }
 
 /* Add a new state to FSA
@@ -79,7 +100,9 @@ void FiniteStateAutomata::addState(string stateName)
 void FiniteStateAutomata::addState(State *stateName)
 {
 
-	for(int i=0; i<listLength; i++)
+	vecStateList.push_back(stateName);
+	
+	/*for(int i=0; i<listLength; i++)
 	{
 		if(stateList[i] == NULL)
 		{
@@ -90,16 +113,24 @@ void FiniteStateAutomata::addState(State *stateName)
 
 	}
 	cout << "Statelist is full." << endl;
-	delete stateName;
+	delete stateName;*/
 }
 /* Remove state from FSA
  * Parameters: a string, containing the name of removable state */
 void FiniteStateAutomata::removeState(string stateName)		
 {
+
+	for(std::vector<State*>::iterator it = vecStateList.begin(); it != vecStateList.end(); ++it) {
+		if((*it)->name == stateName) {
+			vecStateList.erase(it);
+			break;
+		}
+	}
+
 	/* search State with parameters name in stateList, by checking only the elements, that aren't empty,
 	 * when found the element free it and set it to null afterwards, so that it can be reused, decrease
 	 * counter*/
-	for(int i = 0; i< listLength;i++)
+	/*for(int i = 0; i< listLength;i++)
 	{
 		if(stateList[i]!= NULL)							
 		{
@@ -111,10 +142,10 @@ void FiniteStateAutomata::removeState(string stateName)
 			}
 		}
 
-	}
+	}*/
 	/* Cause a state has been removed, it is necessary, that you remove all transitions, that uses
 	 * this state, same way as removing the state*/
-	for (int i = 0;i<listLength;i++)
+	/*for (int i = 0;i<listLength;i++)
 	{
 		if(transitionList[i]!= NULL)
 		{
@@ -125,7 +156,7 @@ void FiniteStateAutomata::removeState(string stateName)
 				automataTransitionCount--;
 			}
 		}
-	}
+	}*/
 }
 
 /* Output of all states
@@ -135,13 +166,19 @@ void FiniteStateAutomata::removeState(string stateName)
 void FiniteStateAutomata::outputStateList( )
 {
 	cout<<"StateList:"<< endl;
+
+	for(std::vector<State*>::iterator it = vecStateList.begin(); it != vecStateList.end(); ++it) {
+		cout << (*it)->output() << endl;
+	}
+
+	/*
 	for(int idx=0; idx<listLength; idx++)
 	{
 		if(stateList[idx]!=NULL)
 		{
 			cout << stateList[idx]->output() << endl;
 		}
-	}
+	}*/
 }
 
 /* Output the names of all startStates
@@ -151,7 +188,15 @@ void FiniteStateAutomata::outputStateList( )
 void FiniteStateAutomata::getStartState()
 {
 	cout<<endl;
-	cout<<"Start States:"<< endl;
+	cout<<"Start State:"<< endl;
+
+	for(std::vector<State*>::iterator it = vecStateList.begin(); it != vecStateList.end(); ++it) {
+		if((*it)->startState == true) {
+			cout << (*it)->output() << endl;
+			break;
+		}
+	}
+	/*
 	for (int i = 0; i<listLength;i++)
 	{
 		if(stateList[i]!= NULL)
@@ -162,7 +207,7 @@ void FiniteStateAutomata::getStartState()
 			}
 		}
 
-	}
+	}*/
 	cout<<endl;
 }
 
@@ -173,8 +218,16 @@ void FiniteStateAutomata::getStartState()
 void FiniteStateAutomata::getFinalState()
 {
 	cout<<endl;
-	cout<<"Final States:"<< endl;
-	for (int i = 0; i<listLength;i++)
+	cout<<"Final State:"<< endl;
+	
+	for(std::vector<State*>::iterator it = vecStateList.begin(); it != vecStateList.end(); ++it) {
+		if((*it)->finalState == true) {
+			cout << (*it)->output() << endl;
+			break;
+		}
+	}
+	
+	/*for (int i = 0; i<listLength;i++)
 	{
 		if(stateList[i]!= NULL)
 		{
@@ -184,7 +237,7 @@ void FiniteStateAutomata::getFinalState()
 			}
 		}
 
-	}
+	}*/
 	cout<<endl;
 }
 
@@ -192,21 +245,32 @@ void FiniteStateAutomata::getFinalState()
  * Parameters: 3 strings, containing the state, the transition starts with (beginingState),
  * the name of connection between the two states (edge)
  * and the state, the transition ends with(finalState)*/
-void FiniteStateAutomata::addTransition(string beginingState,string edge, string finalState)
+void FiniteStateAutomata::addTransition(string p_szBeginningState,string edge, string finalState)
 {
-	bool begining = false;
+	bool beginning = false;
 	bool final = false;
-	State *pBegining;
+	State *pBeginning;
 	State *pFinal;
 	// check whether the states off added transition still exist, if one state exist, set it boolean to true
-	for(int i=0; i<listLength; i++)
+	for(std::vector<State*>::iterator it = vecStateList.begin(); it != vecStateList.end(); ++it) {
+		if((*it)->name == p_szBeginningState) {
+			beginning = true;
+			pBeginning = *it;
+		}
+		if((*it)->name == finalState) {
+			final = true;
+			pFinal = *it;
+		}
+	}
+	
+	/*for(int i=0; i<listLength; i++)
 		{
 			if(stateList[i] != NULL)
 			{
-				if(stateList[i]->name ==beginingState)
+				if(stateList[i]->name == p_szBeginningState)
 					{
-						begining = true;
-						pBegining = stateList[i];
+						beginning = true;
+						pBeginning = stateList[i];
 					}
 				if(stateList[i]->name == finalState)
 				{
@@ -214,11 +278,11 @@ void FiniteStateAutomata::addTransition(string beginingState,string edge, string
 					pFinal = stateList[i];
 				}
 			}
-		}
-	// if the states doesn't exist, add them to the FSA, cause we don't want a transition added that never can be used
-	if(begining == false)
+		}*/
+	// if the states don't exist, add them to the FSA, cause we don't want a transition added that never can be used
+	if(beginning == false)
 	{
-		addState(beginingState);
+		addState(p_szBeginningState);
 	}
 	if (final == false)
 	{
@@ -228,29 +292,32 @@ void FiniteStateAutomata::addTransition(string beginingState,string edge, string
 	 * addTransition method with the same values, so that the states can be found in stateList now,
 	 * so you don't want to add two transition so return after recursively repetition
 	*/
-	if(begining== false || final == false)
+	if(beginning== false || final == false)
 	{
-		addTransition(beginingState, edge, finalState);
+		addTransition(p_szBeginningState, edge, finalState);
 		return;
 	}
 	/* after both states had been found in transition list start adding the transition and storing it
 	 * at the first empty place of transitionListk, so with the method implemented till now it's possible
 	 * to save one transition more than once, that's maybe critical and maybe has to be fixed*/
-	Transition *newTransition = new Transition(*pBegining,*pFinal,edge);
+	Transition *newTransition = new Transition(*pBeginning,*pFinal,edge);
 
-	for(int i=0; i<listLength; i++)
+	//for(std::vector<Transition*>::iterator it = vecTransitionList.begin(); it != vecTransitionList.end(); ++it) {
+		vecTransitionList.push_back(newTransition);
+	//}
+
+	/*for(int i=0; i<listLength; i++)
+	{
+		if(transitionList[i] == NULL)
 		{
-			if(transitionList[i] == NULL)
-			{
-				transitionList[i] = newTransition;
-				automataTransitionCount++;
-				return;
-			}
-
+			transitionList[i] = newTransition;
+			automataTransitionCount++;
+			return;
 		}
-		cout << "Transitionlist is full." << endl;
-		delete newTransition;
-
+	}
+	cout << "Transitionlist is full." << endl;
+	delete newTransition;
+	*/
 }
 
 /* Add a transition
@@ -290,7 +357,14 @@ void FiniteStateAutomata::addTransition(string input)
  * counter (all three parameters must match*/
 void FiniteStateAutomata::removeTransition(string beginingState,string edge, string finalState)
 {
-	for(int i = 0; i< listLength;i++)
+
+	for(std::vector<Transition*>::iterator it = vecTransitionList.begin(); it != vecTransitionList.end(); ++it) {
+		if((*it)->begining.name == beginingState && (*it)->finish.name == finalState && (*it)->edge == edge) {
+			vecTransitionList.erase(it);
+		}
+	}
+
+	/*for(int i = 0; i< listLength;i++)
 	{
 		if(transitionList[i] != NULL)
 		{
@@ -303,7 +377,7 @@ void FiniteStateAutomata::removeTransition(string beginingState,string edge, str
 				automataTransitionCount--;
 			}
 		}
-	}
+	}*/
 }
 
 /* Output of all transitions
@@ -313,14 +387,19 @@ void FiniteStateAutomata::removeTransition(string beginingState,string edge, str
 void FiniteStateAutomata::outputTransitionList( )
 {
 	cout<<"TransitionList:"<< endl;
-	for(int idx=0; idx<listLength; idx++)
+
+	for(std::vector<Transition*>::iterator it = vecTransitionList.begin(); it != vecTransitionList.end(); ++it) {
+		cout << (*it)->output() << endl;
+	}
+
+	/*for(int idx=0; idx<listLength; idx++)
 	{
 		if(transitionList[idx]!=NULL)
 		{
 			cout << transitionList[idx]->output() << endl;
 		}
 
-	}
+	}*/
 }
 
 void FiniteStateAutomata::read(string p_szFileName)
@@ -376,7 +455,7 @@ void FiniteStateAutomata::read(string p_szFileName)
 		continue;
 	}
 	if(bFinalState == true) {
-		FiniteStateAutomata::
+
 	}
   }
 }
@@ -396,7 +475,20 @@ void FiniteStateAutomata::write(string p_szFileName)
 	  
 	ofsFile << "<States>\n";
 
-	for(int idx=0; idx<State::stateCount; idx++)
+	for(std::vector<State*>::iterator it = vecStateList.begin(); it != vecStateList.end(); ++it) {
+		
+		ofsFile << (*it)->name << endl;
+
+		if((*it)->startState) {
+			stateStart = *it;
+		}
+	
+		if((*it)->finalState) {
+			stateFinal = *it;
+		}
+	}
+
+	/*for(int idx=0; idx<State::stateCount; idx++)
 	{
 		if(stateList[idx] == NULL) {
 			continue;
@@ -410,7 +502,7 @@ void FiniteStateAutomata::write(string p_szFileName)
 		if(stateList[idx]->finalState) {
 			stateFinal = stateList[idx];
 		}
-	}
+	}*/
 	  
 	ofsFile << "</States>\n";
 
@@ -427,14 +519,18 @@ void FiniteStateAutomata::write(string p_szFileName)
 	}
 
 	ofsFile << "<Transitions>\n";
+
+	for(std::vector<Transition*>::iterator it = vecTransitionList.begin(); it != vecTransitionList.end(); ++it) {
+		ofsFile << (*it)->output() << endl;
+	}
 	  
-	for(int idx=0; idx<Transition::transitionCount; idx++)
+	/*for(int idx=0; idx<Transition::transitionCount; idx++)
 	{
 		if(transitionList[idx] == NULL) {
 			continue;
 		}
 		ofsFile << transitionList[idx]->output() << endl;
-	}
+	}*/
 
 	ofsFile << "</Transitions>\n";
 	  
@@ -450,7 +546,14 @@ void FiniteStateAutomata::testEdge(string testEdge)
 {
 	cout<<endl;
 	cout<<"Following transitions include the edge '"<< testEdge <<"':"<<endl;
-	for (int i=0; i<listLength; i++)
+	
+	for(std::vector<Transition*>::iterator it = vecTransitionList.begin(); it != vecTransitionList.end(); ++it) {
+		if((*it)->edge == testEdge) {
+			cout << (*it)->output() << endl;
+		}
+	}
+	
+	/*for (int i=0; i<listLength; i++)
 	{
 		if(transitionList[i]!= NULL)
 		{
@@ -459,7 +562,7 @@ void FiniteStateAutomata::testEdge(string testEdge)
 				cout << transitionList[i]->output() << endl;
 			}
 		}
-	}
+	}*/
 	cout<<endl;
 }
 
