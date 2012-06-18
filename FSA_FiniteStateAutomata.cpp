@@ -407,56 +407,83 @@ void FiniteStateAutomata::read(string p_szFileName)
 	ifstream ifsFile;
 	ifsFile.open(p_szFileName.c_str(), ios::in);
 	string szLine;
-	bool bStates;
-	bool bTransitions;
-	bool bFinalState;
-	bool bStartState;
+	bool bStates = false;
+	bool bTransitions = false;
+	bool bFinalState = false;
+	bool bStartState = false;
   
 	while(getline(ifsFile, szLine))
 	{
-	if(strcmp(szLine.c_str(), "<States>")) {
+		if(szLine == "<States>") {
 		bStates = true;
 		continue;
-    }
-    if(strcmp(szLine.c_str(), "</States>")) {
-		bStates = false;
-		continue;
-    }
-    if(strcmp(szLine.c_str(), "<Transitions>")) {
-		bTransitions = true;
-		continue;
-    }
-	if(strcmp(szLine.c_str(), "</Transitions>")) {
-		bTransitions = false;
-		continue;
-    }
-	if(strcmp(szLine.c_str(), "<FinalState>")) {
-		bFinalState = true;
-		continue;
-    }
-	if(strcmp(szLine.c_str(), "</FinalState>")) {
-		bFinalState = false;
-		continue;
-    }
-	if(strcmp(szLine.c_str(), "<StartState>")) {
-		bStartState = true;
-		continue;
-    }
-	if(strcmp(szLine.c_str(), "</StartState>")) {
-		bStartState = false;
-		continue;
-    }
-	if(bStates == true) {
-		FiniteStateAutomata::addState(szLine);
-		continue;
-	}
-	if(bTransitions == true) {
-		FiniteStateAutomata::addTransition(szLine);
-		continue;
-	}
-	if(bFinalState == true) {
-
-	}
+		}
+		if(szLine == "</States>") {
+			bStates = false;
+			continue;
+		}
+		if(szLine == "<Transitions>") {
+			bTransitions = true;
+			continue;
+		}
+		if(szLine == "</Transitions>") {
+			bTransitions = false;
+			continue;
+		}
+		if(szLine == "<FinalState>") {
+			bFinalState = true;
+			continue;
+		}
+		if(szLine == "</FinalState>") {
+			bFinalState = false;
+			continue;
+		}
+		if(szLine == "<StartState>") {
+			bStartState = true;
+			continue;
+		}
+		if(szLine == "</StartState>") {
+			bStartState = false;
+			continue;
+		}
+		if(bStates) {
+			FiniteStateAutomata::addState(szLine);
+			continue;
+		}
+		if(bTransitions) {
+			FiniteStateAutomata::addTransition(szLine);
+			continue;
+		}
+		if(bFinalState) {
+			bool bFoundState = false;
+			for(std::vector<State*>::iterator it = vecStateList.begin(); it != vecStateList.end(); ++it) {
+				if((*it)->name == szLine) {
+					(*it)->setFinalState();
+					bFoundState = true;
+					break;
+				}
+			}
+			if(!bFoundState) {
+				State *newState = new State(szLine);
+				newState->finalState = true;
+				addState(newState);
+			}
+		}
+		if(bStartState) {
+			bool bFoundState = false;
+			for(std::vector<State*>::iterator it = vecStateList.begin(); it != vecStateList.end(); ++it) {
+				if((*it)->name == szLine) {
+					(*it)->setStartState();
+					bFoundState = true;
+					break;
+				}
+			}
+			if(!bFoundState) {
+				State *newState = new State(szLine);
+				newState->startState = true;
+				addState(newState);
+			}
+		}
   }
 }
 
@@ -513,7 +540,7 @@ void FiniteStateAutomata::write(string p_szFileName)
 	}
 	
 	if(stateFinal != NULL) {
-		ofsFile << "<FinalState\n";
+		ofsFile << "<FinalState>\n";
 		ofsFile << stateFinal->name << endl;
 		ofsFile << "</FinalState>\n";
 	}
