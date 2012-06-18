@@ -18,13 +18,13 @@ class Transition{
 	friend class FiniteStateAutomata;
 
 private:
-	State begining;
-	State finish;
-	string edge;
+	State stBeginning;
+	State stFinish;
+	string szEdge;
 
 public:
-	Transition(State begining, State finish, string edge);
-	Transition(string input);
+	Transition(State p_stBeginning, State p_stFinish, string p_szEdge);
+	//Transition(string p_szInput);
 	string output();
 
 

@@ -11,12 +11,12 @@
 #include<cstring>
 
 /*Constructor*/
-Transition::Transition(State begining, State finish, string edge)
+Transition::Transition(State p_stBeginning, State p_stFinish, string p_szEdge)
 {
 
-	 this->begining = begining;
-	 this->finish = finish;
-	 this->edge = edge;
+	 this->stBeginning = p_stBeginning;
+	 this->stFinish = p_stFinish;
+	 this->szEdge = p_szEdge;
 }
 
 
@@ -56,7 +56,7 @@ Transition::Transition(State begining, State finish, string edge)
   * it gives a string with the predefined structure "startState edge finalState"*/
 string Transition::output(){
 	string result;
-	result = begining.name + " " + edge + " " + finish.name;
+	result = stBeginning.szName + " " + szEdge + " " + stFinish.szName;
 	return result;
 
 }

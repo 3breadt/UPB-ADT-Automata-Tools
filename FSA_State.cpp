@@ -16,20 +16,20 @@ State::State()
 }
 /* Cnstructor
  * Parameters: one string containing the name of the constructed state*/
-State::State(string name)
+State::State(string p_szName)
 {
-	this-> name = name;
-	startState = false;
-	finalState = false;
+	this-> szName = p_szName;
+	bStartState = false;
+	bFinalState = false;
 }
 /* Cnstructor
  * Parameters: three strings containing the name of the constructed state and the boolean startState
  * and finalState, so it's possible to defining the states status by creating the element*/
-State::State(string name, bool startState, bool finalState)
+State::State(string p_szName, bool p_bStartState, bool p_bFinalState)
 {
-	this->name = name;
-    this->startState = startState;
-    this->finalState = finalState;
+	this->szName = p_szName;
+    this->bStartState = p_bStartState;
+    this->bFinalState = p_bFinalState;
 }
 /* Set startState status
  *
@@ -37,7 +37,7 @@ State::State(string name, bool startState, bool finalState)
  * afterwards*/
 void State::setStartState()
 {
-	startState = true;
+	bStartState = true;
 }
 /* Set finalState status
  *
@@ -45,13 +45,13 @@ void State::setStartState()
  * afterwards*/
 void State::setFinalState()
 {
-	finalState = true;
+	bFinalState = true;
 }
 /* Output of one state
   *
   * it gives a string that includes the name of the state*/
 string State::output()
 {
-	return name;
+	return szName;
 }
 

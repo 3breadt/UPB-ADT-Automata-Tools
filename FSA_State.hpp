@@ -18,14 +18,14 @@ class State{
 	friend class FiniteStateAutomata;
 
 private:
-	string name;
-	bool startState;
-	bool finalState;
+	string szName;
+	bool bStartState;
+	bool bFinalState;
 
 public:
 	State();
-	State(string name);
-	State(string name, bool startState, bool finalState);
+	State(string p_szName);
+	State(string p_szName, bool p_bStartState, bool p_bFinalState);
 	void setStartState();
 	void setFinalState();
 	string output();
