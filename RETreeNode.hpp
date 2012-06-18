@@ -1,8 +1,7 @@
-/*
- * RETreeNode.h
- *
- *  Created on: 25.05.2012
- *      Author: Daniel Dreibrodt, Konstantin Steinmiller
+/**
+ * @file RETreeNode.hpp
+ * Definition of the regular expression tree node class.
+ * @author Daniel Dreibrodt, Konstantin Steinmiller
  */
 
 #ifndef RETREENODE_H_
@@ -11,6 +10,7 @@
 using namespace std;
 
 #include <string>
+#include "FinalStateAutomata.hpp"
 
 /**
  * @brief Represents nodes in the regular expression tree.
@@ -32,6 +32,7 @@ public:
 	string getContent();
 	void setContent(string c);
 	bool isEmpty();
+	FinalStateAutomata *toFSA(int *labelNum);
 
 private:
 	//Contains the operand or the value of the literal represented by this node.

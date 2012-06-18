@@ -1,5 +1,6 @@
-/*
+/**
  * @file REReaderWriter.cpp
+ * Implementation of the reader and writer class for regular expressions.
  * @author Daniel Dreibrodt, Konstantin Steinmiller
  */
 
@@ -13,6 +14,7 @@
 /**
  * Reads a file and parses the regular expression in it.
  * The file must contain only a single line, which in turn contains the regular expression.
+ * @param filename The path to the input file. The path is relative to the working directory, but can also be defined absolutely.
  * @see RegularExpression
  * @author Daniel Dreibrodt, Konstantin Steinmiller
  * @return The regular expression defined in the given file.
@@ -20,19 +22,18 @@
 RegularExpression *REReaderWriter::read(string filename) {
 	ifstream file (filename.c_str());
 	string str((istreambuf_iterator<char>(file)), istreambuf_iterator<char>());
-	return parse(str.c_str(), str.length());
+	return new RegularExpression(str);
 }
 
 /**
  * Parses a string and returns the represented regular expression.
  * @author Daniel Dreibrodt, Konstantin Steinmiller
  * @return The regular expression defined in the given string.
+ * @param str The null-terminated string representing the regular expression.
  */
-RegularExpression *REReaderWriter::parse(const char *string, int len) {
-	RegularExpression *re = new RegularExpression();
-	int pos = 0;
-	re->setTreeRoot(parseNode(string, &pos, len));
-	return re;
+RegularExpression *REReaderWriter::parse(const char str[]) {
+	string s = str;
+	return new RegularExpression(s);
 }
 
 /**
@@ -186,6 +187,7 @@ string REReaderWriter::writeToString(RegularExpression *re) {
 /**
  * Writes a string representation of the given regular expression into a file.
  * @param re The regular expression.
+ * @param filename The path to the output file.
  * @author Daniel Dreibrodt
  */
 void REReaderWriter::writeToFile(RegularExpression *re, const char *filename) {

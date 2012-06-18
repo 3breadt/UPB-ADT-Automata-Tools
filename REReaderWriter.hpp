@@ -1,8 +1,7 @@
-/*
- * REReaderWriter.hpp
- *
- *  Created on: 25.05.2012
- *      Author: Daniel Dreibrodt, Konstantin Steinmiller
+/**
+ * @file REReaderWriter.hpp
+ * Definition of the reader and writer class for regular expressions.
+ * @author Daniel Dreibrodt, Konstantin Steinmiller
  */
 
 using namespace std;
@@ -24,15 +23,17 @@ using namespace std;
  **/
 class REReaderWriter {
 
+friend class RegularExpression;
+
 public:
 	static RegularExpression *read(string filename);
-	static RegularExpression *parse(const char string[], int len);
+	static RegularExpression *parse(const char string[]);
 	static string writeToString(RegularExpression *re);
 	static void writeToFile(RegularExpression *re, const char* filename);
 
 private:
-	static RETreeNode *parseNode(const char string[], int *pos, int len);
-	static RETreeNode *parseNode(RETreeNode *left, const char string[], int *pos, int len);
+	static RETreeNode *parseNode(const char str[], int *pos, int len);
+	static RETreeNode *parseNode(RETreeNode *left, const char str[], int *pos, int len);
 	static RETreeNode *parseLiteral(const char str[], int *pos, int len);
 	static string writeToString(RETreeNode *rn);
 };

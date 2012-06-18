@@ -1,8 +1,7 @@
-/*
- * RegularExpression.h
- *
- *  Created on: 25.05.2012
- *      Author: daniel
+/**
+ * @file RegularExpression.hpp
+ * Definition of the regular expression class.
+ * @author Daniel Dreibrodt, Konstantin Steinmiller
  */
 
 #ifndef REGULAREXPRESSION_H_
@@ -37,10 +36,12 @@ using namespace std;
  */
 class RegularExpression {
 public:
-	RegularExpression();
+	RegularExpression(RETreeNode *p_tR);
+	RegularExpression(string regex);
 	virtual ~RegularExpression();
 	void setTreeRoot(RETreeNode *p_tR);
 	RETreeNode *getTreeRoot();
+	FinalStateAutomata *toFSA();
 
 	/** String representation of the boolean or operator **/
 	static const string re_orOp;
