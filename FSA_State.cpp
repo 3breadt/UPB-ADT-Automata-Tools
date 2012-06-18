@@ -5,7 +5,7 @@
  *      Author: fabiani
  */
 
-#include "State.hpp"
+#include "FSA_State.hpp"
 
 using namespace std;
 

@@ -5,17 +5,17 @@
  *      Author: fabiani
  */
 
-#ifndef TRANSITION_HPP_
-#define TRANSITION_HPP_
+#ifndef FSA_TRANSITION_HPP_
+#define FSA_TRANSITION_HPP_
 
 #include<iostream>
-#include "State.hpp"
+#include "FSA_State.hpp"
 
 using namespace std;
 
 class Transition{
 
-	friend class FinalStateAutomata;
+	friend class FiniteStateAutomata;
 	static int transitionCount;
 
 private:
@@ -31,4 +31,4 @@ public:
 
 };
 
-#endif /* TRANSITION_HPP_ */
+#endif /* FSA_TRANSITION_HPP_ */

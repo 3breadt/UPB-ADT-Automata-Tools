@@ -5,8 +5,8 @@
  *      Author: fabiani
  */
 
-#include "Transition.hpp"
-#include "State.hpp"
+#include "FSA_Transition.hpp"
+#include "FSA_State.hpp"
 #include<string>
 #include<cstring>
 

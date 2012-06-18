@@ -5,7 +5,7 @@
  *      Author: fabiani
  */
 
-#include "FinalStateAutomata.hpp"
+#include "FSA_FiniteStateAutomata.hpp"
 #include<string>
 #include<cstring>
 #include<iostream>
@@ -16,11 +16,11 @@ using namespace std;
 /* number of States and Transitions that can be build for this final state automata
  * so final state automata can save listLength Sate and listLength Transitions*/
 int listLength = 100;
-int FinalStateAutomata::automataStateCount =0; 		// counts the number of states, added to FSA
-int FinalStateAutomata::automataTransitionCount =0;	// counts the number of transition, added to FSA
+int FiniteStateAutomata::automataStateCount =0; 		// counts the number of states, added to FSA
+int FiniteStateAutomata::automataTransitionCount =0;	// counts the number of transition, added to FSA
 
 /* Constructor for FSA*/
-FinalStateAutomata :: FinalStateAutomata()
+FiniteStateAutomata :: FiniteStateAutomata()
 {
 
 	stateList = new State* [listLength];			// a list of element state, including all states of FSA
@@ -33,7 +33,7 @@ FinalStateAutomata :: FinalStateAutomata()
 }
 
 /* Destructor for FSA*/
-FinalStateAutomata::~FinalStateAutomata()
+FiniteStateAutomata::~FiniteStateAutomata()
 {
 	for(int i=0; i<listLength; i++)
 		{
@@ -54,7 +54,7 @@ FinalStateAutomata::~FinalStateAutomata()
  * Parameters: a string, containing the name of added state
  *
  * find the first empty place in list and store the new state there, increase couter, then return*/
-void FinalStateAutomata::addState(string stateName)		
+void FiniteStateAutomata::addState(string stateName)		
 {
 	State *newState = new State(stateName);
 
@@ -76,7 +76,7 @@ void FinalStateAutomata::addState(string stateName)
  * Parameters: a state element, initialized in the calling class
  *
  * for explanation look at method above*/
-void FinalStateAutomata::addState(State *stateName)
+void FiniteStateAutomata::addState(State *stateName)
 {
 
 	for(int i=0; i<listLength; i++)
@@ -94,7 +94,7 @@ void FinalStateAutomata::addState(State *stateName)
 }
 /* Remove state from FSA
  * Parameters: a string, containing the name of removable state */
-void FinalStateAutomata::removeState(string stateName)		
+void FiniteStateAutomata::removeState(string stateName)		
 {
 	/* search State with parameters name in stateList, by checking only the elements, that aren't empty,
 	 * when found the element free it and set it to null afterwards, so that it can be reused, decrease
@@ -132,7 +132,7 @@ void FinalStateAutomata::removeState(string stateName)
  *
  * for each state element in stateList, that isn't null, output the state, meaning giving it name
  * to console */
-void FinalStateAutomata::outputStateList( )
+void FiniteStateAutomata::outputStateList( )
 {
 	cout<<"StateList:"<< endl;
 	for(int idx=0; idx<listLength; idx++)
@@ -148,7 +148,7 @@ void FinalStateAutomata::outputStateList( )
  *
  * for each state element in stateList, that isn't null, check there property of startState,
  * if it's true, then output there name on console*/
-void FinalStateAutomata::getStartState()
+void FiniteStateAutomata::getStartState()
 {
 	cout<<endl;
 	cout<<"Start States:"<< endl;
@@ -170,7 +170,7 @@ void FinalStateAutomata::getStartState()
  *
  * for each state element in stateList, that isn't null, check there property of startState,
  * if it's true, then output there name on console*/
-void FinalStateAutomata::getFinalState()
+void FiniteStateAutomata::getFinalState()
 {
 	cout<<endl;
 	cout<<"Final States:"<< endl;
@@ -192,7 +192,7 @@ void FinalStateAutomata::getFinalState()
  * Parameters: 3 strings, containing the state, the transition starts with (beginingState),
  * the name of connection between the two states (edge)
  * and the state, the transition ends with(finalState)*/
-void FinalStateAutomata::addTransition(string beginingState,string edge, string finalState)
+void FiniteStateAutomata::addTransition(string beginingState,string edge, string finalState)
 {
 	bool begining = false;
 	bool final = false;
@@ -259,7 +259,7 @@ void FinalStateAutomata::addTransition(string beginingState,string edge, string 
  * deviding the parameters string into three strings for geting the startState, edge and finalState,
  * then using the method above for adding a new transition to transitionList, managing strings is a bit
  * complicated by C++*/
-void FinalStateAutomata::addTransition(string input)
+void FiniteStateAutomata::addTransition(string input)
 {
 	string pInput0, pInput1, pInput2;
 	char *pstr,*pTeilString;
@@ -288,7 +288,7 @@ void FinalStateAutomata::addTransition(string input)
  * search transition with parameters in transitionList, by checking only the elements, that aren't empty,
  * when found the element free it and set it to null afterwards, so that it can be reused, decrease
  * counter (all three parameters must match*/
-void FinalStateAutomata::removeTransition(string beginingState,string edge, string finalState)
+void FiniteStateAutomata::removeTransition(string beginingState,string edge, string finalState)
 {
 	for(int i = 0; i< listLength;i++)
 	{
@@ -310,7 +310,7 @@ void FinalStateAutomata::removeTransition(string beginingState,string edge, stri
  *
  * for each transition element in transitionList, that isn't null, output the transition,
  * meaning giving a string, structured like "starState edge finalState" to console*/
-void FinalStateAutomata::outputTransitionList( )
+void FiniteStateAutomata::outputTransitionList( )
 {
 	cout<<"TransitionList:"<< endl;
 	for(int idx=0; idx<listLength; idx++)
@@ -323,29 +323,65 @@ void FinalStateAutomata::outputTransitionList( )
 	}
 }
 
-void FinalStateAutomata::read(string p_szFileName)
+void FiniteStateAutomata::read(string p_szFileName)
 {
 	ifstream ifsFile;
 	ifsFile.open(p_szFileName.c_str(), ios::in);
 	string szLine;
 	bool bStates;
 	bool bTransitions;
+	bool bFinalState;
+	bool bStartState;
   
 	while(getline(ifsFile, szLine))
 	{
 	if(strcmp(szLine.c_str(), "<States>")) {
 		bStates = true;
+		continue;
     }
     if(strcmp(szLine.c_str(), "</States>")) {
 		bStates = false;
+		continue;
     }
     if(strcmp(szLine.c_str(), "<Transitions>")) {
 		bTransitions = true;
+		continue;
     }
+	if(strcmp(szLine.c_str(), "</Transitions>")) {
+		bTransitions = false;
+		continue;
+    }
+	if(strcmp(szLine.c_str(), "<FinalState>")) {
+		bFinalState = true;
+		continue;
+    }
+	if(strcmp(szLine.c_str(), "</FinalState>")) {
+		bFinalState = false;
+		continue;
+    }
+	if(strcmp(szLine.c_str(), "<StartState>")) {
+		bStartState = true;
+		continue;
+    }
+	if(strcmp(szLine.c_str(), "</StartState>")) {
+		bStartState = false;
+		continue;
+    }
+	if(bStates == true) {
+		FiniteStateAutomata::addState(szLine);
+		continue;
+	}
+	if(bTransitions == true) {
+		FiniteStateAutomata::addTransition(szLine);
+		continue;
+	}
+	if(bFinalState == true) {
+		FiniteStateAutomata::
+	}
   }
 }
 
-void FinalStateAutomata::write(string p_szFileName)
+void FiniteStateAutomata::write(string p_szFileName)
 {
 	ofstream ofsFile;
 	State *stateStart = NULL;
@@ -410,7 +446,7 @@ void FinalStateAutomata::write(string p_szFileName)
  *
  * for each transition element in transitionList, that isn't null, comparing there edge to the
  * parameter, if it matches, output the transition to console*/
-void FinalStateAutomata::testEdge(string testEdge)
+void FiniteStateAutomata::testEdge(string testEdge)
 {
 	cout<<endl;
 	cout<<"Following transitions include the edge '"<< testEdge <<"':"<<endl;

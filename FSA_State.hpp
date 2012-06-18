@@ -5,8 +5,8 @@
  *      Author: fabiani
  */
 
-#ifndef STATE_HPP_
-#define STATE_HPP_
+#ifndef FSA_STATE_HPP_
+#define FSA_STATE_HPP_
 
 #include <iostream>
 
@@ -15,7 +15,7 @@ using namespace std;
 class State{
 
 	friend class Transition;
-	friend class FinalStateAutomata;
+	friend class FiniteStateAutomata;
 	static int stateCount;
 
 private:
@@ -32,4 +32,4 @@ public:
 	string output();
 };
 
-#endif /* STATE_HPP_ */
+#endif /* FSA_STATE_HPP_ */

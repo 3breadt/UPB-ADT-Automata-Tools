@@ -5,17 +5,17 @@
  *      Author: fabiani
  */
 
-#ifndef FINALSTATEAUTOMATA_HPP_
-#define FINALSTATEAUTOMATA_HPP_
+#ifndef FSA_FINITESTATEAUTOMATA_HPP_
+#define FSA_FINITESTATEAUTOMATA_HPP_
 
 #include <iostream>
-#include "State.hpp"
-#include "Transition.hpp"
+#include "FSA_State.hpp"
+#include "FSA_Transition.hpp"
 
 
 using namespace std;
 
-class FinalStateAutomata{
+class FiniteStateAutomata{
 private:
 	State** stateList;
 	Transition** transitionList;
@@ -23,8 +23,8 @@ private:
 	static int automataTransitionCount;
 
 public:
-	FinalStateAutomata();
-	~ FinalStateAutomata();
+	FiniteStateAutomata();
+	~ FiniteStateAutomata();
 	void addState(string stateName);
 	void addState(State *stateName);
 	void removeState(string stateName);
@@ -42,4 +42,4 @@ public:
 
 };
 
-#endif /* FINALSTATEAUTOMATA_HPP_ */
+#endif /* FSA_FINITESTATEAUTOMATA_HPP_ */
