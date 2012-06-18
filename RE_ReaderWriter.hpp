@@ -6,7 +6,7 @@
 
 using namespace std;
 
-#include "RegularExpression.hpp"
+#include "RE_RegularExpression.hpp"
 
 #ifndef REREADER_H_
 #define REREADER_H_

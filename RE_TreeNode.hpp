@@ -10,7 +10,7 @@
 using namespace std;
 
 #include <string>
-#include "FinalStateAutomata.hpp"
+#include "FSA_FiniteStateAutomata.hpp"
 
 /**
  * @brief Represents nodes in the regular expression tree.
@@ -32,7 +32,7 @@ public:
 	string getContent();
 	void setContent(string c);
 	bool isEmpty();
-	FinalStateAutomata *toFSA(int *labelNum);
+	FiniteStateAutomata *toFSA(int *labelNum);
 
 private:
 	//Contains the operand or the value of the literal represented by this node.

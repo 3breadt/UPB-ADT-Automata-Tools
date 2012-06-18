@@ -4,9 +4,9 @@
  * @author Daniel Dreibrodt, Konstantin Steinmiller
  */
 
-#include "RegularExpression.hpp"
-#include "FinalStateAutomata.hpp";
-#include "REReaderWriter.hpp"
+#include "RE_RegularExpression.hpp"
+#include "RE_ReaderWriter.hpp"
+#include "FSA_FiniteStateAutomata.hpp";
 
 const string RegularExpression::re_orOp = "|";
 const string RegularExpression::re_andOp = ".";
@@ -63,9 +63,9 @@ RETreeNode *RegularExpression::getTreeRoot() {
  * Future versions will directly produce a minimized, deterministic FSA.
  * @return A finite state automaton representing this regular expression.
  */
-FinalStateAutomata *RegularExpression::toFSA() {
+FiniteStateAutomata *RegularExpression::toFSA() {
 	int labelCounter = 1;
-	FinalStateAutomata *ndfsa = p_treeRoot->toFSA(&labelCounter);
+	FiniteStateAutomata *ndfsa = p_treeRoot->toFSA(&labelCounter);
 	//TODO convert to DFSA
 	//TODO minimize DFSA
 	return ndfsa;

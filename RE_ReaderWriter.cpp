@@ -4,8 +4,8 @@
  * @author Daniel Dreibrodt, Konstantin Steinmiller
  */
 
-#include "REReaderWriter.hpp"
-#include "RETreeNode.hpp"
+#include "RE_ReaderWriter.hpp"
+#include "RE_TreeNode.hpp"
 #include <cstring>
 #include <string>
 #include <iostream>

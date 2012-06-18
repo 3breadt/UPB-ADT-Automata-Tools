@@ -9,7 +9,8 @@
 
 using namespace std;
 
-#include "RETreeNode.hpp"
+#include "RE_TreeNode.hpp"
+#include "FSA_FiniteStateAutomata.hpp"
 
 /**
  * @brief This class represents regular expressions.
@@ -41,7 +42,7 @@ public:
 	virtual ~RegularExpression();
 	void setTreeRoot(RETreeNode *p_tR);
 	RETreeNode *getTreeRoot();
-	FinalStateAutomata *toFSA();
+	FiniteStateAutomata *toFSA();
 
 	/** String representation of the boolean or operator **/
 	static const string re_orOp;
