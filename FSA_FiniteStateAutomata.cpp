@@ -74,7 +74,7 @@ void FiniteStateAutomata::outputStateList( )
  *
  * for each state element in stateList, that isn't null, check there property of startState,
  * if it's true, then output there name on console*/
-void FiniteStateAutomata::getStartState()
+void FiniteStateAutomata::printStartState()
 {
 	cout<<endl;
 	cout<<"Start State:"<< endl;
@@ -92,7 +92,7 @@ void FiniteStateAutomata::getStartState()
  *
  * for each state element in stateList, that isn't null, check there property of startState,
  * if it's true, then output there name on console*/
-void FiniteStateAutomata::getFinalState()
+void FiniteStateAutomata::printFinalState()
 {
 	cout<<endl;
 	cout<<"Final State:"<< endl;
@@ -104,6 +104,51 @@ void FiniteStateAutomata::getFinalState()
 		}
 	}
 	cout<<endl;
+}
+
+bool FiniteStateAutomata::bStateExists(string p_szName)
+{
+	for(std::vector<State*>::iterator it = vecStateList.begin(); it != vecStateList.end(); ++it) {
+		if((*it)->szName == p_szName) {
+			return true;
+		}
+	}
+	return false;
+}
+
+State* FiniteStateAutomata::getState(string p_szName)
+{
+	for(std::vector<State*>::iterator it = vecStateList.begin(); it != vecStateList.end(); ++it) {
+		if((*it)->szName == p_szName) {
+			return *it;
+		}
+	}
+	return NULL;
+}
+
+State* FiniteStateAutomata::getStartState()
+{
+	for(std::vector<State*>::iterator it = vecStateList.begin(); it != vecStateList.end(); ++it) {
+		if((*it)->bStartState == true) {
+			return *it;
+		}
+	}
+	return NULL;
+}
+
+State* FiniteStateAutomata::getFinalState()
+{
+	for(std::vector<State*>::iterator it = vecStateList.begin(); it != vecStateList.end(); ++it) {
+		if((*it)->bFinalState == true) {
+			return *it;
+		}
+	}
+	return NULL;
+}
+
+vector<State*>* FiniteStateAutomata::getStateList()
+{
+	return &vecStateList;
 }
 
 /* Add a transition

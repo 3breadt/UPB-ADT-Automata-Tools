@@ -28,8 +28,13 @@ public:
 	void addState(State *p_stNewState);
 	void removeState(string p_szStateName);
 	void outputStateList();
-	void getStartState();
-	void getFinalState();
+	void printStartState();
+	void printFinalState();
+	bool bStateExists(string p_szName);
+	State* getState(string p_szName);
+	State* getStartState();
+	State* getFinalState();
+	vector<State*>* getStateList();
 	void addTransition(string p_szBeginningState, string p_szEdge, string p_szFinalState);
 	void addTransition(string p_szInput);
 	void removeTransition(string p_szBeginningState, string p_szEdge, string p_szFinalState);
