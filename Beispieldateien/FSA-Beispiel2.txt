@@ -1,0 +1,25 @@
+<StartState>
+alpha
+</StartState>
+<FinalState>
+test2
+</FinalState>
+<States>
+five
+six
+seven
+</States>
+<Transitions>
+five yetanotheredge seven
+</Transitions>
+<States>
+one
+alpha
+test2
+three
+four
+</States>
+<Transitions>
+three edge four
+two edge1 one
+</Transitions>

@@ -302,7 +302,9 @@ void FiniteStateAutomata::read(string p_szFileName)
 			continue;
 		}
 		if(bStates) {
-			FiniteStateAutomata::addState(szLine);
+			if(!bStateExists(szLine)) {
+				FiniteStateAutomata::addState(szLine);
+			}
 			continue;
 		}
 		if(bTransitions) {
