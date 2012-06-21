@@ -100,7 +100,7 @@ void FiniteStateAutomata::printFinalState()
 	for(std::vector<State*>::iterator it = vecStateList.begin(); it != vecStateList.end(); ++it) {
 		if((*it)->bFinalState == true) {
 			cout << (*it)->output() << endl;
-			break;
+			//break;
 		}
 	}
 	cout<<endl;

@@ -5,6 +5,7 @@
  */
 #include <stddef.h>
 #include <string>
+#include <vector>
 #include "RE_TreeNode.hpp"
 #include "RE_RegularExpression.hpp"
 #include "FSA_FiniteStateAutomata.hpp"
@@ -127,7 +128,6 @@ bool RETreeNode::isEmpty() {
  * @return A NDFSA representing the regular expression tree with this node as its root.
  */
 FiniteStateAutomata *RETreeNode::toFSA(int *labelNum) {
-	FiniteStateAutomata *fsa = new FiniteStateAutomata();
 	if(isOperator()) {
 		if(content.compare(RegularExpression::re_andOp)==0) {
 			// For a concatenation all final states of the FSA for the left subtree
@@ -139,36 +139,92 @@ FiniteStateAutomata *RETreeNode::toFSA(int *labelNum) {
 			FiniteStateAutomata *leftFSA = p_left->toFSA(labelNum);
 			FiniteStateAutomata *rightFSA = p_right->toFSA(labelNum);
 
-			//TODO
+			vector<State*> *leftFinalStates = leftFSA->getFinalStates();
+			vector<State*> *rightStates = rightFSA->getStateList();
+			vector<Transition*> *rightTransitions = rightFSA->getTransitions();
+			State *startStateRight = rightFSA->getStartState();
+			startStateRight->setStartState(false);
+
+			unsigned int i = 0;
+			//Add all states of right automaton to left one
+			for(i=0;i<rightStates->size();i++) {
+				leftFSA->addState(rightStates->at(i));
+			}
+			//Add all transitions of right automaton to left one
+			for(i=0;i<rightTransitions->size();i++) {
+				leftFSA->getTransitions()->push_back(rightTransitions->at(i));
+			}
+			//For each final state of left automaton, add transition to start state of right one
+			//and turn the final state into a normal one
+			for(i=0;i<leftFinalStates->size();i++) {
+				State *finalState = leftFinalStates->at(i);
+				leftFSA->addTransition(finalState->output(),"",startStateRight->output());
+				finalState->setFinalState(false);
+			}
+
+			delete rightFSA;
+
+			return leftFSA;
 		} else if(content.compare(RegularExpression::re_orOp)==0) {
-			// For an boolean or operator the start states of the left and right
-			// subtree's FSAs have to be merged.
-			// As this is not possible with our API a new start state is created
+			// For an boolean or operator a new start state is created
 			// which has empty transitions to both starting states of the left
 			// and right subtree's FSAs.
 			// Those two start states are then turned into normal states.
 
-			char *stateAname = new char[20];
-			sprintf(stateAname, "State%d", *labelNum);
-			State *startState = new State(stateAname, true, false);
+			char *startStateName = new char[20];
+			sprintf(startStateName, "State%d", *labelNum);
+			State *startState = new State(startStateName, true, false);
 			(*labelNum)++;
 
 			FiniteStateAutomata *leftFSA = p_left->toFSA(labelNum);
 			FiniteStateAutomata *rightFSA = p_right->toFSA(labelNum);
 
-			//TODO
+			vector<State*> *rightStates = rightFSA->getStateList();
+			vector<Transition*> *rightTransitions = rightFSA->getTransitions();
+
+			State *startStateRight = rightFSA->getStartState();
+			startStateRight->setStartState(false);
+			State *startStateLeft = leftFSA->getStartState();
+			startStateLeft->setStartState(false);
+
+			unsigned int i = 0;
+			//Add all states of right automaton to left one
+			for(i=0;i<rightStates->size();i++) {
+				leftFSA->addState(rightStates->at(i));
+			}
+			//Add all transitions of right automaton to left one
+			for(i=0;i<rightTransitions->size();i++) {
+				leftFSA->getTransitions()->push_back(rightTransitions->at(i));
+			}
+
+			leftFSA->addState(startState);
+			leftFSA->addTransition(startState->output(),"",startStateLeft->output());
+			leftFSA->addTransition(startState->output(),"",startStateRight->output());
+
+			delete rightFSA;
+			return leftFSA;
 		} else if(content.compare(RegularExpression::re_starOp)==0) {
 			// For a repetition all final states of the left subtree's
 			// FSA are connected to its starting state.
 			// Then the starting state is also turned into a final state.
 
 			FiniteStateAutomata *leftFSA = p_left->toFSA(labelNum);
+			vector<State*> *finalStates = leftFSA->getFinalStates();
+			State *startState = leftFSA->getStartState();
+			unsigned int i=0;
+			for(i=0;i<finalStates->size();i++) {
+				State *finalState = finalStates->at(i);
+				leftFSA->addTransition(finalState->output(),"",startState->output());
+				finalState->setFinalState(false);
+			}
+			startState->setFinalState(true);
 
-			//TODO
+			return leftFSA;
 		}
 	} else {
 		//For literals create one start state A and one final state B
 		//The transition between A and B is marked by the literal itself
+		FiniteStateAutomata *fsa = new FiniteStateAutomata();
 
 		char *stateAname = new char[20];
 		sprintf(stateAname, "State%d", *labelNum);
@@ -183,6 +239,8 @@ FiniteStateAutomata *RETreeNode::toFSA(int *labelNum) {
 		fsa->addState(stateB);
 
 		fsa->addTransition(stateAname, content, stateBname);
+
+		return fsa;
 	}
-	return fsa;
+	return NULL;
 }
