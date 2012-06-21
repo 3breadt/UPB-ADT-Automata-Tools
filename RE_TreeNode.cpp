@@ -227,8 +227,7 @@ FiniteStateAutomata *RETreeNode::toFSA(int *labelNum) {
 		FiniteStateAutomata *fsa = new FiniteStateAutomata();
 
 		char *stateAname = new char[20];
-		sprintf(stateAname, "State%d", *labelNum);
-		(*labelNum)++;
+		sprintf(stateAname, "State%da", *labelNum);
 		State *stateA = new State(stateAname, true, false);
 		fsa->addState(stateA);
 
