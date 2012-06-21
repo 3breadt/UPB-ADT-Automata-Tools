@@ -61,6 +61,19 @@ string Transition::output(){
 
 }
 
+State* Transition::getBeginningState()
+{
+	return &stBeginning;
+}
+State* Transition::getFinishState()
+{
+	return &stFinish;
+}
+string Transition::getEdgeName()
+{
+	return szEdge;
+}
+
 
 
 

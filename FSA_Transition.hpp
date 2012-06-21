@@ -26,6 +26,9 @@ public:
 	Transition(State p_stBeginning, State p_stFinish, string p_szEdge);
 	//Transition(string p_szInput);
 	string output();
+	State* getBeginningState();
+	State* getFinishState();
+	string getEdgeName();
 
 
 };
