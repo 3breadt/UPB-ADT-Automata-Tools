@@ -1,9 +1,10 @@
 <StartState>
 alpha
 </StartState>
-<FinalState>
+<FinalStates>
 test2
-</FinalState>
+four
+</FinalStates>
 <States>
 five
 six

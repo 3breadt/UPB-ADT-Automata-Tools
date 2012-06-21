@@ -26,8 +26,10 @@ public:
 	State();
 	State(string p_szName);
 	State(string p_szName, bool p_bStartState, bool p_bFinalState);
-	void setStartState();
-	void setFinalState();
+	void setStartState(bool p_bSetStartState);
+	void setFinalState(bool p_bSetFinalState);
+	bool isStartState();
+	bool isFinalState();
 	string output();
 };
 

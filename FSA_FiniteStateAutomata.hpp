@@ -20,6 +20,8 @@ class FiniteStateAutomata{
 private:
 	vector<State*> vecStateList;
 	vector<Transition*> vecTransitionList;
+	vector<State*> vecFinalStates;
+	bool isInFinalStatesVector(string p_szStateName);
 
 public:
 	FiniteStateAutomata();
@@ -33,12 +35,13 @@ public:
 	bool bStateExists(string p_szName);
 	State* getState(string p_szName);
 	State* getStartState();
-	State* getFinalState();
+	vector<State*>* getFinalStates();
 	vector<State*>* getStateList();
 	void addTransition(string p_szBeginningState, string p_szEdge, string p_szFinalState);
 	void addTransition(string p_szInput);
 	void removeTransition(string p_szBeginningState, string p_szEdge, string p_szFinalState);
     void outputTransitionList();
+	vector<Transition*>* getTransitions();
     void read(string p_szFileName);
 	void write(string p_szFileName);
 	void testEdge(string p_szTestEdge);

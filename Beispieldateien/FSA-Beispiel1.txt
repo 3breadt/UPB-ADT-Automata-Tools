@@ -8,9 +8,11 @@ four
 <StartState>
 alpha
 </StartState>
-<FinalState>
+<FinalStates>
 test2
-</FinalState>
+four
+seven
+</FinalStates>
 <Transitions>
 three edge four
 two edge1 one

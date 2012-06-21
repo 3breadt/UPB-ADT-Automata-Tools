@@ -35,17 +35,27 @@ State::State(string p_szName, bool p_bStartState, bool p_bFinalState)
  *
  * if you didn't set the status by creating the state element you can use this method for defining it
  * afterwards*/
-void State::setStartState()
+void State::setStartState(bool p_bSetStartState)
 {
-	bStartState = true;
+	bStartState = p_bSetStartState;
 }
 /* Set finalState status
  *
  * if you didn't set the status by creating the state element you can use this method for defining it
  * afterwards*/
-void State::setFinalState()
+void State::setFinalState(bool p_bSetFinalState)
 {
-	bFinalState = true;
+	bFinalState = p_bSetFinalState;
+}
+
+bool State::isStartState()
+{
+	return State::bStartState;
+}
+
+bool State::isFinalState()
+{
+	return State::bFinalState;
 }
 /* Output of one state
   *

@@ -136,19 +136,31 @@ State* FiniteStateAutomata::getStartState()
 	return NULL;
 }
 
-State* FiniteStateAutomata::getFinalState()
-{
-	for(std::vector<State*>::iterator it = vecStateList.begin(); it != vecStateList.end(); ++it) {
-		if((*it)->bFinalState == true) {
-			return *it;
-		}
-	}
-	return NULL;
-}
-
 vector<State*>* FiniteStateAutomata::getStateList()
 {
 	return &vecStateList;
+}
+
+vector<State*>* FiniteStateAutomata::getFinalStates()
+{
+	for(std::vector<State*>::iterator it = vecStateList.begin(); it != vecStateList.end(); ++it) {
+		if((*it)->bFinalState == true) {
+			if(!FiniteStateAutomata::isInFinalStatesVector((*it)->szName)) {
+				vecFinalStates.push_back(*it);
+			}
+		}
+	}
+	return &vecFinalStates;
+}
+
+bool FiniteStateAutomata::isInFinalStatesVector(string p_szStateName)
+{
+	for(std::vector<State*>::iterator it = vecFinalStates.begin(); it != vecFinalStates.end(); ++it) {
+		if((*it)->szName == p_szStateName) {
+			return true;			
+		}
+	}
+	return false;
 }
 
 /* Add a transition
@@ -257,6 +269,11 @@ void FiniteStateAutomata::outputTransitionList( )
 	}
 }
 
+vector<Transition*>* FiniteStateAutomata::getTransitions()
+{
+	return &vecTransitionList;
+}
+
 void FiniteStateAutomata::read(string p_szFileName)
 {
 	ifstream ifsFile;
@@ -285,11 +302,11 @@ void FiniteStateAutomata::read(string p_szFileName)
 			bTransitions = false;
 			continue;
 		}
-		if(szLine == "<FinalState>") {
+		if(szLine == "<FinalStates>") {
 			bFinalState = true;
 			continue;
 		}
-		if(szLine == "</FinalState>") {
+		if(szLine == "</FinalStates>") {
 			bFinalState = false;
 			continue;
 		}
@@ -315,7 +332,7 @@ void FiniteStateAutomata::read(string p_szFileName)
 			bool bFoundState = false;
 			for(std::vector<State*>::iterator it = vecStateList.begin(); it != vecStateList.end(); ++it) {
 				if((*it)->szName == szLine) {
-					(*it)->setFinalState();
+					(*it)->setFinalState(true);
 					bFoundState = true;
 					break;
 				}
@@ -330,7 +347,7 @@ void FiniteStateAutomata::read(string p_szFileName)
 			bool bFoundState = false;
 			for(std::vector<State*>::iterator it = vecStateList.begin(); it != vecStateList.end(); ++it) {
 				if((*it)->szName == szLine) {
-					(*it)->setStartState();
+					(*it)->setStartState(true);
 					bFoundState = true;
 					break;
 				}
@@ -348,7 +365,6 @@ void FiniteStateAutomata::write(string p_szFileName)
 {
 	ofstream ofsFile;
 	State *stateStart = NULL;
-	State *stateFinal = NULL;
 
 	ofsFile.open(p_szFileName.c_str());
 
@@ -366,10 +382,6 @@ void FiniteStateAutomata::write(string p_szFileName)
 		if((*it)->bStartState) {
 			stateStart = *it;
 		}
-	
-		if((*it)->bFinalState) {
-			stateFinal = *it;
-		}
 	}
 	  
 	ofsFile << "</States>\n";
@@ -380,11 +392,13 @@ void FiniteStateAutomata::write(string p_szFileName)
 		ofsFile << "</StartState>\n";
 	}
 	
-	if(stateFinal != NULL) {
-		ofsFile << "<FinalState>\n";
-		ofsFile << stateFinal->szName << endl;
-		ofsFile << "</FinalState>\n";
+	ofsFile << "<FinalStates>\n";
+
+	for(std::vector<State*>::iterator it = vecFinalStates.begin(); it != vecFinalStates.end(); ++it) {
+		
+		ofsFile << (*it)->szName << endl;
 	}
+	ofsFile << "</FinalStates>\n";
 
 	ofsFile << "<Transitions>\n";
 
