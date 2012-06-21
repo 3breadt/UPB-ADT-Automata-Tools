@@ -127,8 +127,10 @@ bool RETreeNode::isEmpty() {
  * the regular expression tree with this node as its root.
  * @param labelNum Pointer to the counter variable that is used for naming the states of the FSA.
  * @return A NDFSA representing the regular expression tree with this node as its root.
+ * @author Daniel Dreibrodt, Konstantin Steinmiller
  */
 FiniteStateAutomata *RETreeNode::toFSA(int *labelNum) {
+	//Self-developed algorithm
 	if(isOperator()) {
 		if(content.compare(RegularExpression::re_andOp)==0) {
 			// For a concatenation all final states of the FSA for the left subtree
@@ -140,23 +142,29 @@ FiniteStateAutomata *RETreeNode::toFSA(int *labelNum) {
 			FiniteStateAutomata *leftFSA = p_left->toFSA(labelNum);
 			FiniteStateAutomata *rightFSA = p_right->toFSA(labelNum);
 
+			vector<State*> *leftStates = leftFSA->getStateList();
 			vector<State*> *leftFinalStates = leftFSA->getFinalStates();
+			vector<Transition*> *leftTransitions = leftFSA->getTransitions();
+
 			vector<State*> *rightStates = rightFSA->getStateList();
 			vector<Transition*> *rightTransitions = rightFSA->getTransitions();
 			State *startStateRight = rightFSA->getStartState();
 			startStateRight->setStartState(false);
 
-			unsigned int i = 0;
 			//Add all states of right automaton to left one
-			for(i=0;i<rightStates->size();i++) {
-				leftFSA->addState(rightStates->at(i));
-			}
+			leftStates->reserve(leftStates->size()+rightStates->size());
+			leftStates->insert(leftStates->end(), rightStates->begin(), rightStates->end());
+
 			//Add all transitions of right automaton to left one
-			for(i=0;i<rightTransitions->size();i++) {
-				leftFSA->getTransitions()->push_back(rightTransitions->at(i));
-			}
+			leftTransitions->reserve(leftTransitions->size()+rightTransitions->size());
+			leftTransitions->insert(leftTransitions->end(), rightTransitions->begin(), rightTransitions->end());
+
+			//TODO Create more minimal FSA here, add transitions to and from right star state
+			// for all left final states and remove old right start state and its transitions
+
 			//For each final state of left automaton, add transition to start state of right one
 			//and turn the final state into a normal one
+			unsigned int i;
 			for(i=0;i<leftFinalStates->size();i++) {
 				State *finalState = leftFinalStates->at(i);
 				leftFSA->addTransition(finalState->output(),"",startStateRight->output());
@@ -180,7 +188,9 @@ FiniteStateAutomata *RETreeNode::toFSA(int *labelNum) {
 			FiniteStateAutomata *leftFSA = p_left->toFSA(labelNum);
 			FiniteStateAutomata *rightFSA = p_right->toFSA(labelNum);
 
+			vector<State*> *leftStates = leftFSA->getStateList();
 			vector<State*> *rightStates = rightFSA->getStateList();
+			vector<Transition*> *leftTransitions = leftFSA->getTransitions();
 			vector<Transition*> *rightTransitions = rightFSA->getTransitions();
 
 			State *startStateRight = rightFSA->getStartState();
@@ -188,15 +198,13 @@ FiniteStateAutomata *RETreeNode::toFSA(int *labelNum) {
 			State *startStateLeft = leftFSA->getStartState();
 			startStateLeft->setStartState(false);
 
-			unsigned int i = 0;
 			//Add all states of right automaton to left one
-			for(i=0;i<rightStates->size();i++) {
-				leftFSA->addState(rightStates->at(i));
-			}
+			leftStates->reserve(leftStates->size()+rightStates->size());
+			leftStates->insert(leftStates->end(), rightStates->begin(), rightStates->end());
 			//Add all transitions of right automaton to left one
-			for(i=0;i<rightTransitions->size();i++) {
-				leftFSA->getTransitions()->push_back(rightTransitions->at(i));
-			}
+			leftTransitions->reserve(leftTransitions->size()+rightTransitions->size());
+			leftTransitions->insert(leftTransitions->end(), rightTransitions->begin(), rightTransitions->end());
+
 
 			leftFSA->addState(startState);
 			leftFSA->addTransition(startState->output(),"",startStateLeft->output());
@@ -215,6 +223,9 @@ FiniteStateAutomata *RETreeNode::toFSA(int *labelNum) {
 			unsigned int i=0;
 			for(i=0;i<finalStates->size();i++) {
 				State *finalState = finalStates->at(i);
+				//TODO optimize add transitions directly with states
+				// so that the states which are known already need
+				// not to be searched again
 				leftFSA->addTransition(finalState->output(),"",startState->output());
 				finalState->setFinalState(false);
 			}

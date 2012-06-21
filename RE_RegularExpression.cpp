@@ -58,7 +58,7 @@ RETreeNode *RegularExpression::getTreeRoot() {
 }
 
 /**
- * @brief Converts the regular expression to a finite state automaton.
+ * @brief Converts this regular expression to a finite state automaton.
  * At the moment that automaton is non-deterministic.
  * Future versions will directly produce a minimized, deterministic FSA.
  * @return A finite state automaton representing this regular expression.
