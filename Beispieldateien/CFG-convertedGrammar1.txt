@@ -1,0 +1,25 @@
+<States>
+<expression>
+endState
+TransitionState20
+TransitionState30
+TransitionState31
+TransitionState32
+</States>
+<StartState>
+<expression>
+</StartState>
+<FinalState>
+endState
+</FinalState>
+<Transitions>
+<expression> a endState
+<expression> b <expression>
+<expression> a TransitionState20
+TransitionState20 b <expression>
+<expression> c TransitionState30
+TransitionState30 d TransitionState31
+TransitionState31 a TransitionState32
+TransitionState32 b <expression>
+<expression> d <expression>
+</Transitions>

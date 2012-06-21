@@ -112,6 +112,10 @@ void Production::printProduction()
 	cout << this->toString() << endl;
 }
 
+string Production::getLeftSide()
+{
+	return this->left;
+}
 
 
 

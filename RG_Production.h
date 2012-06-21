@@ -30,7 +30,7 @@ public:
 	Production();
 	~Production();
 
-public:
+private:
 
 	string left;
 	Substitution* right;
@@ -42,6 +42,7 @@ public:
 	void readProductionFromLine(string line, string productionArrow);
 	void printProduction();
 	string toString();
+	string getLeftSide();
 };
 
 

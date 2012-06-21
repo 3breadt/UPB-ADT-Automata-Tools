@@ -7,6 +7,7 @@
 
 #include "RG_Grammar.h"
 #include <stdlib.h>
+#include <sstream>
 
 #define DEBUG
 
@@ -139,6 +140,7 @@ DynArray<Production*> Grammar::getProductions()
  */
 void Grammar::checkIfRegular()
 {
+	this->isRegular = 1 ;
 	for(unsigned int i=0 ; i < this->getProductions().getLength(); i++ ) // For every Production
 	{
 		/**
@@ -173,12 +175,125 @@ void Grammar::checkIfRegular()
 	}
 }
 
+int Grammar::getNumberOfProductions()
+{
+	return this->getProductions().getLength() ;
+}
+
+Production* Grammar::getProduction(int index)
+{
+	return this->getProductions()[index];
+}
+
+int Grammar::isStartSymbol(string symbol)
+{
+	if(this->getStartSymbol().compare(symbol)==0)
+	{
+		return 1;
+	}
+	return 0;
+}
+
 void Grammar::initConvert()
 {
 	this->checkIfRegular();
+	cout<< "IS REGULAR? :" << this->isRegular<< endl;
 	if(this->isRegular == 0)
 	{
 		cerr << "Grammar is not Regular, cannot Convert" << endl ;
 		exit(1);
 	}
+}
+/**
+ * @brief converts a Regular Grammar to a Finite States Automaton
+ *
+ * Not verified!!!
+ *
+ * @return the FSA
+ */
+FiniteStateAutomata* Grammar::convertToFSA()
+{
+	this->initConvert();
+
+	FiniteStateAutomata* automat = new FiniteStateAutomata() ;
+
+	/**First end of the Transition */
+	State* pFromState;
+
+	for(int i=0; i< this->getNumberOfProductions() ; i++)
+	{
+		Production*    pProd = this->getProduction(i);
+		Substitution*  pSubs = pProd->getSubstitution();
+		string leftSide    = pProd->getLeftSide();
+
+		if (!automat->bStateExists(leftSide))
+		{
+			automat->addState(leftSide);
+		}
+		if (this->isStartSymbol(leftSide))
+		{
+			automat->getState(leftSide)->setStartState(true);
+		}
+		pFromState = automat->getState(leftSide);
+
+		/** if Production has the form: A --> <epsilon> */
+		if(pSubs->getSymbolstring(0).compare(EMPTY_STRING) == 0)
+		{
+			pFromState->setFinalState(true);
+		}
+		else
+		{
+			int substitutionlength= pSubs->getDecodedSubstitutionLength();
+
+			/** For every symbol in the Substitution */
+			for(int j=0 ; j < substitutionlength; j++)
+			{
+				/** the current symbol is a Terminal */
+				if(pSubs->symbolIsTerminal(j))
+				{
+					/** the current Symbol is the last one in the Substitution, and it is a Terminal */
+					if(j+1 == substitutionlength )
+					{
+						if (!automat->bStateExists("endState"))
+						{
+							automat->addState("endState");
+							automat->getState("endState")->setFinalState(true);
+						}
+						automat->addTransition(pFromState->output(),pSubs->getSymbolstring(j),"endState");
+					}
+					/** the current symbol is not the last one in the substitution, there is more HiHi :p */
+					else
+					{
+						/** the next symbol in the Substitution is a NonTerminal */
+						if(!pSubs->symbolIsTerminal(j+1))
+						{
+							if (!automat->bStateExists(pSubs->getSymbolstring(j+1)))
+							{
+								automat->addState(pSubs->getSymbolstring(j+1));
+							}
+							automat->addTransition(pFromState->output(),pSubs->getSymbolstring(j),pSubs->getSymbolstring(j+1));
+						}
+						/** the next symbol in the Substitution is a Terminal */
+						else
+						{
+							stringstream ss;
+							string stateName;
+							ss << "TransitionState" << i << j ;
+							ss >> stateName ;
+							automat->addState(stateName);
+							automat->addTransition(pFromState->output(),pSubs->getSymbolstring(j),stateName);
+							pFromState = automat->getState(stateName);
+						}
+					}
+
+				}
+			}
+		}
+
+
+
+	}
+
+	return automat;
+
 }

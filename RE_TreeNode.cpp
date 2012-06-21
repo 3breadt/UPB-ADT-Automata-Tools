@@ -4,6 +4,7 @@
  * @author Daniel Dreibrodt, Konstantin Steinmiller
  */
 #include <stddef.h>
+#include <cstdio>
 #include <string>
 #include <vector>
 #include "RE_TreeNode.hpp"
