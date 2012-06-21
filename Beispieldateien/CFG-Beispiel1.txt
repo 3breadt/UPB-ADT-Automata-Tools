@@ -12,4 +12,4 @@ d
 <expression> --> b <expression>
 <expression> --> a b <expression>
 <expression> --> c d a b <expression>
-<expression> --> d <expression> a
+<expression> --> d <expression>

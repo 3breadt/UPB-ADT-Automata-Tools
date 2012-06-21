@@ -11,8 +11,11 @@
 
 #include "RG_DynArray.h"
 #include "RG_Production.h"
+#include "FSA_FiniteStateAutomata.hpp"
 
 using namespace std;
+
+#define EMPTY_STRING "<epsilon>"
 
 /**
  * @class Grammar
@@ -56,9 +59,16 @@ public:
 	string getStartSymbol();
 	DynArray<Production*> getProductions();
 
+	int getNumberOfProductions();
+	Production* getProduction(int index);
+	int isStartSymbol(string symbol);
+
 	void checkIfRegular();
 
 	void initConvert();
+
+	FiniteStateAutomata* convertToFSA();
+
 };
 
 
