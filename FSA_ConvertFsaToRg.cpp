@@ -8,6 +8,7 @@
 #include "FSA_ConvertFsaToRg.hpp"
 #include <vector>
 #include "RG_Grammar.h"
+#include "RG_ReaderWriter.h"
 
 using namespace std;
 
@@ -19,14 +20,13 @@ ConvertFsaToRg::ConvertFsaToRg()
 Grammar* ConvertFsaToRg::convert(FiniteStateAutomata *fsaToConvert)
 {
 	Grammar *graConverted = new Grammar();
-	FiniteStateAutomata fsaActual = *fsaToConvert;
+	FiniteStateAutomata *fsaActual = fsaToConvert;
 	State *stTemp;
 
-
-	vector<Transition*>* vecTransitionList = fsaActual.getTransitions();
+	vector<Transition*>* vecTransitionList = fsaActual->getTransitions();
 	DynArray<string> arTemp;
 
-	stTemp = fsaActual.getStartState();
+	stTemp = fsaActual->getStartState();
 	graConverted->setStartSymbol(stTemp->output());
 	if(stTemp->isFinalState() == true)
 	{
@@ -40,13 +40,6 @@ Grammar* ConvertFsaToRg::convert(FiniteStateAutomata *fsaToConvert)
 
 	for(std::vector<Transition*>::iterator it = vecTransitionList->begin(); it != vecTransitionList->end(); ++it)
 	{
-		Substitution suTemp = *new Substitution();
-		Production prTemp = *new Production();
-		suTemp.setRawString((*it)->getEdgeName() + (*it)->getFinishState()->output());
-		prTemp.setLeftSide((*it)->getBeginningState()->output());
-		prTemp.setSubstitution(&suTemp);
-		graConverted->addProduction(&prTemp);
-
 		arTemp = graConverted->getNonTerminals();
 		if(!arTemp.exist((*it)->getBeginningState()->output()))
 		{
@@ -56,19 +49,29 @@ Grammar* ConvertFsaToRg::convert(FiniteStateAutomata *fsaToConvert)
 		{
 			graConverted->addNonTerminal((*it)->getFinishState()->output());
 		}
+		//graConverted->getNonTerminals().printArray();
 		arTemp = graConverted->getTerminals();
 		if(!arTemp.exist((*it)->getEdgeName()))
 		{
 			graConverted->addTerminal((*it)->getEdgeName());
 		}
-		if((*it)->getFinishState()->isFinalState() == true)
+
+		Substitution *suTemp = new Substitution();
+		Production *prTemp = new Production();
+		suTemp->setRawString((*it)->getEdgeName() + " " + (*it)->getFinishState()->output());
+		prTemp->setLeftSide((*it)->getBeginningState()->output());
+		prTemp->setSubstitution(suTemp);
+		suTemp->decode(graConverted->getTerminals(), graConverted->getNonTerminals());
+		graConverted->addProduction(prTemp);
+		/*if((*it)->getFinishState()->isFinalState() == true)
 		{
 			suTemp.setRawString((*it)->getEdgeName());
 			prTemp.setLeftSide((*it)->getBeginningState()->output());
 			prTemp.setSubstitution(&suTemp);
 			graConverted->addProduction(&prTemp);
-		}
+		}*/
 
 	}
-return graConverted;
+	graConverted->getProductions().printArray();
+	return graConverted;
 }
