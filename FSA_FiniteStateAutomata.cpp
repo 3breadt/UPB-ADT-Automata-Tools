@@ -24,6 +24,7 @@ FiniteStateAutomata::~FiniteStateAutomata()
 {
 	vecStateList.clear();
 	vecTransitionList.clear();
+	vecFinalStates.clear();
 }
 
 /* Add a new state to FSA
@@ -143,8 +144,13 @@ vector<State*>* FiniteStateAutomata::getStateList()
 
 vector<State*>* FiniteStateAutomata::getFinalStates()
 {
+	// remove all states which are not final anymore
+	FiniteStateAutomata::removeFinalStates();
+
+	// search the state list for all states that are final, add them to the final states vector
 	for(std::vector<State*>::iterator it = vecStateList.begin(); it != vecStateList.end(); ++it) {
 		if((*it)->bFinalState == true) {
+			// only add if they're not in the vector already
 			if(!FiniteStateAutomata::isInFinalStatesVector((*it)->szName)) {
 				vecFinalStates.push_back(*it);
 			}
@@ -153,11 +159,28 @@ vector<State*>* FiniteStateAutomata::getFinalStates()
 	return &vecFinalStates;
 }
 
+void FiniteStateAutomata::removeFinalStates()
+{
+	// remove all states which are not final anymore
+	for(std::vector<State*>::iterator it = vecFinalStates.begin(); it != vecFinalStates.end(); ++it) {
+		if((*it)->bFinalState == false) {
+			vecFinalStates.erase(it);
+			FiniteStateAutomata::removeFinalStates();
+			break;
+		}
+	}
+}
+
+/**
+ * Private function for checking if a final state is in the final states vector.
+ * @param p_szStateName Name of the final state to check.
+ * @return True if the state is in the vector, false if not.
+ */
 bool FiniteStateAutomata::isInFinalStatesVector(string p_szStateName)
 {
 	for(std::vector<State*>::iterator it = vecFinalStates.begin(); it != vecFinalStates.end(); ++it) {
 		if((*it)->szName == p_szStateName) {
-			return true;			
+			return true;
 		}
 	}
 	return false;

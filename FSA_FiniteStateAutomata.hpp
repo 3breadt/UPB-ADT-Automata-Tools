@@ -22,6 +22,7 @@ private:
 	vector<Transition*> vecTransitionList;
 	vector<State*> vecFinalStates;
 	bool isInFinalStatesVector(string p_szStateName);
+	void removeFinalStates();
 
 public:
 	FiniteStateAutomata();

@@ -14,7 +14,7 @@ State::State()
 {
 
 }
-/* Cnstructor
+/* Constructor
  * Parameters: one string containing the name of the constructed state*/
 State::State(string p_szName)
 {
