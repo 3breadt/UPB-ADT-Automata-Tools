@@ -31,3 +31,6 @@ Docs/
 
 #Finder files
 .DS_Store
+
+#CMakeBuild
+build/
