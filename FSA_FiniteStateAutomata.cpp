@@ -262,6 +262,50 @@ void FiniteStateAutomata::addTransition(string p_szInput)
 	addTransition(szBeginningState, szEdge, szFinalState);
 }
 
+void FiniteStateAutomata::addTransition(State *p_stBeginningState, string p_szEdge, State *p_stFinalState)
+{
+	/*bool bBeginning = false;
+	bool bFinal = false;
+	State *pBeginning;
+	State *pFinal;
+	// check whether the states off added transition still exist, if one state exist, set it boolean to true
+	for(std::vector<State*>::iterator it = vecStateList.begin(); it != vecStateList.end(); ++it) {
+		if((*it)->szName == p_stBeginningState->szName) {
+			bBeginning = true;
+			pBeginning = *it;
+		}
+		if((*it)->szName == p_stFinalState->szName) {
+			bFinal = true;
+			pFinal = *it;
+		}
+	}
+	
+	// if the states don't exist, add them to the FSA, cause we don't want a transition added that never can be used
+	if(bBeginning == false)
+	{
+		addState(p_stBeginningState);
+	}
+	if (bFinal == false)
+	{
+		addState(p_stFinalState);
+	}*/
+	/* if one or both states didn't exist and had to been added, then recursively repeat the
+	 * addTransition method with the same values, so that the states can be found in stateList now,
+	 * so you don't want to add two transition so return after recursively repetition
+	*/
+	/*if(bBeginning == false || bFinal == false)
+	{
+		addTransition(p_stBeginningState, p_szEdge, p_stFinalState);
+		return;
+	}*/
+	/* after both states had been found in transition list start adding the transition and storing it
+	 * at the first empty place of transitionListk, so with the method implemented till now it's possible
+	 * to save one transition more than once, that's maybe critical and maybe has to be fixed*/
+	Transition *newTransition = new Transition(*p_stBeginningState, *p_stFinalState, p_szEdge);
+
+	vecTransitionList.push_back(newTransition);
+}
+
 /* Remove a transition
  * Parameters: 3 strings, conteining the beginning state(explanation at function "addtransition"),
  * the edge and the finalState

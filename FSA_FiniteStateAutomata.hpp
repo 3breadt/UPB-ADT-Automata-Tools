@@ -39,6 +39,7 @@ public:
 	vector<State*>* getFinalStates();
 	vector<State*>* getStateList();
 	void addTransition(string p_szBeginningState, string p_szEdge, string p_szFinalState);
+	void addTransition(State *p_stBeginningState, string p_szEdge, State *p_stFinalState);
 	void addTransition(string p_szInput);
 	void removeTransition(string p_szBeginningState, string p_szEdge, string p_szFinalState);
     void outputTransitionList();
