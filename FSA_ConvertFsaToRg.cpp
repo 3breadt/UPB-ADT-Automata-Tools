@@ -63,15 +63,16 @@ Grammar* ConvertFsaToRg::convert(FiniteStateAutomata *fsaToConvert)
 		prTemp->setSubstitution(suTemp);
 		suTemp->decode(graConverted->getTerminals(), graConverted->getNonTerminals());
 		graConverted->addProduction(prTemp);
-		/*if((*it)->getFinishState()->isFinalState() == true)
+		if((*it)->getFinishState()->isFinalState() == true)
 		{
-			suTemp.setRawString((*it)->getEdgeName());
-			prTemp.setLeftSide((*it)->getBeginningState()->output());
-			prTemp.setSubstitution(&suTemp);
-			graConverted->addProduction(&prTemp);
-		}*/
-
+			Substitution *suTemp = new Substitution();
+			Production *prTemp = new Production();
+			suTemp->setRawString((*it)->getEdgeName());
+			prTemp->setLeftSide((*it)->getBeginningState()->output());
+			prTemp->setSubstitution(suTemp);
+			suTemp->decode(graConverted->getTerminals(), graConverted->getNonTerminals());
+			graConverted->addProduction(prTemp);
+		}
 	}
-	graConverted->getProductions().printArray();
 	return graConverted;
 }
