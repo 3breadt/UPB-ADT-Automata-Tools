@@ -40,7 +40,7 @@ public:
 	void clearReferencedStates();
 	State* getConvertedState();
 	vector<State*>* getReferencedStates();
-	bool equalsReferncedStates(StateConverter *p_scStateConverter);
+	bool equalsReferencedStates(StateConverter *p_scStateConverter);
 };
 
 #endif /* FSA_STATE_HPP_ */

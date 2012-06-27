@@ -341,6 +341,10 @@ vector<Transition*>* FiniteStateAutomata::getTransitions()
 	return &vecTransitionList;
 }
 
+/**
+ * Reads data for this automata from a file, and adjusts all objects (setting the lists etc).
+ * @param p_szFileName Path and name of the file.
+ */
 void FiniteStateAutomata::read(string p_szFileName)
 {
 	ifstream ifsFile;
@@ -428,6 +432,10 @@ void FiniteStateAutomata::read(string p_szFileName)
   }
 }
 
+/**
+ * Writes the data of the automata into a textfile.
+ * @param p_szFileName Path and name of the file.
+ */
 void FiniteStateAutomata::write(string p_szFileName)
 {
 	ofstream ofsFile;
@@ -496,47 +504,74 @@ void FiniteStateAutomata::testEdge(string p_szTestEdge)
 	cout<<endl;
 }
 
+/**
+ * Converts this finite state automata into a new deterministic finite state automata.
+ * There is no check if this automata is already deterministic,
+ * the conversion is done no matter what.
+ * @return A pointer to the new finite state automata.
+ */
 FiniteStateAutomata* FiniteStateAutomata::fsaConvertNEAtoDEA()
 {
 	FiniteStateAutomata *fsaDEA = new FiniteStateAutomata();
 	State *stStartState = this->getStartState();
+
+	// get all existing edges (from this automata)
 	vector<string> vecEdges = getEdgesFromTransitionList();
 	vector<StateConverter*> vecStateConverters;
 
+	// Set the new automatas start state to a new state equivalent to the old automatas start state
 	State *stNewStartState = new State();
 	stNewStartState->szName = "S0";
 	stNewStartState->bFinalState = stStartState->bFinalState;
 	stNewStartState->bStartState = stStartState->bStartState;
 
+	// Create a new StateConverter containing the new start state, and adds a reference
+	// to the old automaton's start state.
 	StateConverter *scNewStartState = new StateConverter(stNewStartState);
 	scNewStartState->addReferencedState(stStartState);
-	scNewStartState->checkForFinalState();
 	vecStateConverters.push_back(scNewStartState);
 
 	int idx = 0;
 	int iStateCounter = 1;
+
+	// for each item in the StateConverters vector (this vector increases in size while in this loop, hence no foreach loop)
 	while(vecStateConverters.size() > idx) {
+
+		// for each existing edge (from this automaton)
 		for(std::vector<string>::iterator itedge = vecEdges.begin(); itedge != vecEdges.end(); ++itedge) {
 
+			// get all states that are reachable by the current edge
 			vector<State*>* vecTargetStates = new vector<State*>();
 			for(std::vector<State*>::iterator itref = vecStateConverters[idx]->vecReferencedStates.begin(); itref != vecStateConverters[idx]->vecReferencedStates.end(); ++itref) {
-				getTargetStatesForEdge(*itedge, *itref, vecTargetStates);
+				setTargetStatesForEdge(*itedge, *itref, vecTargetStates);
 			}
 			
+			// Create the name for the new state
 			std::stringstream szstream;
 			szstream << "S" << iStateCounter;
 			string szStateName = szstream.str();
+
+			// get a new StateConverter representing all States reachable through the current edge as a single State
 			StateConverter *scNewStateConverter = new StateConverter(szStateName, vecTargetStates);
+			
+			// make the StateConverter's State final if any of the referenced States are final
 			scNewStateConverter->checkForFinalState();
 			StateConverter* scTargetStateConverter;
+
+			// if a StateConverter equal to the new StateConverter doesn't exist in the
+			// StateConverters vector, add it and increase the state counter (used for naming)
 			if(!isInStateConverterList(scNewStateConverter, &vecStateConverters) && (vecTargetStates->size() > 0)) {
 				vecStateConverters.push_back(scNewStateConverter);
 				scTargetStateConverter = getEqualStateConverterFromConverterList(scNewStateConverter, &vecStateConverters);
 				iStateCounter++;
-			} else {
+			}
+			// else get the equal StateConverter from the vector and delete the new StateConverter,
+			// as it is not needed anymore
+			else {
 				scTargetStateConverter = getEqualStateConverterFromConverterList(scNewStateConverter, &vecStateConverters);
 				delete scNewStateConverter;
 			}
+			// add a transition to from the current StateConverter to the targeted (new) StateConverter
 			if(scTargetStateConverter != NULL) {
 				fsaDEA->addTransition(vecStateConverters[idx]->getConvertedState(), *itedge, scTargetStateConverter->getConvertedState());
 			}
@@ -544,11 +579,20 @@ FiniteStateAutomata* FiniteStateAutomata::fsaConvertNEAtoDEA()
 		idx++;
 	}
 
+	// Create the State vector for the new automaton from the StateConverter vector
 	setStateListFromStateConverterList(fsaDEA->getStateList(), &vecStateConverters);
+
+	// fill the final states vector
 	fsaDEA->getFinalStates();
+
 	return fsaDEA;
 }
 
+/**
+ * Creates a vector of States from the given vector of StateConverters.
+ * @param p_vecStateList Vector in which to save the States.
+ * @param p_vecStateConverterList Vector of StateConverters which contain the States for the target vector.
+ */
 void FiniteStateAutomata::setStateListFromStateConverterList(vector<State*>* p_vecStateList, vector<StateConverter*>* p_vecStateConverterList)
 {
 	for(std::vector<StateConverter*>::iterator itconv = p_vecStateConverterList->begin(); itconv != p_vecStateConverterList->end(); ++itconv) {
@@ -556,7 +600,14 @@ void FiniteStateAutomata::setStateListFromStateConverterList(vector<State*>* p_v
 	}
 }
 
-void FiniteStateAutomata::getTargetStatesForEdge(string p_szEdge, State* p_stStateToCheck, vector<State*>* p_vecTargetStates)
+/**
+ * Saves all the States which are targeted by an edge from a specific State in the given vector.
+ * More than one State means that the automata is non-deterministic.
+ * @param p_szEdge Which edge to check.
+ * @param p_stStateToCheck Which State to check.
+ * @param p_vecTargetStates Vector in which to save the target States.
+ */
+void FiniteStateAutomata::setTargetStatesForEdge(string p_szEdge, State* p_stStateToCheck, vector<State*>* p_vecTargetStates)
 {
 	for(std::vector<Transition*>::iterator ittrans = vecTransitionList.begin(); ittrans != vecTransitionList.end(); ++ittrans) {
 		if((*ittrans)->getBeginningState()->output() == p_stStateToCheck->output() && (*ittrans)->getEdgeName() == p_szEdge) {
@@ -565,13 +616,19 @@ void FiniteStateAutomata::getTargetStatesForEdge(string p_szEdge, State* p_stSta
 	}
 }
 
+/**
+ * Checks if a StateConverter equal to the given StateConverter exists in the given vector.
+ * @param p_scStateConverter StateConverter to do the check for.
+ * @param p_vecStateConverterList Vector that may or may not contain the given StateConverter.
+ * @return True if an equal StateConverter exists, false if not.
+ */
 bool FiniteStateAutomata::isInStateConverterList(StateConverter* p_scStateConverter, vector<StateConverter*>* p_vecStateConverterList)
 {
 	for(std::vector<StateConverter*>::iterator it = p_vecStateConverterList->begin(); it != p_vecStateConverterList->end(); ++it) {
 		if(p_scStateConverter->getReferencedStates()->size() != (*it)->getReferencedStates()->size()) {
 			continue;
 		} else {
-			if((*it)->equalsReferncedStates(p_scStateConverter)) {
+			if((*it)->equalsReferencedStates(p_scStateConverter)) {
 				return true;
 			}
 		}
@@ -579,13 +636,20 @@ bool FiniteStateAutomata::isInStateConverterList(StateConverter* p_scStateConver
 	return false;
 }
 
+/**
+ * Checks if a StateConverter equal to the given StateConverter exists in the given vector,
+ * and returns a pointer to that StateConverter.
+ * @param p_scStateConverter StateConverter to do the check for.
+ * @param p_vecStateConverterList Vector that may or may not contain the given StateConverter.
+ * @return A pointer to the given StateConverter, or NULL if no equal StateConverter exists.
+ */
 StateConverter* FiniteStateAutomata::getEqualStateConverterFromConverterList(StateConverter* p_scStateConverter, vector<StateConverter*>* p_vecStateConverterList)
 {
 	for(std::vector<StateConverter*>::iterator it = p_vecStateConverterList->begin(); it != p_vecStateConverterList->end(); ++it) {
 		if(p_scStateConverter->getReferencedStates()->size() != (*it)->getReferencedStates()->size()) {
 			continue;
 		} else {
-			if((*it)->equalsReferncedStates(p_scStateConverter)) {
+			if((*it)->equalsReferencedStates(p_scStateConverter)) {
 				return *it;
 			}
 		}
@@ -593,6 +657,10 @@ StateConverter* FiniteStateAutomata::getEqualStateConverterFromConverterList(Sta
 	return NULL;
 }
 
+/**
+ * Gets all edge names from this automata's transition vector.
+ * @return A vector containing all the edge names.
+ */
 vector<string> FiniteStateAutomata::getEdgesFromTransitionList()
 {
 	vector<string> vecEdges;
