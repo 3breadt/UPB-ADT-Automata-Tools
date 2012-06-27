@@ -11,7 +11,9 @@
 #include <iostream>
 #include "FSA_State.hpp"
 #include "FSA_Transition.hpp"
+#include "FSA_StateConverter.hpp"
 #include <vector>
+#include <sstream>
 
 
 using namespace std;
@@ -23,6 +25,11 @@ private:
 	vector<State*> vecFinalStates;
 	bool isInFinalStatesVector(string p_szStateName);
 	void removeFinalStates();
+	vector<string> getEdgesFromTransitionList();
+	bool isInStateConverterList(StateConverter* p_scStateConverter, vector<StateConverter*>* p_vecStateConverterList);
+	StateConverter* getEqualStateConverterFromConverterList(StateConverter* p_scStateConverter, vector<StateConverter*>* p_vecStateConverterList);
+	void getTargetStatesForEdge(string p_szEdge, State* p_stStateToCheck, vector<State*>* p_vecTargetStates);
+	void setStateListFromStateConverterList(vector<State*>* p_vecStateList, vector<StateConverter*>* p_vecStateConverterList);
 
 public:
 	FiniteStateAutomata();
@@ -47,8 +54,7 @@ public:
     void read(string p_szFileName);
 	void write(string p_szFileName);
 	void testEdge(string p_szTestEdge);
-
-
+	FiniteStateAutomata* fsaConvertNEAtoDEA();
 };
 
 #endif /* FSA_FINITESTATEAUTOMATA_HPP_ */

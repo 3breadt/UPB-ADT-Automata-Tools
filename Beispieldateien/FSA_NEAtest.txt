@@ -1,0 +1,19 @@
+<States>
+N0
+N1
+N2
+N3
+</States>
+<StartState>
+N0
+</StartState>
+<FinalStates>
+N3
+</FinalStates>
+<Transitions>
+N0 b N0
+N0 a N0
+N0 a N1
+N1 b N2
+N2 a N3
+</Transitions>

@@ -496,5 +496,121 @@ void FiniteStateAutomata::testEdge(string p_szTestEdge)
 	cout<<endl;
 }
 
+FiniteStateAutomata* FiniteStateAutomata::fsaConvertNEAtoDEA()
+{
+	FiniteStateAutomata *fsaDEA = new FiniteStateAutomata();
+	State *stStartState = this->getStartState();
+	vector<string> vecEdges = getEdgesFromTransitionList();
+	vector<StateConverter*> vecStateConverters;
+
+	State *stNewStartState = new State();
+	stNewStartState->szName = "S0";
+	stNewStartState->bFinalState = stStartState->bFinalState;
+	stNewStartState->bStartState = stStartState->bStartState;
+
+	StateConverter *scNewStartState = new StateConverter(stNewStartState);
+	scNewStartState->addReferencedState(stStartState);
+	scNewStartState->checkForFinalState();
+	vecStateConverters.push_back(scNewStartState);
+
+	int idx = 0;
+	int iStateCounter = 1;
+	while(vecStateConverters.size() > idx) {
+		for(std::vector<string>::iterator itedge = vecEdges.begin(); itedge != vecEdges.end(); ++itedge) {
+
+			vector<State*>* vecTargetStates = new vector<State*>();
+			for(std::vector<State*>::iterator itref = vecStateConverters[idx]->vecReferencedStates.begin(); itref != vecStateConverters[idx]->vecReferencedStates.end(); ++itref) {
+				getTargetStatesForEdge(*itedge, *itref, vecTargetStates);
+			}
+			
+			std::stringstream szstream;
+			szstream << "S" << iStateCounter;
+			string szStateName = szstream.str();
+			StateConverter *scNewStateConverter = new StateConverter(szStateName, vecTargetStates);
+			scNewStateConverter->checkForFinalState();
+			if(!isInStateConverterList(scNewStateConverter, &vecStateConverters) && (vecTargetStates->size() > 0)) {
+				vecStateConverters.push_back(scNewStateConverter);
+				iStateCounter++;
+			}
+			StateConverter* scTargetStateConverter = getEqualStateConverterFromConverterList(scNewStateConverter, &vecStateConverters);
+			if(scTargetStateConverter != NULL) {
+				fsaDEA->addTransition(vecStateConverters[idx]->getConvertedState(), *itedge, scTargetStateConverter->getConvertedState());
+			}
+		}
+		idx++;
+	}
+
+	setStateListFromStateConverterList(fsaDEA->getStateList(), &vecStateConverters);
+	fsaDEA->getFinalStates();
+	return fsaDEA;
+}
+
+void FiniteStateAutomata::setStateListFromStateConverterList(vector<State*>* p_vecStateList, vector<StateConverter*>* p_vecStateConverterList)
+{
+	for(std::vector<StateConverter*>::iterator itconv = p_vecStateConverterList->begin(); itconv != p_vecStateConverterList->end(); ++itconv) {
+		p_vecStateList->push_back((*itconv)->getConvertedState());
+	}
+}
+
+void FiniteStateAutomata::getTargetStatesForEdge(string p_szEdge, State* p_stStateToCheck, vector<State*>* p_vecTargetStates)
+{
+	for(std::vector<Transition*>::iterator ittrans = vecTransitionList.begin(); ittrans != vecTransitionList.end(); ++ittrans) {
+		if((*ittrans)->getBeginningState()->output() == p_stStateToCheck->output() && (*ittrans)->getEdgeName() == p_szEdge) {
+			p_vecTargetStates->push_back((*ittrans)->getFinishState());
+		}
+	}
+}
+
+bool FiniteStateAutomata::isInStateConverterList(StateConverter* p_scStateConverter, vector<StateConverter*>* p_vecStateConverterList)
+{
+	for(std::vector<StateConverter*>::iterator it = p_vecStateConverterList->begin(); it != p_vecStateConverterList->end(); ++it) {
+		if(p_scStateConverter->getReferencedStates()->size() != (*it)->getReferencedStates()->size()) {
+			continue;
+		} else {
+			if((*it)->equalsReferncedStates(p_scStateConverter)) {
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+StateConverter* FiniteStateAutomata::getEqualStateConverterFromConverterList(StateConverter* p_scStateConverter, vector<StateConverter*>* p_vecStateConverterList)
+{
+	for(std::vector<StateConverter*>::iterator it = p_vecStateConverterList->begin(); it != p_vecStateConverterList->end(); ++it) {
+		if(p_scStateConverter->getReferencedStates()->size() != (*it)->getReferencedStates()->size()) {
+			continue;
+		} else {
+			if((*it)->equalsReferncedStates(p_scStateConverter)) {
+				return *it;
+			}
+		}
+	}
+	return NULL;
+}
+
+vector<string> FiniteStateAutomata::getEdgesFromTransitionList()
+{
+	vector<string> vecEdges;
+	for(std::vector<Transition*>::iterator it = vecTransitionList.begin(); it != vecTransitionList.end(); ++it) {
+		bool bFound = false;
+		string szEdge;
+		if(vecEdges.empty()) {
+			vecEdges.push_back((*it)->szEdge);
+			continue;
+		}
+		for(std::vector<string>::iterator itedge = vecEdges.begin(); itedge != vecEdges.end(); itedge++) {
+			szEdge = *itedge;
+			if((*it)->szEdge == szEdge) {
+				bFound = true;
+			}
+		}
+		if(!bFound) {
+			vecEdges.push_back((*it)->szEdge);
+		}
+	}
+	return vecEdges;
+}
+
 
 

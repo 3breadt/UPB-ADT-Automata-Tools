@@ -1,0 +1,22 @@
+<States>
+S0
+S1
+S2
+S3
+</States>
+<StartState>
+S0
+</StartState>
+<FinalStates>
+S3
+</FinalStates>
+<Transitions>
+S0 b S0
+S0 a S1
+S1 b S2
+S1 a S1
+S2 b S0
+S2 a S3
+S3 b S2
+S3 a S1
+</Transitions>
