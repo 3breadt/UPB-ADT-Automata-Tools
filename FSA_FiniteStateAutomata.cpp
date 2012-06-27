@@ -528,11 +528,15 @@ FiniteStateAutomata* FiniteStateAutomata::fsaConvertNEAtoDEA()
 			string szStateName = szstream.str();
 			StateConverter *scNewStateConverter = new StateConverter(szStateName, vecTargetStates);
 			scNewStateConverter->checkForFinalState();
+			StateConverter* scTargetStateConverter;
 			if(!isInStateConverterList(scNewStateConverter, &vecStateConverters) && (vecTargetStates->size() > 0)) {
 				vecStateConverters.push_back(scNewStateConverter);
+				scTargetStateConverter = getEqualStateConverterFromConverterList(scNewStateConverter, &vecStateConverters);
 				iStateCounter++;
+			} else {
+				scTargetStateConverter = getEqualStateConverterFromConverterList(scNewStateConverter, &vecStateConverters);
+				delete scNewStateConverter;
 			}
-			StateConverter* scTargetStateConverter = getEqualStateConverterFromConverterList(scNewStateConverter, &vecStateConverters);
 			if(scTargetStateConverter != NULL) {
 				fsaDEA->addTransition(vecStateConverters[idx]->getConvertedState(), *itedge, scTargetStateConverter->getConvertedState());
 			}
