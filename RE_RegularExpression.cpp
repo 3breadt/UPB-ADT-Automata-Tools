@@ -59,17 +59,16 @@ RETreeNode *RegularExpression::getTreeRoot() {
 
 /**
  * @brief Converts this regular expression to a finite state automaton.
- * At the moment that automaton is non-deterministic.
- * Future versions will directly produce a minimized, deterministic FSA.
+ * At the moment that automaton is a non-minimized deterministic FSA.
  * @return A finite state automaton representing this regular expression.
  * @author Daniel Dreibrodt, Konstantin Steinmiller
  */
 FiniteStateAutomata *RegularExpression::toFSA() {
 	int labelCounter = 1;
-	FiniteStateAutomata *ndfsa = p_treeRoot->toFSA(&labelCounter);
-	//TODO convert to DFSA
-	//TODO minimize DFSA
-	return ndfsa;
+	FiniteStateAutomata *nda = p_treeRoot->toFSA(&labelCounter);
+	FiniteStateAutomata *dfa = nda->fsaConvertNEAtoDEA();
+	//TODO minimize DFA
+	return dfa;
 }
 
 /**
