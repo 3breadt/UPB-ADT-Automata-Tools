@@ -18,12 +18,12 @@ namespace std {
 
 
 /**
- * @brief Converts a FSA to a regular expression using a modified version of Brzozowski's algorithm.
- * The original Brozozowski algorithm was implemented according to information found at
+ * @brief Converts a FSA to a regular expression using Brzozowski's algebraic method.
+ * The method was implemented according to information found at
  * http://cs.stackexchange.com/questions/2016/how-to-convert-finite-automata-to-regular-expressions .
  * This algorithm was then adapted to the existing data structures and improved.
- * @param fsa The FSA to convert
- * @return The equivalent regular expression
+ * @param fsa The FSA to convert.
+ * @return A regular expression equivalent to the given automaton.
  * @author Daniel Dreibrodt
  */
 RegularExpression *FSAtoREConverter::toRE(FiniteStateAutomata *fsa) {
