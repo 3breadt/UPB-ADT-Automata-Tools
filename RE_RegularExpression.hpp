@@ -7,10 +7,11 @@
 #ifndef REGULAREXPRESSION_H_
 #define REGULAREXPRESSION_H_
 
-using namespace std;
-
+#include <string>
 #include "RE_TreeNode.hpp"
 #include "FSA_FiniteStateAutomata.hpp"
+
+using namespace std;
 
 /**
  * @brief This class represents regular expressions.
@@ -43,6 +44,7 @@ public:
 	void setTreeRoot(RETreeNode *p_tR);
 	RETreeNode *getTreeRoot();
 	FiniteStateAutomata *toFSA();
+    string toString();
 
 	/** String representation of the boolean or operator **/
 	static const string re_orOp;

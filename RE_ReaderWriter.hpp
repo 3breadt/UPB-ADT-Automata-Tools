@@ -4,8 +4,6 @@
  * @author Daniel Dreibrodt, Konstantin Steinmiller
  */
 
-using namespace std;
-
 #include "RE_RegularExpression.hpp"
 
 #ifndef REREADER_H_
@@ -35,7 +33,6 @@ private:
 	static RETreeNode *parseNode(const char str[], int *pos, int len);
 	static RETreeNode *parseNode(RETreeNode *left, const char str[], int *pos, int len);
 	static RETreeNode *parseLiteral(const char str[], int *pos, int len);
-	static string writeToString(RETreeNode *rn);
 };
 
 #endif /* REREADER_H_ */
