@@ -31,6 +31,9 @@ public:
 	bool isStartState();
 	bool isFinalState();
 	string output();
+
+	string getName();
+	int compare(State* state);
 };
 
 #endif /* FSA_STATE_HPP_ */

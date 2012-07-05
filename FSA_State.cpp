@@ -65,3 +65,25 @@ string State::output()
 	return szName;
 }
 
+/**
+ * @author Yacine Smaoui
+ */
+string State::getName()
+{
+	return this->szName ;
+}
+
+/**
+ * @brief compares two States
+ * @author Yacine Smaoui
+ */
+int State::compare(State* state)
+{
+	if (this->getName().compare(state->getName())==0
+			&& this->isFinalState() == state->isFinalState()
+			&& this->isStartState() == state->isStartState())
+	{
+		return 0 ;
+	}
+	return 1;
+}

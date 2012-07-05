@@ -1,0 +1,34 @@
+<States>
+A
+B
+C
+D
+E
+F
+G
+H
+</States>
+<StartState>
+A
+</StartState>
+<FinalStates>
+C
+</FinalStates>
+<Transitions>
+A 0 B
+A 1 F
+B 0 G
+B 1 C
+C 0 A
+C 1 C
+D 0 C
+D 1 G
+E 0 H
+E 1 F
+F 0 C
+F 1 A
+G 0 G
+G 1 E
+H 0 G
+H 1 C
+</Transitions>
