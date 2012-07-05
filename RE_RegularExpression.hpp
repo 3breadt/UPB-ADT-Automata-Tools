@@ -10,6 +10,7 @@
 #include <string>
 #include "RE_TreeNode.hpp"
 #include "FSA_FiniteStateAutomata.hpp"
+#include "RG_Grammar.h"
 
 using namespace std;
 
@@ -44,6 +45,7 @@ public:
 	void setTreeRoot(RETreeNode *p_tR);
 	RETreeNode *getTreeRoot();
 	FiniteStateAutomata *toFSA();
+    Grammar *toRG();
     string toString();
 
 	/** String representation of the boolean or operator **/
