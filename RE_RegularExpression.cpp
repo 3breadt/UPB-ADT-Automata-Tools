@@ -7,6 +7,7 @@
 #include "RE_RegularExpression.hpp"
 #include "RE_ReaderWriter.hpp"
 #include "FSA_FiniteStateAutomata.hpp"
+#include "RG_Grammar.h"
 
 const string RegularExpression::re_orOp = "|";
 const string RegularExpression::re_andOp = ".";
@@ -69,6 +70,19 @@ FiniteStateAutomata *RegularExpression::toFSA() {
 	FiniteStateAutomata *dfa = nda->fsaConvertNEAtoDEA();
 	//TODO minimize DFA
 	return dfa;
+}
+
+/**
+ * @brief Converts this regular expression to a regular grammar.
+ * First the regular expression is converted to a finite state automata.
+ * That automata is then converted to a regular grammar.
+ * @return A regular grammar that is equivalent to this regular expression.
+ * @author Daniel Dreibrodt
+ **/
+Grammar *RegularExpression::toRG() {
+    FiniteStateAutomata *dfa = toFSA();
+    //return dfa->toRG();
+    return NULL;
 }
 
 /**
