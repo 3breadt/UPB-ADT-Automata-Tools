@@ -2,7 +2,7 @@
  * State.hpp
  *
  *  Created on: May 25, 2012
- *      Author: fabiani
+ *      Author: skowelek
  */
 
 #ifndef FSA_STATECONVERTER_HPP_

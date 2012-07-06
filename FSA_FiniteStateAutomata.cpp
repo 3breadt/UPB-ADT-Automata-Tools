@@ -107,6 +107,12 @@ void FiniteStateAutomata::printFinalState()
 	cout<<endl;
 }
 
+/**
+ * Searches the state list for a state with the given name for existance.
+ * @param p_szName Name of the state to search for.
+ * @return True if a state with the given name exists in the state list, false if not.
+ * @author skowelek, fabiani
+ */
 bool FiniteStateAutomata::bStateExists(string p_szName)
 {
 	for(std::vector<State*>::iterator it = vecStateList.begin(); it != vecStateList.end(); ++it) {
@@ -117,6 +123,12 @@ bool FiniteStateAutomata::bStateExists(string p_szName)
 	return false;
 }
 
+/**
+ * Searches the state list for a state with the given name, and returns a pointer to that state.
+ * @param p_szName Name of the state to search for.
+ * @return A pointer to the state if it has been found, NULL if not.
+ * @author skowelek, fabiani
+ */
 State* FiniteStateAutomata::getState(string p_szName)
 {
 	for(std::vector<State*>::iterator it = vecStateList.begin(); it != vecStateList.end(); ++it) {
@@ -127,6 +139,11 @@ State* FiniteStateAutomata::getState(string p_szName)
 	return NULL;
 }
 
+/**
+ * Returns the start state of this automaton.
+ * @return The start state of this automaton.
+ * @author skowelek, fabiani
+ */
 State* FiniteStateAutomata::getStartState()
 {
 	for(std::vector<State*>::iterator it = vecStateList.begin(); it != vecStateList.end(); ++it) {
@@ -137,11 +154,23 @@ State* FiniteStateAutomata::getStartState()
 	return NULL;
 }
 
+/**
+ * Returns the state vector.
+ * @return The state vector.
+ * @author skowelek, fabiani
+ */
 vector<State*>* FiniteStateAutomata::getStateList()
 {
 	return &vecStateList;
 }
 
+/**
+ * Returns the final states vector. Additionally, it updates the vector on everytime by
+ * calling FiniteStateAutomata::removeFinalStates to remove non-final states and checks
+ * the state vector for final states that are not in the vector.
+ * @return The final states vector.
+ * @author skowelek
+ */
 vector<State*>* FiniteStateAutomata::getFinalStates()
 {
 	// remove all states which are not final anymore
@@ -159,6 +188,10 @@ vector<State*>* FiniteStateAutomata::getFinalStates()
 	return &vecFinalStates;
 }
 
+/**
+ * Removes all states from the final states vector which are not final (anymore).
+ * @author skowelek
+ */
 void FiniteStateAutomata::removeFinalStates()
 {
 	// remove all states which are not final anymore
@@ -175,6 +208,7 @@ void FiniteStateAutomata::removeFinalStates()
  * Private function for checking if a final state is in the final states vector.
  * @param p_szStateName Name of the final state to check.
  * @return True if the state is in the vector, false if not.
+ * @author skowelek
  */
 bool FiniteStateAutomata::isInFinalStatesVector(string p_szStateName)
 {
@@ -254,7 +288,7 @@ void FiniteStateAutomata::addTransition(string p_szInput)
 			 pInput[idx]= pTeilString;
 			 pTeilString = strtok(NULL, " ");
 		 }
-	/* change char *Array[] to stringis needed to use funktion Transition*/
+	/* change char *Array[] to string. Is needed to use function Transition*/
 	szBeginningState = pInput[0];
 	szEdge = pInput[1];
 	szFinalState = pInput[2];
@@ -344,6 +378,7 @@ vector<Transition*>* FiniteStateAutomata::getTransitions()
 /**
  * Reads data for this automata from a file, and adjusts all objects (setting the lists etc).
  * @param p_szFileName Path and name of the file.
+ * @author skowelek
  */
 void FiniteStateAutomata::read(string p_szFileName)
 {
@@ -437,6 +472,7 @@ void FiniteStateAutomata::read(string p_szFileName)
 /**
  * Writes the data of the automata into a textfile.
  * @param p_szFileName Path and name of the file.
+ * @author skowelek
  */
 void FiniteStateAutomata::write(string p_szFileName)
 {
@@ -490,7 +526,6 @@ void FiniteStateAutomata::write(string p_szFileName)
 
 /* Testing an edge
  * Parameters: a string containing the name of the edge, that has to be tested
- *
  * for each transition element in transitionList, that isn't null, comparing there edge to the
  * parameter, if it matches, output the transition to console*/
 void FiniteStateAutomata::testEdge(string p_szTestEdge)
@@ -511,6 +546,7 @@ void FiniteStateAutomata::testEdge(string p_szTestEdge)
  * There is no check if this automata is already deterministic,
  * the conversion is done no matter what.
  * @return A pointer to the new finite state automata.
+ * @author skowelek
  */
 FiniteStateAutomata* FiniteStateAutomata::fsaConvertNEAtoDEA()
 {
@@ -596,6 +632,7 @@ FiniteStateAutomata* FiniteStateAutomata::fsaConvertNEAtoDEA()
  * Creates a vector of States from the given vector of StateConverters.
  * @param p_vecStateList Vector in which to save the States.
  * @param p_vecStateConverterList Vector of StateConverters which contain the States for the target vector.
+ * @author skowelek
  */
 void FiniteStateAutomata::setStateListFromStateConverterList(vector<State*>* p_vecStateList, vector<StateConverter*>* p_vecStateConverterList)
 {
@@ -610,6 +647,7 @@ void FiniteStateAutomata::setStateListFromStateConverterList(vector<State*>* p_v
  * @param p_szEdge Which edge to check.
  * @param p_stStateToCheck Which State to check.
  * @param p_vecTargetStates Vector in which to save the target States.
+ * @author skowelek
  */
 void FiniteStateAutomata::setTargetStatesForEdge(string p_szEdge, State* p_stStateToCheck, vector<State*>* p_vecTargetStates)
 {
@@ -625,6 +663,7 @@ void FiniteStateAutomata::setTargetStatesForEdge(string p_szEdge, State* p_stSta
  * @param p_scStateConverter StateConverter to do the check for.
  * @param p_vecStateConverterList Vector that may or may not contain the given StateConverter.
  * @return True if an equal StateConverter exists, false if not.
+ * @author skowelek
  */
 bool FiniteStateAutomata::isInStateConverterList(StateConverter* p_scStateConverter, vector<StateConverter*>* p_vecStateConverterList)
 {
@@ -646,6 +685,7 @@ bool FiniteStateAutomata::isInStateConverterList(StateConverter* p_scStateConver
  * @param p_scStateConverter StateConverter to do the check for.
  * @param p_vecStateConverterList Vector that may or may not contain the given StateConverter.
  * @return A pointer to the given StateConverter, or NULL if no equal StateConverter exists.
+ * @author skowelek
  */
 StateConverter* FiniteStateAutomata::getEqualStateConverterFromConverterList(StateConverter* p_scStateConverter, vector<StateConverter*>* p_vecStateConverterList)
 {
@@ -664,6 +704,7 @@ StateConverter* FiniteStateAutomata::getEqualStateConverterFromConverterList(Sta
 /**
  * Gets all edge names from this automata's transition vector.
  * @return A vector containing all the edge names.
+ * @author skowelek
  */
 vector<string> FiniteStateAutomata::getEdgesFromTransitionList()
 {
@@ -689,7 +730,7 @@ vector<string> FiniteStateAutomata::getEdgesFromTransitionList()
 }
 
 /**
- * Minimizes this FSA.
+ * Minimizes this FSA using Moore's algorithm.
  * @return The minimized FSA.
  * @author skowelek, fabiani
  */
@@ -789,6 +830,14 @@ FiniteStateAutomata* FiniteStateAutomata::minimize()
 	return fsaNew;
 }
 
+/**
+ * Searches the given group vector for a specific group by name, and returns the index of
+ * this group (i.e. where the group is located in the vector).
+ * @param p_szGroupName Name of the group to search for.
+ * @param p_vecGroups Vector to search.
+ * @return The index of the group, or -1 if the group hasn't been found.
+ * @author skowelek, fabiani
+ */
 int FiniteStateAutomata::findGroupByGroupName(string p_szGroupName, vector<Group*>* p_vecGroups)
 {
 	int iCounter = 0;
@@ -803,6 +852,14 @@ int FiniteStateAutomata::findGroupByGroupName(string p_szGroupName, vector<Group
 	return -1;
 }
 
+/**
+ * Searches the given group vector for a group element whose state is equal to the given state,
+ * and returns the name of the group containing this element.
+ * @param p_stState State to search for.
+ * @param p_vecGroups Groups to search for the specific element.
+ * @return The name of the group containing the element, or an empty string if no equal state was found.
+ * @author skowelek, fabiani
+ */
 string FiniteStateAutomata::getTargetGroupName(State* p_stState, vector<Group*>* p_vecGroups)
 {
 	for(std::vector<Group*>::iterator it = p_vecGroups->begin(); it != p_vecGroups->end(); ++it) {
@@ -812,10 +869,16 @@ string FiniteStateAutomata::getTargetGroupName(State* p_stState, vector<Group*>*
 			}
 		}
 	}
-	return NULL;
+	return "";
 	
 }
 
+/**
+ * Sets the target groups (i.e. the groups reachable through the specific edges) for each
+ * group element of all groups. Used in the minimize function.
+ * @param p_vecGroups Vector containing all groups containing all group elements to set the target groups for.
+ * @author skowelek, fabiani
+ */
 void FiniteStateAutomata::setTargetGroups(vector<Group*>* p_vecGroups)
 {
 	vector<string>* vecEdges = p_vecGroups->at(0)->getEdges();
@@ -835,6 +898,11 @@ void FiniteStateAutomata::setTargetGroups(vector<Group*>* p_vecGroups)
 	}
 }
 
+/**
+ * Converts this FSA to Regular Grammar.
+ * @returns A new instance of grammar.
+ * @author fabiani
+ */
 Grammar* FiniteStateAutomata::convertToGrammar()
 {
 	Grammar *graConverted = new Grammar();
@@ -867,7 +935,6 @@ Grammar* FiniteStateAutomata::convertToGrammar()
 		{
 			graConverted->addNonTerminal((*it)->getFinishState()->output());
 		}
-		//graConverted->getNonTerminals().printArray();
 		arTemp = graConverted->getTerminals();
 		if(!arTemp.exist((*it)->getEdgeName()))
 		{
