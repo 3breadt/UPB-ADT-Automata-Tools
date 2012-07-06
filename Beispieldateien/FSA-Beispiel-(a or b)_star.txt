@@ -1,0 +1,13 @@
+<States>
+s0
+</States>
+<StartState>
+s0
+</StartState>
+<FinalStates>
+s0
+</FinalStates>
+<Transitions>
+s0 a s0
+s0 b s0
+</Transitions>

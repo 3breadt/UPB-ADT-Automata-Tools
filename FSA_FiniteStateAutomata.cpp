@@ -357,6 +357,8 @@ void FiniteStateAutomata::read(string p_szFileName)
   
 	while(getline(ifsFile, szLine))
 	{
+        szLine.erase(szLine.find_last_not_of(" \n\r\t")+1); //trim white-spaces at end of line
+        
 		if(szLine == "<States>") {
 		bStates = true;
 		continue;

@@ -32,9 +32,11 @@ RETreeNode::RETreeNode(string c) {
 RETreeNode::~RETreeNode() {
 	if(p_left != NULL) {
 		delete p_left;
+        p_left = NULL;
 	}
 	if(p_right != NULL) {
 		delete p_right;
+        p_right = NULL;
 	}
 }
 
@@ -94,7 +96,7 @@ RETreeNode *RETreeNode::getRight() {
  * @author Daniel Dreibrodt, Konstantin Steinmiller
  */
 void RETreeNode::setLeft(RETreeNode *p_l) {
-	if(isOperator())
+	if(isOperator()||p_l==NULL)
 		p_left = p_l;
 	else
 		throw "Node ("+content+") does not represent an operator. Cannot add left child: "+p_l->getContent();
@@ -106,20 +108,115 @@ void RETreeNode::setLeft(RETreeNode *p_l) {
  * @author Daniel Dreibrodt, Konstantin Steinmiller
  */
 void RETreeNode::setRight(RETreeNode *p_r) {
-	if(isOperator())
+	if(isOperator()||p_r==NULL)
 		p_right = p_r;
 	else
 		throw "Node ("+content+") does not represent an operator. Cannot add right child: "+p_r->getContent();
 }
 
 /**
- * Determines whether this tree node represents an empty literal,
- * which is usually represented by the epsilon symbol.
- * @return Whether the content of this tree node is empty.
+ * Determines whether this tree node represents an empty regular expression.
+ * @return Whether the regular expression represented by this node is empty.
  * @author Daniel Dreibrodt
  */
 bool RETreeNode::isEmpty() {
-	return content.length()==0;
+	if(content.length()==0) {
+        return true;
+    } else if(isOperator()) {
+        bool lEmpty = (p_left != NULL)?p_left->isEmpty():true;
+        bool rEmpty = (p_right != NULL)?p_right->isEmpty():true;
+        return lEmpty && rEmpty;
+    } else {
+        return false;
+    }
+}
+
+/**
+ * Creates a clone of this tree node.
+ * @return A new tree node that represents the same regular expression tree as this node.
+ * @author Daniel Dreibrodt
+ */
+RETreeNode *RETreeNode::clone() {
+    RETreeNode *node = new RETreeNode(content);
+    if(p_left!=NULL)
+        node->setLeft(p_left->clone());
+    if(p_right!=NULL)
+        node->setRight(p_right->clone());
+    return node;
+}
+
+/**
+ * Removes all redundancies from the regular expression.
+ * So expressions like (<epsilon>)* or (<epsilon>|<epsilon>) will be changed to <epsilon>.
+ * Expressions like (A.<epsilon>) will be changed to A (if A is a literal, subtree equality is not yet checked).
+ * Also incomplete subtrees, like operator nodes without children, will be changed to empty nodes.
+ * @author Daniel Dreibrodt
+ */
+void RETreeNode::simplify() {
+    if(p_left!=NULL)
+        p_left->simplify();
+    if(p_right!=NULL)
+        p_right->simplify();
+    
+    if(isEmpty() && content.length()>0) {
+        if(p_left!=NULL) {
+            delete p_left;
+            p_left = NULL;
+        }
+        if(p_right!=NULL) {
+            delete p_right;
+            p_right = NULL;
+        }
+        content = "";
+    } else {
+       
+        
+        if(content.compare(RegularExpression::re_andOp)==0) {
+            if(p_left->isEmpty()) {
+                RETreeNode *p_oldRight = p_right;
+                content = p_oldRight->content;
+                if(p_oldRight->getLeft()!=NULL) {
+                    setLeft(p_oldRight->getLeft()->clone());
+                } else {
+                    setLeft(NULL);
+                }
+                if(p_oldRight->getRight()!=NULL) {
+                    setRight(p_oldRight->getRight()->clone());
+                } else {
+                    setRight(NULL);
+                }
+                //Delete old node
+                delete p_oldRight;
+                p_oldRight = NULL;
+            } else if(p_right->isEmpty()) {
+                RETreeNode *p_oldLeft = p_left;
+                content = p_oldLeft->content;
+                if(p_oldLeft->getLeft()!=NULL) {
+                    setLeft(p_oldLeft->getLeft()->clone());
+                } else {
+                    setLeft(NULL);
+                }
+                if(p_oldLeft->getRight()!=NULL) {
+                    setRight(p_oldLeft->getRight()->clone());
+                } else {
+                    setRight(NULL);
+                }
+                //Delete old node
+                delete p_oldLeft;
+                p_oldLeft = NULL;
+            }
+        } else if(content.compare(RegularExpression::re_orOp)==0) {
+            if(!p_left->isOperator() && !p_right->isOperator()) {
+                if(p_left->getContent().compare(p_right->getContent())==0) {
+                    content = p_left->getContent();
+                    delete p_left;
+                    p_left = NULL;
+                    delete p_right;
+                    p_right = NULL;
+                }
+            }
+        }
+    }
 }
 
 /**
@@ -254,4 +351,36 @@ FiniteStateAutomata *RETreeNode::toFSA(int *labelNum) {
 		return fsa;
 	}
 	return NULL;
+}
+
+/**
+ * Converts a regular expression tree to a string by performing
+ * an inorder tree walk.
+ * @param The node of the regular expression tree.
+ * @return The string representation of the regular expression specified by the given node.
+ * @author Daniel Dreibrodt, Konstantin Steinmiller
+ */
+string RETreeNode::toString() {
+    string s = "";
+	if(isOperator()) {
+		s += "(";
+		if(getLeft() != NULL) {
+			s += getLeft()->toString();
+		}
+	}
+    
+	if(content.length()==0) {
+		s += "<epsilon>";
+	} else {
+		s += getContent();
+	}
+    
+	if(isOperator()) {
+		if(getRight() != NULL) {
+			s += getRight()->toString();
+		}
+		s += ")";
+	}
+    
+	return s;
 }

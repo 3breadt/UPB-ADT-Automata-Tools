@@ -7,10 +7,10 @@
 #ifndef RETREENODE_H_
 #define RETREENODE_H_
 
-using namespace std;
-
 #include <string>
 #include "FSA_FiniteStateAutomata.hpp"
+
+using namespace std;
 
 /**
  * @brief Represents nodes in the regular expression tree.
@@ -32,7 +32,10 @@ public:
 	string getContent();
 	void setContent(string c);
 	bool isEmpty();
+    void simplify();
+    RETreeNode *clone();
 	FiniteStateAutomata *toFSA(int *labelNum);
+    string toString();
 
 private:
 	//Contains the operand or the value of the literal represented by this node.

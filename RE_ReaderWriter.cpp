@@ -180,8 +180,7 @@ RETreeNode *REReaderWriter::parseLiteral(const char str[], int *pos, int len) {
  * @author Daniel Dreibrodt
  */
 string REReaderWriter::writeToString(RegularExpression *re) {
-	RETreeNode *root = re->getTreeRoot();
-	return writeToString(root);
+	return re->toString();
 }
 
 /**
@@ -194,35 +193,4 @@ void REReaderWriter::writeToFile(RegularExpression *re, const char *filename) {
 	ofstream file(filename, std::ios_base::binary);
 	file << writeToString(re);
 	file.close();
-}
-
-/**
- * Converts a regular expression tree to a string by performing
- * an inorder tree walk.
- * @param The node of the regular expression tree.
- * @return The string representation of the regular expression specified by the given node.
- */
-string REReaderWriter::writeToString(RETreeNode *rn) {
-	string s = "";
-	if(rn->isOperator()) {
-		s += "(";
-		if(rn->getLeft() != NULL) {
-			s += writeToString(rn->getLeft());
-		}
-	}
-
-	if(rn->isEmpty()) {
-		s += "<epsilon>";
-	} else {
-		s += rn->getContent();
-	}
-
-	if(rn->isOperator()) {
-		if(rn->getRight() != NULL) {
-			s += writeToString(rn->getRight());
-		}
-		s += ")";
-	}
-
-	return s;
 }
