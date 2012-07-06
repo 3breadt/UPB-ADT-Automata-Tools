@@ -12,9 +12,14 @@
 #include "FSA_State.hpp"
 #include "FSA_Transition.hpp"
 #include "FSA_StateConverter.hpp"
+#include "FSA_Group.hpp"
+#include "FSA_GroupElement.hpp"
+#include "RG_Grammar.h"
 #include <vector>
 #include <sstream>
 
+class Group;
+class Grammar;
 
 using namespace std;
 
@@ -25,11 +30,13 @@ private:
 	vector<State*> vecFinalStates;
 	bool isInFinalStatesVector(string p_szStateName);
 	void removeFinalStates();
-	vector<string> getEdgesFromTransitionList();
 	bool isInStateConverterList(StateConverter* p_scStateConverter, vector<StateConverter*>* p_vecStateConverterList);
 	StateConverter* getEqualStateConverterFromConverterList(StateConverter* p_scStateConverter, vector<StateConverter*>* p_vecStateConverterList);
 	void setTargetStatesForEdge(string p_szEdge, State* p_stStateToCheck, vector<State*>* p_vecTargetStates);
 	void setStateListFromStateConverterList(vector<State*>* p_vecStateList, vector<StateConverter*>* p_vecStateConverterList);
+	string getTargetGroupName(State* p_stState, vector<Group*>* p_vecGroups);
+	void setTargetGroups(vector<Group*>* p_vecGroups);
+	int findGroupByGroupName(string p_szGroupName, vector<Group*>* p_vecGroups);
 
 public:
 	FiniteStateAutomata();
@@ -50,11 +57,14 @@ public:
 	void addTransition(string p_szInput);
 	void removeTransition(string p_szBeginningState, string p_szEdge, string p_szFinalState);
     void outputTransitionList();
+	vector<string> getEdgesFromTransitionList();
 	vector<Transition*>* getTransitions();
     void read(string p_szFileName);
 	void write(string p_szFileName);
 	void testEdge(string p_szTestEdge);
 	FiniteStateAutomata* fsaConvertNEAtoDEA();
+	FiniteStateAutomata* minimize();
+	Grammar* convertToGrammar();
 };
 
 #endif /* FSA_FINITESTATEAUTOMATA_HPP_ */

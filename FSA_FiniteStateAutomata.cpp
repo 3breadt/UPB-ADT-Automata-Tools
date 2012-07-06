@@ -588,6 +588,8 @@ FiniteStateAutomata* FiniteStateAutomata::fsaConvertNEAtoDEA()
 	return fsaDEA;
 }
 
+
+
 /**
  * Creates a vector of States from the given vector of StateConverters.
  * @param p_vecStateList Vector in which to save the States.
@@ -684,5 +686,209 @@ vector<string> FiniteStateAutomata::getEdgesFromTransitionList()
 	return vecEdges;
 }
 
+/**
+ * Minimizes this FSA.
+ * @return The minimized FSA.
+ * @author skowelek, fabiani
+ */
+FiniteStateAutomata* FiniteStateAutomata::minimize()
+{
+	vector<Group*> vecGroups;
+	Group* gRejectingStates = new Group(this, "G0");
+	Group* gAcceptingStates = new Group(this, "G1");
 
+	vecGroups.push_back(gRejectingStates);
+	vecGroups.push_back(gAcceptingStates);
 
+	for(std::vector<State*>::iterator it = vecStateList.begin(); it != vecStateList.end(); ++it) {
+		GroupElement* geElement = new GroupElement(*it);
+		if((*it)->bFinalState) {
+			gAcceptingStates->addElementToGroup(geElement);
+		} else {
+			gRejectingStates->addElementToGroup(geElement);
+		}
+	}
+
+	setTargetGroups(&vecGroups);
+	vector<Group*> vecNewGroups;
+	int iGroupCounter = 0;
+	int iGroupSizeNew = vecNewGroups.size();
+	int iGroupSize = vecGroups.size();
+	while(iGroupSizeNew != iGroupSize) {
+	
+		for(std::vector<Group*>::iterator itgroup = vecGroups.begin(); itgroup != vecGroups.end(); ++itgroup) {
+			std::stringstream szstream;
+			szstream << "G" << iGroupCounter;
+			string szGroupName = szstream.str();
+			Group* gNewGroup = new Group(this, szGroupName);
+			vecNewGroups.push_back(gNewGroup);
+			iGroupCounter++;
+			gNewGroup->addElementToGroup((*itgroup)->getElements()->at(0));
+			int iGroupStart = findGroupByGroupName(szGroupName, &vecNewGroups);
+			for(std::vector<GroupElement*>::iterator itel = (*itgroup)->getElements()->begin(); itel != (*itgroup)->getElements()->end(); ++itel) {
+				bool bIsAdded = false;
+				for(int idx = iGroupStart; idx < vecNewGroups.size(); idx++) {
+					if((*itgroup)->compareElements(*itel, vecNewGroups.at(idx)->getElements()->at(0))) {
+						if((*itel)->getState()->output() != vecNewGroups.at(idx)->getElements()->at(0)->getState()->output()) {
+							vecNewGroups.at(idx)->addElementToGroup((*itel));
+						}
+						bIsAdded = true;
+						break;
+					}
+				}
+				if(!bIsAdded) {
+					std::stringstream szstream;
+					szstream << "G" << iGroupCounter;
+					string szSubGroupName = szstream.str();
+					Group* gNewGroup = new Group(this, szSubGroupName);
+					vecNewGroups.push_back(gNewGroup);
+					iGroupCounter++;
+					gNewGroup->addElementToGroup((*itel));
+				}
+			}
+		}
+		iGroupSizeNew = vecNewGroups.size();
+		iGroupSize = vecGroups.size();
+		if(iGroupSizeNew != iGroupSize) {
+			vecGroups = vecNewGroups;
+			vecNewGroups.clear();
+			setTargetGroups(&vecGroups);
+		}
+		iGroupCounter = 0;
+	}
+
+	FiniteStateAutomata* fsaNew = new FiniteStateAutomata();
+	for(std::vector<Group*>::iterator itgroup = vecGroups.begin(); itgroup != vecGroups.end(); ++itgroup) {
+		State* stNewState = new State((*itgroup)->getName());
+		for(std::vector<GroupElement*>::iterator itel = (*itgroup)->getElements()->begin(); itel != (*itgroup)->getElements()->end(); ++itel) {
+			if((*itel)->getState()->bFinalState) {
+				stNewState->setFinalState(true);
+			}
+			if((*itel)->getState()->bStartState) {
+				stNewState->setStartState(true);
+			}
+		}
+		fsaNew->addState(stNewState);
+	}
+
+	vector<string> vecEdges = getEdgesFromTransitionList();
+	for(std::vector<Group*>::iterator itgroup = vecGroups.begin(); itgroup != vecGroups.end(); ++itgroup) {
+		for(std::vector<GroupElement*>::iterator itel = (*itgroup)->getElements()->begin(); itel != (*itgroup)->getElements()->end(); ++itel) {
+			for(int idx = 0; idx < vecEdges.size(); idx++) {
+				State* stStart = (*itel)->getState();
+				State* stFinish = fsaNew->getState((*itel)->getTargetGroups()->at(idx));
+				string szEdge = vecEdges.at(idx);
+				fsaNew->addTransition(stStart, szEdge, stFinish);
+			}
+		}
+	}
+	fsaNew->getFinalStates();
+
+	return fsaNew;
+}
+
+int FiniteStateAutomata::findGroupByGroupName(string p_szGroupName, vector<Group*>* p_vecGroups)
+{
+	int iCounter = 0;
+	for(std::vector<Group*>::iterator it = p_vecGroups->begin(); it != p_vecGroups->end(); ++it) {
+		if((*it)->getName() == p_szGroupName) {
+			return iCounter;
+			break;
+		} else {
+			iCounter++;
+		}
+	}
+	return -1;
+}
+
+string FiniteStateAutomata::getTargetGroupName(State* p_stState, vector<Group*>* p_vecGroups)
+{
+	for(std::vector<Group*>::iterator it = p_vecGroups->begin(); it != p_vecGroups->end(); ++it) {
+		for(std::vector<GroupElement*>::iterator itel = (*it)->getElements()->begin(); itel != (*it)->getElements()->end(); ++itel) {
+			if((*itel)->getState()->output() == p_stState->output()) {
+				return (*it)->getName();
+			}
+		}
+	}
+	return NULL;
+	
+}
+
+void FiniteStateAutomata::setTargetGroups(vector<Group*>* p_vecGroups)
+{
+	vector<string>* vecEdges = p_vecGroups->at(0)->getEdges();
+	for(std::vector<Group*>::iterator it = p_vecGroups->begin(); it != p_vecGroups->end(); ++it) {
+		for(std::vector<GroupElement*>::iterator itel = (*it)->getElements()->begin(); itel != (*it)->getElements()->end(); ++itel) {
+			(*itel)->clearTargetGroups();
+			for(std::vector<string>::iterator ited = vecEdges->begin(); ited != vecEdges->end(); ++ited) {
+				vector<State*> vecState;
+				setTargetStatesForEdge(*ited, (*itel)->getState(), &vecState);
+				if(vecState.at(0) == NULL) {
+					(*itel)->addGroupToTargetVector("");
+				} else {
+					(*itel)->addGroupToTargetVector(getTargetGroupName(vecState.at(0), p_vecGroups));
+				}
+			}
+		}
+	}
+}
+
+Grammar* FiniteStateAutomata::convertToGrammar()
+{
+	Grammar *graConverted = new Grammar();
+	FiniteStateAutomata *fsaActual = this;
+	State *stTemp;
+
+	vector<Transition*>* vecTransitionList = fsaActual->getTransitions();
+	DynArray<string> arTemp;
+
+	stTemp = fsaActual->getStartState();
+	graConverted->setStartSymbol(stTemp->output());
+	if(stTemp->isFinalState() == true)
+	{
+		Substitution suTemp= *new Substitution();
+		Production prTemp = *new Production();
+		suTemp.setRawString("epsilon");
+		prTemp.setLeftSide(stTemp->output());
+		prTemp.setSubstitution(&suTemp);
+		graConverted->addProduction(&prTemp);
+	}
+
+	for(std::vector<Transition*>::iterator it = vecTransitionList->begin(); it != vecTransitionList->end(); ++it)
+	{
+		arTemp = graConverted->getNonTerminals();
+		if(!arTemp.exist((*it)->getBeginningState()->output()))
+		{
+			graConverted->addNonTerminal((*it)->getBeginningState()->output());
+		}
+		if(!arTemp.exist((*it)->getFinishState()->output()))
+		{
+			graConverted->addNonTerminal((*it)->getFinishState()->output());
+		}
+		//graConverted->getNonTerminals().printArray();
+		arTemp = graConverted->getTerminals();
+		if(!arTemp.exist((*it)->getEdgeName()))
+		{
+			graConverted->addTerminal((*it)->getEdgeName());
+		}
+
+		Substitution *suTemp = new Substitution();
+		Production *prTemp = new Production();
+		suTemp->setRawString((*it)->getEdgeName() + " " + (*it)->getFinishState()->output());
+		prTemp->setLeftSide((*it)->getBeginningState()->output());
+		prTemp->setSubstitution(suTemp);
+		suTemp->decode(graConverted->getTerminals(), graConverted->getNonTerminals());
+		graConverted->addProduction(prTemp);
+		if((*it)->getFinishState()->isFinalState() == true)
+		{
+			Substitution *suTemp = new Substitution();
+			Production *prTemp = new Production();
+			suTemp->setRawString((*it)->getEdgeName());
+			prTemp->setLeftSide((*it)->getBeginningState()->output());
+			prTemp->setSubstitution(suTemp);
+			suTemp->decode(graConverted->getTerminals(), graConverted->getNonTerminals());
+			graConverted->addProduction(prTemp);
+		}
+	}
+	return graConverted;
+}
