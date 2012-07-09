@@ -81,8 +81,7 @@ FiniteStateAutomata *RegularExpression::toFSA() {
  **/
 Grammar *RegularExpression::toRG() {
     FiniteStateAutomata *dfa = toFSA();
-    //return dfa->toRG();
-    return NULL;
+    return dfa->convertToGrammar();
 }
 
 /**
