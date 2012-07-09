@@ -3,11 +3,9 @@
 
 #include <iostream>
 #include <vector>
+#include "FSA_FiniteStateAutomata.hpp"
 #include "FSA_State.hpp"
 #include "FSA_GroupElement.hpp"
-#include "FSA_FiniteStateAutomata.hpp"
-
-class GroupElement;
 
 using namespace std;
 

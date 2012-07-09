@@ -4,9 +4,6 @@
 #include <iostream>
 #include <vector>
 #include "FSA_State.hpp"
-#include "FSA_Group.hpp"
-
-class Group;
 
 using namespace std;
 

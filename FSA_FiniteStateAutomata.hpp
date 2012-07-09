@@ -12,16 +12,13 @@
 #include "FSA_State.hpp"
 #include "FSA_Transition.hpp"
 #include "FSA_StateConverter.hpp"
-#include "FSA_Group.hpp"
-#include "FSA_GroupElement.hpp"
-#include "RG_Grammar.h"
 #include <vector>
 #include <sstream>
 
+using namespace std;
+
 class Group;
 class Grammar;
-
-using namespace std;
 
 class FiniteStateAutomata{
 private:

@@ -6,6 +6,9 @@
  */
 
 #include "FSA_FiniteStateAutomata.hpp"
+#include "FSA_Group.hpp"
+#include "FSA_GroupElement.hpp"
+#include "RG_Grammar.h"
 #include<string>
 #include<cstring>
 #include<iostream>
