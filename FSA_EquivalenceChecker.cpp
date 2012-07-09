@@ -14,9 +14,18 @@ bool FSAEquivalenceChecker::checkEquivalence(FiniteStateAutomata *fsa1, FiniteSt
     return checker->check();
 }
 
+/**
+ * Creates a new equivalence checker object which will work on deterministic, minimized
+ * copies of the given automata.
+ * @param fsa1 The one automaton.
+ * @param fsa2 The other automaton.
+ * @author Daniel Dreibrodt
+ **/
 FSAEquivalenceChecker::FSAEquivalenceChecker(FiniteStateAutomata *fsa1, FiniteStateAutomata *fsa2) {
     dfa1 = fsa1->fsaConvertNEAtoDEA();
+    dfa1 = dfa1->minimize();
     dfa2 = dfa2->fsaConvertNEAtoDEA();
+    dfa2 = dfa2->minimize();
     
     for(vector<Transition*>::iterator it = dfa1->getTransitions()->begin(); it != dfa1->getTransitions()->end(); ++it) {
         Transition *currentTrans = *it;
@@ -33,13 +42,10 @@ FSAEquivalenceChecker::FSAEquivalenceChecker(FiniteStateAutomata *fsa1, FiniteSt
 
 /**
  * Performs the equivalence check.
- * First the two DFAs are minimized and then their minimal forms are compared.
  * @return Whether the two automata are equal.
  * @author Daniel Dreibrodt
  **/
-bool FSAEquivalenceChecker::check() {
-    //TODO minimize
-    
+bool FSAEquivalenceChecker::check() {    
     if(dfa1->getStateList()->size() != dfa2->getStateList()->size()) {
         return false;
     }
