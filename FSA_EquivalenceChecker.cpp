@@ -1,5 +1,8 @@
 #include "FSA_FiniteStateAutomata.hpp"
 #include "FSA_EquivalenceChecker.hpp"
+#include <set>
+#include <map>
+#include <vector>
 
 /**
  * @brief Checks the equivalence of two given finite state automata.
@@ -24,20 +27,20 @@ bool FSAEquivalenceChecker::checkEquivalence(FiniteStateAutomata *fsa1, FiniteSt
 FSAEquivalenceChecker::FSAEquivalenceChecker(FiniteStateAutomata *fsa1, FiniteStateAutomata *fsa2) {
     dfa1 = fsa1->fsaConvertNEAtoDEA();
     dfa1 = dfa1->minimize();
-    dfa2 = dfa2->fsaConvertNEAtoDEA();
+    dfa2 = fsa2->fsaConvertNEAtoDEA();    
     dfa2 = dfa2->minimize();
-    
     for(vector<Transition*>::iterator it = dfa1->getTransitions()->begin(); it != dfa1->getTransitions()->end(); ++it) {
         Transition *currentTrans = *it;
 		//Add transition to transitionsFromState map
-		transitionsFromState1[currentTrans->getBeginningState()->output()].push_back(currentTrans);
+		transitionsFromState1[currentTrans->getBeginningState()->getName()].push_back(currentTrans);
 	}
     
     for(vector<Transition*>::iterator it = dfa2->getTransitions()->begin(); it != dfa2->getTransitions()->end(); ++it) {
         Transition *currentTrans = *it;
 		//Add transition to transitionsFromState map
-		transitionsFromState2[currentTrans->getBeginningState()->output()].push_back(currentTrans);
+		transitionsFromState2[currentTrans->getBeginningState()->getName()].push_back(currentTrans);
 	}
+    
 }
 
 /**
@@ -61,10 +64,10 @@ bool FSAEquivalenceChecker::check() {
  * @author Daniel Dreibrodtx
  **/
 bool FSAEquivalenceChecker::checkStateEquivalence(State *s1, State *s2) {
-    if(matchingStates.find(s1->output()) != matchingStates.end()) {
+    if(matchingStates.find(s1->getName()) != matchingStates.end()) {
         //A counterpart to s1 has already been found        
         //Check whether it is the same as s2
-        return s1->output().compare(s2->output()) == 0;
+        return s1->getName().compare(s2->getName()) == 0;
     }
     
     //Check whether finality matches
@@ -73,8 +76,8 @@ bool FSAEquivalenceChecker::checkStateEquivalence(State *s1, State *s2) {
     
     map<string, Transition*> labelToTrans1, labelToTrans2;
     
-    vector<Transition*> t1 = transitionsFromState1[s1->output()];
-    vector<Transition*> t2 = transitionsFromState2[s2->output()];
+    vector<Transition*> t1 = transitionsFromState1[s1->getName()];
+    vector<Transition*> t2 = transitionsFromState2[s2->getName()];
     
     if(t1.size() != t2.size())
         return false;
@@ -86,21 +89,21 @@ bool FSAEquivalenceChecker::checkStateEquivalence(State *s1, State *s2) {
     }
     
     //assume equivalence
-    matchingStates[s1->output()] = s2->output();
+    matchingStates[s1->getName()] = s2->getName();
     
     //For each transition from s1, find corresponding one from s2
     for(i=0; i < t1.size(); i++) {
         string label = t1[i]->getEdgeName();
         Transition* counterpartTransition = labelToTrans2[label];
         if(counterpartTransition == NULL) {
-            matchingStates.erase(s1->output());
+            matchingStates.erase(s1->getName());
             return false;
         }
 
         bool equal = checkStateEquivalence(t1[i]->getFinishState(), counterpartTransition->getFinishState());
         
         if(!equal) {
-            matchingStates.erase(s1->output());
+            matchingStates.erase(s1->getName());
             return false;
         }
     }
