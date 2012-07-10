@@ -821,7 +821,7 @@ FiniteStateAutomata* FiniteStateAutomata::minimize()
 	for(std::vector<Group*>::iterator itgroup = vecGroups.begin(); itgroup != vecGroups.end(); ++itgroup) {
 		for(std::vector<GroupElement*>::iterator itel = (*itgroup)->getElements()->begin(); itel != (*itgroup)->getElements()->end(); ++itel) {
 			for(int idx = 0; idx < vecEdges.size(); idx++) {
-				State* stStart = (*itel)->getState();
+				State* stStart = fsaNew->getState((*itgroup)->getName());
 				State* stFinish = fsaNew->getState((*itel)->getTargetGroups()->at(idx));
 				string szEdge = vecEdges.at(idx);
 				fsaNew->addTransition(stStart, szEdge, stFinish);
@@ -873,7 +873,6 @@ string FiniteStateAutomata::getTargetGroupName(State* p_stState, vector<Group*>*
 		}
 	}
 	return "";
-	
 }
 
 /**
