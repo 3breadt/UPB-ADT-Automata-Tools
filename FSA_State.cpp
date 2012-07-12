@@ -9,57 +9,77 @@
 
 using namespace std;
 
-/* default Constructor, needed to use the constructor of transition*/
+/** default Constructor for FSA_State.*/
 State::State()
 {
 
 }
-/* Constructor
- * Parameters: one string containing the name of the constructed state*/
+/**
+ * Constructor for FSA_State.
+ * @param p_szName Name of state.
+ * @return FSA_state.
+ * @author fabiani, andreasb
+ */
 State::State(string p_szName)
 {
 	this-> szName = p_szName;
 	bStartState = false;
 	bFinalState = false;
 }
-/* Cnstructor
- * Parameters: three strings containing the name of the constructed state and the boolean startState
- * and finalState, so it's possible to defining the states status by creating the element*/
+/** 
+ * Constructor for FSA_State.
+ * @param p_szName Name of state,
+ * @param p_bStartState True if State is StartState,
+ * @param p_bFinalState True if State is FinalState.
+ * @return FSA_State.
+ * @author fabiani, andreasb
+ */
 State::State(string p_szName, bool p_bStartState, bool p_bFinalState)
 {
 	this->szName = p_szName;
     this->bStartState = p_bStartState;
     this->bFinalState = p_bFinalState;
 }
-/* Set startState status
- *
- * if you didn't set the status by creating the state element you can use this method for defining it
- * afterwards*/
+/**
+ * Sets the startState value of FSA_State
+ * @param p_bSetStartState Value for the startState.
+ * @author fabiani, andreasb
+ */
 void State::setStartState(bool p_bSetStartState)
 {
 	bStartState = p_bSetStartState;
 }
-/* Set finalState status
- *
- * if you didn't set the status by creating the state element you can use this method for defining it
- * afterwards*/
+/**
+ * Sets the finalState value of FSA_State
+ * @param p_bSetFinalState Value for the finalState.
+ * @author fabiani, andreasb
+ */
 void State::setFinalState(bool p_bSetFinalState)
 {
 	bFinalState = p_bSetFinalState;
 }
 
+/**
+ * Gives the value of startState attribute.
+ * @author fabiani, andreasb
+ */
 bool State::isStartState()
 {
 	return State::bStartState;
 }
 
+/**
+ * Gives the value of finalState attribute.
+ * @author fabiani, andreasb
+ */
 bool State::isFinalState()
 {
 	return State::bFinalState;
 }
-/* Output of one state
-  *
-  * it gives a string that includes the name of the state*/
+/** 
+ * Output of one state
+ * @return szName Name of the state.
+ * @author fabiani, andreasb*/
 string State::output()
 {
 	return szName;

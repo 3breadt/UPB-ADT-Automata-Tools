@@ -1,4 +1,5 @@
 #include "FSA_GroupElement.hpp"
+#include <string>
 
 using namespace std;
 
