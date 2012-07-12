@@ -1,4 +1,4 @@
-/**
+/*
  * FiniteStateAutomata.cpp
  *
  *  Created on: May 25, 2012
@@ -231,8 +231,8 @@ bool FiniteStateAutomata::isInFinalStatesVector(string p_szStateName)
 /** 
  * Add a transition to transitionlist.
  * @param p_szBeginningState Name of the first state of transition,
- *		  p_szEdge Name of the transition edge,
- *		  p_szFinalState Name of the second state of transition.
+ * @param p_szEdge Name of the transition edge,
+ * @param p_szFinalState Name of the second state of transition.
  * @author fabiani, andreasb
  */
 void FiniteStateAutomata::addTransition(string p_szBeginningState, string p_szEdge, string p_szFinalState)
@@ -307,8 +307,8 @@ void FiniteStateAutomata::addTransition(string p_szInput)
 /** 
  * Add a transition to transitionlist.
  * @param *p_stBeginningState Pointer of type state (begining state of transition),
- *		   p_szEdge Name of the edge,
- *		  *p_stFinalState Pointer of type state (final state of transition).
+ * @param  p_szEdge Name of the edge,
+ * @param *p_stFinalState Pointer of type state (final state of transition).
  * @author fabiani, andreasb
  */
 void FiniteStateAutomata::addTransition(State *p_stBeginningState, string p_szEdge, State *p_stFinalState)
@@ -321,8 +321,8 @@ void FiniteStateAutomata::addTransition(State *p_stBeginningState, string p_szEd
 /**
  * Remove a transition
  * @param p_szBeginningState Name of the transitions beginning state,
- *		  p_szEdge Name of the transitions edge,
- *		  p_szFinalState Name of the transitions final state.
+ * @param p_szEdge Name of the transitions edge,
+ * @param p_szFinalState Name of the transitions final state.
  * @author fabiani, andreasb
  */
 void FiniteStateAutomata::removeTransition(string p_szBeginningState, string p_szEdge, string p_szFinalState)
@@ -883,7 +883,7 @@ void FiniteStateAutomata::setTargetGroups(vector<Group*>* p_vecGroups)
 
 /**
  * Converts this FSA to Regular Grammar.
- * @returns A new instance of grammar.
+ * @return A new instance of grammar.
  * @author fabiani
  */
 Grammar* FiniteStateAutomata::convertToGrammar()

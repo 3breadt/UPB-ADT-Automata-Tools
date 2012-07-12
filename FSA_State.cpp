@@ -29,8 +29,8 @@ State::State(string p_szName)
 /** 
  * Constructor for FSA_State.
  * @param p_szName Name of state,
- *		  p_bStartState True if State is StartState,
- *		  p_bFinalState True if State is FinalState.
+ * @param p_bStartState True if State is StartState,
+ * @param p_bFinalState True if State is FinalState.
  * @return FSA_State.
  * @author fabiani, andreasb
  */
