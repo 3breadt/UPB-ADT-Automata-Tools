@@ -206,4 +206,4 @@ RegularExpression *FSAtoREConverter::toRE(FiniteStateAutomata *fsa) {
 	return new RegularExpression(root);
 }
 
-} /* namespace std */
+}

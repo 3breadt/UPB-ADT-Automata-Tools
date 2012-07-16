@@ -74,6 +74,16 @@ string Transition::getEdgeName()
 	return szEdge;
 }
 
+void Transition::setBeginningState(State p_stBeginning) {
+	this->stBeginning = p_stBeginning;
+}
 
+void Transition::setFinishState(State p_stFinish) {
+	this->stFinish = p_stFinish;
+}
+
+void Transition::setEdgeName(string p_szEdge) {
+	this->szEdge = p_szEdge;
+}
 
 

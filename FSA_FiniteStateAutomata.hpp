@@ -19,6 +19,7 @@ using namespace std;
 
 class Group;
 class Grammar;
+//class RegularExpression;
 
 class FiniteStateAutomata{
 private:
@@ -34,6 +35,7 @@ private:
 	string getTargetGroupName(State* p_stState, vector<Group*>* p_vecGroups);
 	void setTargetGroups(vector<Group*>* p_vecGroups);
 	int findGroupByGroupName(string p_szGroupName, vector<Group*>* p_vecGroups);
+	bool isInTransitionList(Transition* p_tNewTransition);
 
 public:
 	FiniteStateAutomata();
@@ -61,7 +63,10 @@ public:
 	void testEdge(string p_szTestEdge);
 	FiniteStateAutomata* fsaConvertNEAtoDEA();
 	FiniteStateAutomata* minimize();
+	FiniteStateAutomata* removeEmptyEdges();
+	bool isTotal();
 	Grammar* convertToGrammar();
+	//RegularExpression* toRE(FiniteStateAutomata *fsa);
 };
 
 #endif /* FSA_FINITESTATEAUTOMATA_HPP_ */

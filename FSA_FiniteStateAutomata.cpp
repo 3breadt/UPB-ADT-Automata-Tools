@@ -14,6 +14,8 @@
 #include<iostream>
 #include<fstream>
 #include<vector>
+//#include <map>
+//#include "RE_RegularExpression.hpp"
 
 using namespace std;
 
@@ -258,7 +260,7 @@ void FiniteStateAutomata::addTransition(string p_szBeginningState, string p_szEd
 	 * addTransition method with the same values, so that the states can be found in stateList now,
 	 * so you don't want to add two transition so return after recursively repetition
 	*/
-	if(bBeginning== false || bFinal == false)
+	if(bBeginning == false || bFinal == false)
 	{
 		addTransition(p_szBeginningState, p_szEdge, p_szFinalState);
 		return;
@@ -268,7 +270,11 @@ void FiniteStateAutomata::addTransition(string p_szBeginningState, string p_szEd
 	 * to save one transition more than once, that's maybe critical and maybe has to be fixed*/
 	Transition *newTransition = new Transition(*pBeginning, *pFinal, p_szEdge);
 
-	vecTransitionList.push_back(newTransition);
+	if(isInTransitionList(newTransition)) {
+		delete newTransition;
+	} else {
+		vecTransitionList.push_back(newTransition);
+	}
 }
 
 /* Add a transition
@@ -339,8 +345,12 @@ void FiniteStateAutomata::addTransition(State *p_stBeginningState, string p_szEd
 	 * at the first empty place of transitionListk, so with the method implemented till now it's possible
 	 * to save one transition more than once, that's maybe critical and maybe has to be fixed*/
 	Transition *newTransition = new Transition(*p_stBeginningState, *p_stFinalState, p_szEdge);
-
-	vecTransitionList.push_back(newTransition);
+	
+	if(isInTransitionList(newTransition)) {
+		delete newTransition;
+	} else {
+		vecTransitionList.push_back(newTransition);
+	}
 }
 
 /* Remove a transition
@@ -358,6 +368,15 @@ void FiniteStateAutomata::removeTransition(string p_szBeginningState, string p_s
 			vecTransitionList.erase(it);
 		}
 	}
+}
+
+bool FiniteStateAutomata::isInTransitionList(Transition* p_tNewTransition) {
+	for(std::vector<Transition*>::iterator it = vecTransitionList.begin(); it != vecTransitionList.end(); ++it) {
+		if((*it)->stBeginning.szName == p_tNewTransition->stBeginning.szName && (*it)->stFinish.szName == p_tNewTransition->stFinish.szName && (*it)->szEdge == p_tNewTransition->szEdge) {
+			return true;
+		}
+	}
+	return false;
 }
 
 /* Output of all transitions
@@ -739,6 +758,7 @@ vector<string> FiniteStateAutomata::getEdgesFromTransitionList()
  */
 FiniteStateAutomata* FiniteStateAutomata::minimize()
 {
+	this->fsaConvertNEAtoDEA();
 	vector<Group*> vecGroups;
 	Group* gRejectingStates = new Group(this, "G0");
 	Group* gAcceptingStates = new Group(this, "G1");
@@ -824,7 +844,9 @@ FiniteStateAutomata* FiniteStateAutomata::minimize()
 				State* stStart = fsaNew->getState((*itgroup)->getName());
 				State* stFinish = fsaNew->getState((*itel)->getTargetGroups()->at(idx));
 				string szEdge = vecEdges.at(idx);
-				fsaNew->addTransition(stStart, szEdge, stFinish);
+				if(stFinish != NULL) {
+					fsaNew->addTransition(stStart, szEdge, stFinish);
+				}
 			}
 		}
 	}
@@ -890,7 +912,7 @@ void FiniteStateAutomata::setTargetGroups(vector<Group*>* p_vecGroups)
 			for(std::vector<string>::iterator ited = vecEdges->begin(); ited != vecEdges->end(); ++ited) {
 				vector<State*> vecState;
 				setTargetStatesForEdge(*ited, (*itel)->getState(), &vecState);
-				if(vecState.at(0) == NULL) {
+				if(vecState.size() <= 0 || vecState.at(0) == NULL) {
 					(*itel)->addGroupToTargetVector("");
 				} else {
 					(*itel)->addGroupToTargetVector(getTargetGroupName(vecState.at(0), p_vecGroups));
@@ -898,6 +920,53 @@ void FiniteStateAutomata::setTargetGroups(vector<Group*>* p_vecGroups)
 			}
 		}
 	}
+}
+
+FiniteStateAutomata* FiniteStateAutomata::removeEmptyEdges() {
+	FiniteStateAutomata* fsaNew = new FiniteStateAutomata();
+	fsaNew->vecTransitionList = this->vecTransitionList;
+	fsaNew->vecStateList = this->vecStateList;
+	
+	while(true) {
+		bool bFoundEmpty = false;
+		for(std::vector<Transition*>::iterator it = fsaNew->vecTransitionList.begin(); it != fsaNew->vecTransitionList.end(); ++it) {
+			if((*it)->szEdge == "") {
+				for(std::vector<Transition*>::iterator ittrans = fsaNew->vecTransitionList.begin(); ittrans != fsaNew->vecTransitionList.end(); ++ittrans) {
+					if((*ittrans)->getFinishState()->getName() == (*it)->getBeginningState()->getName()) {
+						(*ittrans)->setFinishState(*((*it)->getFinishState()));
+					}
+				}
+				fsaNew->removeState((*it)->getBeginningState()->output());
+				fsaNew->vecTransitionList.erase(it);
+				bFoundEmpty = true;
+				break;
+			}
+		}
+		if(!bFoundEmpty) {
+			break;
+		}
+	}
+	fsaNew->getFinalStates();
+	return fsaNew;
+}
+
+bool FiniteStateAutomata::isTotal() {
+	vector<string> vecEdges = getEdgesFromTransitionList();
+	for(std::vector<State*>::iterator itstate = vecStateList.begin(); itstate != vecStateList.end(); ++itstate) {
+		for(std::vector<string>::iterator itedge = vecEdges.begin(); itedge != vecEdges.end(); ++itedge) {
+			bool bFound = false;
+			for(std::vector<Transition*>::iterator ittrans = vecTransitionList.begin(); ittrans != vecTransitionList.end(); ++ittrans) {
+				if((*ittrans)->getBeginningState()->getName() == (*itstate)->getName() && (*ittrans)->getEdgeName() == (*itedge)) {
+					bFound = true;
+					break;
+				}
+			}
+			if(!bFound) {
+				return false;
+			}
+		}
+	}
+	return true;
 }
 
 /**
@@ -963,3 +1032,192 @@ Grammar* FiniteStateAutomata::convertToGrammar()
 	}
 	return graConverted;
 }
+
+/**
+ * @brief Converts a FSA to a regular expression using Brzozowski's algebraic method.
+ * The method was implemented according to information found at
+ * http://cs.stackexchange.com/questions/2016/how-to-convert-finite-automata-to-regular-expressions .
+ * This algorithm was then adapted to the existing data structures and improved.
+ * @param fsa The FSA to convert.
+ * @return A regular expression equivalent to the given automaton.
+ * @author Daniel Dreibrodt
+ */
+/*RegularExpression* FiniteStateAutomata::toRE(FiniteStateAutomata *fsa) {
+	//TODO minimization, or require given FSA to be minimal
+
+	vector<State*> *states = fsa->getStateList();
+	vector<Transition*> *transitions = fsa->getTransitions();
+
+	//create hash-maps to easily find transitions to/from states
+	map<string, vector<Transition*> > transitionsFromState;
+	map<string, vector<Transition*> > transitionsToState;    
+    
+	for(vector<Transition*>::iterator it = transitions->begin(); it != transitions->end(); ++it) {
+        Transition *currentTrans = *it;
+		//Add transition to transitionsFromState map
+        //transitionsFromState.insert(make_pair(currentTrans->getBeginningState(), currentTrans);
+		transitionsFromState[currentTrans->getBeginningState()->output()].push_back(currentTrans);
+		//Add transition to transitionsToState map
+		transitionsToState[currentTrans->getFinishState()->output()].push_back(currentTrans);
+	}
+
+	///// BRZOZOWSKI ALGORITHM /////
+    
+    int m,n,i,j;
+    
+    //m is the number of states
+	m = (int)states->size();
+    
+    //b[n] holds the regular expression that describes how a final state can be reached from state n
+	RETreeNode* b[m];
+    //a is a matrix that holds all transitions
+    //If there is a transition from state 0 to state 1 with the symbol x
+    //then a[0][1]=x
+
+	RETreeNode* a[m][m];
+    
+	//Make sure that start state comes first in state vector
+	if(!(states->at(0)->isStartState())) {
+		State *firstState = states->at(0);
+		for(i=1;i<m;i++) {
+			State *currentState = states->at(i);
+			if(currentState->isStartState()) {
+				(*states)[0] = currentState;
+				(*states)[i] = firstState;
+				break;
+			}
+		}
+	}
+
+	for(i=0;i<m;i++) {
+		//Build b
+		State *currentState = states->at(i);
+		if(currentState->isFinalState()) {
+			b[i] = new RETreeNode("");
+		} else {
+			b[i] = NULL;
+		}
+        
+		//Build a 
+		vector<Transition*> *transFromCurrentState = &(transitionsFromState[currentState->output()]);
+		for(j=0;j<m;j++) {
+			a[i][j] = NULL;
+            State *targetState = states->at(j);
+            
+			for(vector<Transition*>::iterator it = transFromCurrentState->begin(); it != transFromCurrentState->end(); ++it) {
+				Transition *currentTransition = *it;                
+                
+				if(currentTransition->getFinishState()->output().compare(targetState->output())==0) {
+					//If several transitions from currentState to targetState exist
+					//create a boolean "or" regular expression tree node
+					if(a[i][j] == NULL) {
+						a[i][j] = new RETreeNode(currentTransition->getEdgeName());
+					}
+					else {
+						RETreeNode *orNode = new RETreeNode(RegularExpression::re_orOp);
+						orNode->setRight(a[i][j]->clone());
+						orNode->setLeft(new RETreeNode(currentTransition->getEdgeName()));
+						a[i][j] = orNode;
+                        
+					}
+				}
+			}
+		}
+	}
+    
+	for(n=m-1;n>=0;n--) {
+		//B[n] := star(A[n,n]) . B[n]
+        bool foundNNLoop = false; //Addition to original algorithm
+        if(a[n][n]!=NULL) {
+            foundNNLoop = true;
+            //Loops mean repetition -> star operator
+            RETreeNode* bnStarNode = new RETreeNode(RegularExpression::re_starOp);        
+            bnStarNode->setLeft(a[n][n]->clone());
+            if(b[n]==NULL) {
+                b[n] = bnStarNode;
+            } else {
+                //combine with already existing regex
+                RETreeNode* bnAndNode = new RETreeNode(RegularExpression::re_andOp);
+                bnAndNode->setRight(bnStarNode);
+                bnAndNode->setLeft(b[n]);
+                b[n] = bnAndNode;
+            }
+        }
+
+        //if no loop has been found yet, there exists none for state n
+        //thus the following part does not need to be executed
+        if(foundNNLoop) {
+            for(j=0;j<n;j++) {
+                //A[n,j] := star(A[n,n]) . A[n,j];
+                RETreeNode* anjStarNode = new RETreeNode(RegularExpression::re_starOp);        
+                anjStarNode->setLeft(a[n][n]->clone());
+                if(a[n][j]==NULL) {
+                    a[n][j] = anjStarNode;
+                } else {
+                    RETreeNode* anjAndNode = new RETreeNode(RegularExpression::re_andOp);
+                    anjAndNode->setRight(anjStarNode);
+                    anjAndNode->setLeft(a[n][j]);
+                    a[n][j] = anjAndNode;
+                }                
+            }
+        }
+		for(i=0;i<n;i++) {
+			//B[i] += A[i,n] . B[n]
+            RETreeNode* newBiNode = NULL;
+            if(a[i][n]!=NULL && b[n]!=NULL) {
+                newBiNode = new RETreeNode(RegularExpression::re_andOp);
+                newBiNode->setLeft(a[i][n]->clone());
+                newBiNode->setRight(b[n]->clone());
+            } else if(a[i][n]!=NULL) {
+                newBiNode = a[i][n]->clone();
+            } else if(b[n]!=NULL) {
+                newBiNode = b[n]->clone();            }
+			if(b[i]!=NULL && newBiNode != NULL) {
+				RETreeNode* biOrNode = new RETreeNode(RegularExpression::re_orOp);
+				biOrNode->setLeft(b[i]);
+				biOrNode->setRight(newBiNode);
+				b[i] = biOrNode;
+			} else {
+				b[i] = newBiNode;
+			}
+            
+			for(j=0;j<n;j++) {
+				//A[i,j] += A[i,n] . A[n,j]
+               
+                RETreeNode* newAijNode = NULL;
+                if(a[i][n]!=NULL && a[n][j]!=NULL) {
+                    newAijNode = new RETreeNode(RegularExpression::re_andOp);
+                    newAijNode->setLeft(a[i][n]->clone());
+                    newAijNode->setRight(a[n][j]->clone());
+                } else if(a[i][n]!=NULL) {
+                    newAijNode = a[i][n]->clone();
+                } else if(a[n][j]!=NULL) {
+                    newAijNode = a[n][j]->clone();
+                }
+                if(a[i][j]!=NULL && newAijNode != NULL) {
+                    RETreeNode* aijOrNode = new RETreeNode(RegularExpression::re_orOp);
+                    aijOrNode->setLeft(a[i][j]);
+                    aijOrNode->setRight(newAijNode);
+                    a[i][j] = aijOrNode;                    
+                } else {
+                    a[i][j] = newAijNode;
+                }                
+			}
+		}
+	}
+     
+	RETreeNode* root = b[0];
+    root->simplify();
+    
+    //Free memory
+    for(i=0;i<m;i++) {
+        for(j=0;j<m;j++) {
+            delete a[i][j];
+        }
+    }
+    for(i=1;i<m;i++) {
+        delete b[i];
+    }
+    
+	return new RegularExpression(root);
+}*/

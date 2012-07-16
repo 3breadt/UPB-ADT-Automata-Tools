@@ -29,6 +29,9 @@ public:
 	State* getBeginningState();
 	State* getFinishState();
 	string getEdgeName();
+	void setBeginningState(State p_stBeginning);
+	void setFinishState(State p_stFinish);
+	void setEdgeName(string p_szEdge);
 
 
 };
