@@ -27,8 +27,9 @@ namespace std {
  * @author Daniel Dreibrodt
  */
 RegularExpression *FSAtoREConverter::toRE(FiniteStateAutomata *fsa) {
-	//TODO minimization, or require given FSA to be minimal
-
+    fsa = fsa->fsaConvertNEAtoDEA();
+    fsa = fsa->minimize();
+    
 	vector<State*> *states = fsa->getStateList();
 	vector<Transition*> *transitions = fsa->getTransitions();
 
@@ -40,9 +41,9 @@ RegularExpression *FSAtoREConverter::toRE(FiniteStateAutomata *fsa) {
         Transition *currentTrans = *it;
 		//Add transition to transitionsFromState map
         //transitionsFromState.insert(make_pair(currentTrans->getBeginningState(), currentTrans);
-		transitionsFromState[currentTrans->getBeginningState()->output()].push_back(currentTrans);
+		transitionsFromState[currentTrans->getBeginningState()->getName()].push_back(currentTrans);
 		//Add transition to transitionsToState map
-		transitionsToState[currentTrans->getFinishState()->output()].push_back(currentTrans);
+		transitionsToState[currentTrans->getFinishState()->getName()].push_back(currentTrans);
 	}
 
 	///// BRZOZOWSKI ALGORITHM /////
@@ -83,7 +84,7 @@ RegularExpression *FSAtoREConverter::toRE(FiniteStateAutomata *fsa) {
 		}
         
 		//Build a 
-		vector<Transition*> *transFromCurrentState = &(transitionsFromState[currentState->output()]);
+		vector<Transition*> *transFromCurrentState = &(transitionsFromState[currentState->getName()]);
 		for(j=0;j<m;j++) {
 			a[i][j] = NULL;
             State *targetState = states->at(j);
@@ -91,7 +92,7 @@ RegularExpression *FSAtoREConverter::toRE(FiniteStateAutomata *fsa) {
 			for(vector<Transition*>::iterator it = transFromCurrentState->begin(); it != transFromCurrentState->end(); ++it) {
 				Transition *currentTransition = *it;                
                 
-				if(currentTransition->getFinishState()->output().compare(targetState->output())==0) {
+				if(currentTransition->getFinishState()->getName().compare(targetState->getName())==0) {
 					//If several transitions from currentState to targetState exist
 					//create a boolean "or" regular expression tree node
 					if(a[i][j] == NULL) {
