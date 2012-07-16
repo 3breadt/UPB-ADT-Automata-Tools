@@ -256,15 +256,15 @@ FiniteStateAutomata *RETreeNode::toFSA(int *labelNum) {
 			leftTransitions->reserve(leftTransitions->size()+rightTransitions->size());
 			leftTransitions->insert(leftTransitions->end(), rightTransitions->begin(), rightTransitions->end());
 
-			//TODO Create more minimal FSA here, add transitions to and from right star state
-			// for all left final states and remove old right start state and its transitions
+			//One could create a more minimal FSA here by addin the transitions to and from right start state
+			// for all left final states and remove old right start state and its transitions.           
 
 			//For each final state of left automaton, add transition to start state of right one
 			//and turn the final state into a normal one
 			unsigned int i;
 			for(i=0;i<leftFinalStates->size();i++) {
 				State *finalState = leftFinalStates->at(i);
-				leftFSA->addTransition(finalState->output(),"",startStateRight->output());
+				leftFSA->addTransition(finalState,"",startStateRight);
 				finalState->setFinalState(false);
 			}
 
@@ -304,8 +304,8 @@ FiniteStateAutomata *RETreeNode::toFSA(int *labelNum) {
 
 
 			leftFSA->addState(startState);
-			leftFSA->addTransition(startState->output(),"",startStateLeft->output());
-			leftFSA->addTransition(startState->output(),"",startStateRight->output());
+			leftFSA->addTransition(startState,"",startStateLeft);
+			leftFSA->addTransition(startState,"",startStateRight);
 
 			delete rightFSA;
 			return leftFSA;
@@ -320,10 +320,7 @@ FiniteStateAutomata *RETreeNode::toFSA(int *labelNum) {
 			unsigned int i=0;
 			for(i=0;i<finalStates->size();i++) {
 				State *finalState = finalStates->at(i);
-				//TODO optimize add transitions directly with states
-				// so that the states which are known already need
-				// not to be searched again
-				leftFSA->addTransition(finalState->output(),"",startState->output());
+				leftFSA->addTransition(finalState,"",startState);
 				finalState->setFinalState(false);
 			}
 			startState->setFinalState(true);

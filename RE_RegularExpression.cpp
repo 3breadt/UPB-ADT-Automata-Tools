@@ -68,7 +68,7 @@ FiniteStateAutomata *RegularExpression::toFSA() {
 	int labelCounter = 1;
 	FiniteStateAutomata *nda = p_treeRoot->toFSA(&labelCounter);
 	FiniteStateAutomata *dfa = nda->fsaConvertNEAtoDEA();
-	//TODO minimize DFA
+    dfa = dfa->minimize();
 	return dfa;
 }
 
