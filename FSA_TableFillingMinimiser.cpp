@@ -9,6 +9,8 @@
 #include "FSA_TableFillingMinimiser.h"
 
 #define DISTINGUISHABLE 9
+#define ELEMENT_ON_DIAG_MINTABLE 8
+#define ELEMENT_TREATED 7
 
 using namespace std;
 
@@ -27,7 +29,7 @@ void TableFillingFSAMinimiser::minimize(FiniteStateAutomata* pAutomat)
 
 	vector< vector<int> > minTable (numberOfStates , vector<int>(numberOfStates));
 
-	//TODO:initialise Minimizing Table
+
 	initMinimizingTable(pAutomat, &minTable);
 	printMinTable(&minTable);
 	fillMinimizingTable(&minTable, pAutomat);
@@ -114,10 +116,11 @@ void TableFillingFSAMinimiser::searchForPredecessorState(int stateIndex, string 
 
 	pAutomatTransitions = pAutomat->getTransitions();
 	pAutomatStates = pAutomat->getStateList();
-
-	for(unsigned int i=0 ; i < pAutomatTransitions->size() ; i++)
+	unsigned int automatTransitionsSize = pAutomatTransitions->size() ;
+	for(unsigned int i=0 ; i < automatTransitionsSize ; i++)
 	{
-		if((*pAutomatTransitions)[i]->getFinishState()->compare((*pAutomatStates)[i]) == 0
+		int compareResult = (*pAutomatTransitions)[i]->getFinishState()->compare((*pAutomatStates)[stateIndex]);
+		if(compareResult == 0
 				&& (*pAutomatTransitions)[i]->getEdgeName().compare(input) == 0)
 		{
 			pTempValidState = (*pAutomatTransitions)[i]->getBeginningState() ;
@@ -127,7 +130,7 @@ void TableFillingFSAMinimiser::searchForPredecessorState(int stateIndex, string 
 			{
 				pOutputVector->push_back(tempValidStateIndex);
 			}
-			searchForPredecessorState(tempValidStateIndex, input, pAutomat, pOutputVector);
+		//	searchForPredecessorState(tempValidStateIndex, input, pAutomat, pOutputVector);
 		}
 	}
 }
@@ -160,48 +163,125 @@ void printVector(vector<int>* v)
 void TableFillingFSAMinimiser::fillMinimizingTable(vector< vector<int> > * pMinTable , FiniteStateAutomata* pAutomat)
 {
 	int changeFlag = 1; // 1 if table changed
+	int k =0 ;
+
+	int numberOfStates = getNumberOfStates(pAutomat);
+	vector< vector<int> > doneTable (numberOfStates , vector<int>(numberOfStates));
+
+	/**intialise DoneTable*/
+	for(unsigned int i=0; i < doneTable.size() ; ++i )
+	{
+		for(unsigned int j=0; j < i ; ++j) //(*pMinTable)[i].size()
+		{
+				doneTable[i][j]= 0 ;
+		}
+	}
+
 	while(changeFlag == 1)
 	{
-		int k =0 ;
-		cout << "entered while loop " << k++ <<endl;
+		cout << "::::::::::::::::::::::::::entered while loop::::::::::::::::::::::::: " << k++ <<endl;
 		changeFlag = 0;
-		for(unsigned int i=0; i < pMinTable->size() ; i++ )
+		vector<int> predecessorStatesOfI;
+		vector<int> predecessorStatesOfJ;
+
+		/**(1) For every element in MinTable... */
+		unsigned int minTableSize = pMinTable->size();
+		for(unsigned int i=0; i < minTableSize ; i++ )
 		{
 			for(unsigned int j=0; j < i ; j++)
 			{
-				if((*pMinTable)[i][j] == DISTINGUISHABLE)
+				/** ... check if element is Distinguishable and not already treated */
+				if((*pMinTable)[i][j] == DISTINGUISHABLE
+						&& doneTable[i][j] == 0)
 				{
-					cout << "Distinguishable" << endl;
+					cout << "===================Distinguishable=================" << "\n"<< endl;
+					cout << "+++++++Before pred. Search+++++++" << endl;
 
-					vector<int> predecessorStatesOfI(getNumberOfStates(pAutomat));
-					vector<int> predecessorStatesOfJ(getNumberOfStates(pAutomat));
 
-					//every element in I is distiguishable to every element in J
+					//every element in predecessorI is distiguishable to every element in predecessorJ
 					predecessorStatesOfI.push_back(i);
 					printVector(&predecessorStatesOfI);
 					predecessorStatesOfJ.push_back(j);
-					printVector(&predecessorStatesOfJ);     // 0 in vector is not good!!!! because there is a state 0!!!  moreover: i>1 ??
-					/*****************************************
+					printVector(&predecessorStatesOfJ);
+
 					//TODO: all inputs!!! (total FSA)
 
 					searchForPredecessorState(i,"1", pAutomat, &predecessorStatesOfI );
 					searchForPredecessorState(j,"1", pAutomat, &predecessorStatesOfJ );
+					cout << "+++++++After pred. Search+++++++" << endl;
+					printVector(&predecessorStatesOfI);
+					printVector(&predecessorStatesOfJ);
+
+
+
+
 
 					for(unsigned int i=0; i < predecessorStatesOfI.size() ; i++ )
 					{
 						for(unsigned int j=0; j < predecessorStatesOfJ.size() ; j++)
 						{
-							int elementInMinTable = (*pMinTable)[predecessorStatesOfI[i]][predecessorStatesOfJ[j]] ;
-							if(elementInMinTable == 0)
+							int elementInMinTable;
+							if(predecessorStatesOfI[i] == predecessorStatesOfJ[j])
 							{
-								changeFlag = 1;
+								elementInMinTable = ELEMENT_ON_DIAG_MINTABLE;
 							}
-							(*pMinTable)[predecessorStatesOfI[i]][predecessorStatesOfJ[j]] = DISTINGUISHABLE ;
+							else
+							{
+
+								 if(predecessorStatesOfI[i]> predecessorStatesOfJ[j])
+								{
+									 elementInMinTable = (*pMinTable)[predecessorStatesOfI[i]][predecessorStatesOfJ[j]];
+								}
+								 else
+								 {
+									 elementInMinTable = (*pMinTable)[predecessorStatesOfJ[j]][predecessorStatesOfI[i]];
+								 }
+						//		int elementInMinTable = (*pMinTable)[predecessorStatesOfI[i]][predecessorStatesOfJ[j]] ;
+								if(elementInMinTable == 0)
+								{
+
+									 if(predecessorStatesOfI[i]> predecessorStatesOfJ[j])
+									{
+
+										(*pMinTable)[predecessorStatesOfI[i]][predecessorStatesOfJ[j]] = DISTINGUISHABLE ;
+									}
+									else
+									{
+
+										(*pMinTable)[predecessorStatesOfJ[j]][predecessorStatesOfI[i]] = DISTINGUISHABLE ;
+									}
+
+									 changeFlag = 1;
+									//(*pMinTable)[predecessorStatesOfI[i]][predecessorStatesOfJ[j]] = DISTINGUISHABLE ;
+									//(*pMinTable)[predecessorStatesOfJ[j]][predecessorStatesOfI[i]] = DISTINGUISHABLE ;
+								}
+								else
+								{
+									cout << "^^^^^^^^^^^^^^^^^^No CHANGE^^^^^^^^^^^^^^^^" << endl ;
+								}
+							}
+
+
 
 						}
 					}
+
+					/*****************************************
+
 					******************************************/
+					//clear predecessors arrays!!
+					predecessorStatesOfI.clear();
+					predecessorStatesOfJ.clear();
+					doneTable[i][j] = ELEMENT_TREATED ;
+					doneTable[j][i] = ELEMENT_TREATED ;
+					printMinTable(pMinTable);
+
 				}
+				else /** element in MinTable is not distinguishable */
+				{
+					//Do nothing
+				}
+
 			}
 		}
 	}

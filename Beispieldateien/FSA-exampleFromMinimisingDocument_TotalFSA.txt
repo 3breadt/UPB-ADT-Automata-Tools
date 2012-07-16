@@ -26,7 +26,7 @@ D 1 G
 E 0 H
 E 1 F
 F 0 C
-F 1 A
+F 1 G
 G 0 G
 G 1 E
 H 0 G
