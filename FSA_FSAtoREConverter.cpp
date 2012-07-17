@@ -92,7 +92,7 @@ RegularExpression *FSAtoREConverter::toRE(FiniteStateAutomata *fsa) {
 			for(vector<Transition*>::iterator it = transFromCurrentState->begin(); it != transFromCurrentState->end(); ++it) {
 				Transition *currentTransition = *it;                
                 
-				if(currentTransition->getFinishState()->getName().compare(targetState->getName())==0) {
+				if(currentTransition->getFinishState()->getName() == targetState->getName()) {
 					//If several transitions from currentState to targetState exist
 					//create a boolean "or" regular expression tree node
 					if(a[i][j] == NULL) {

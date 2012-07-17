@@ -9,8 +9,6 @@
 #include <stdlib.h>
 #include <sstream>
 
-#define DEBUG
-
 /**
  * @brief Constructor.
  */

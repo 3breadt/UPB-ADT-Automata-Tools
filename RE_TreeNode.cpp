@@ -21,7 +21,7 @@ using namespace std;
  */
 RETreeNode::RETreeNode(string c) {
 	content = c;
-	if(content.compare("<epsilon>")==0) {
+	if(content == "<epsilon>") {
 		//empty literal
 		content = "";
 	}
@@ -171,7 +171,7 @@ void RETreeNode::simplify() {
     } else {
        
         
-        if(content.compare(RegularExpression::re_andOp)==0) {
+        if(content == RegularExpression::re_andOp) {
             if(p_left->isEmpty()) {
                 RETreeNode *p_oldRight = p_right;
                 content = p_oldRight->content;
@@ -205,9 +205,9 @@ void RETreeNode::simplify() {
                 delete p_oldLeft;
                 p_oldLeft = NULL;
             }
-        } else if(content.compare(RegularExpression::re_orOp)==0) {
+        } else if(content == RegularExpression::re_orOp) {
             if(!p_left->isOperator() && !p_right->isOperator()) {
-                if(p_left->getContent().compare(p_right->getContent())==0) {
+                if(p_left->getContent() == p_right->getContent()) {
                     content = p_left->getContent();
                     delete p_left;
                     p_left = NULL;
@@ -229,7 +229,7 @@ void RETreeNode::simplify() {
 FiniteStateAutomata *RETreeNode::toFSA(int *labelNum) {
 	//Self-developed algorithm
 	if(isOperator()) {
-		if(content.compare(RegularExpression::re_andOp)==0) {
+		if(content == RegularExpression::re_andOp) {
 			// For a concatenation all final states of the FSA for the left subtree
 			// have to be connected with an empty transition to the start state
 			// of the FSA for the right subtree.
@@ -271,7 +271,7 @@ FiniteStateAutomata *RETreeNode::toFSA(int *labelNum) {
 			delete rightFSA;
 
 			return leftFSA;
-		} else if(content.compare(RegularExpression::re_orOp)==0) {
+		} else if(content == RegularExpression::re_orOp) {
 			// For an boolean or operator a new start state is created
 			// which has empty transitions to both starting states of the left
 			// and right subtree's FSAs.
@@ -309,7 +309,7 @@ FiniteStateAutomata *RETreeNode::toFSA(int *labelNum) {
 
 			delete rightFSA;
 			return leftFSA;
-		} else if(content.compare(RegularExpression::re_starOp)==0) {
+		} else if(content == RegularExpression::re_starOp) {
 			// For a repetition all final states of the left subtree's
 			// FSA are connected to its starting state.
 			// Then the starting state is also turned into a final state.

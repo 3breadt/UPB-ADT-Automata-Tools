@@ -27,8 +27,26 @@ bool FSAEquivalenceChecker::checkEquivalence(FiniteStateAutomata *fsa1, FiniteSt
 FSAEquivalenceChecker::FSAEquivalenceChecker(FiniteStateAutomata *fsa1, FiniteStateAutomata *fsa2) {
     dfa1 = fsa1->fsaConvertNEAtoDEA();
     dfa1 = dfa1->minimize();
+    
     dfa2 = fsa2->fsaConvertNEAtoDEA();    
     dfa2 = dfa2->minimize();
+    
+#ifdef DEBUG
+    cout << "FSA 1:\n";
+    
+    dfa1->printStartState();
+    dfa1->printFinalState();
+    dfa1->outputStateList();
+    dfa1->outputTransitionList();
+    
+    cout << "\nFSA 2:\n";
+    
+    dfa2->printStartState();
+    dfa2->printFinalState();
+    dfa2->outputStateList();
+    dfa2->outputTransitionList();
+#endif
+    
     for(vector<Transition*>::iterator it = dfa1->getTransitions()->begin(); it != dfa1->getTransitions()->end(); ++it) {
         Transition *currentTrans = *it;
 		//Add transition to transitionsFromState map
@@ -50,6 +68,9 @@ FSAEquivalenceChecker::FSAEquivalenceChecker(FiniteStateAutomata *fsa1, FiniteSt
  **/
 bool FSAEquivalenceChecker::check() {    
     if(dfa1->getStateList()->size() != dfa2->getStateList()->size()) {
+#ifdef DEBUG
+        cout << "State lists have differing size\n";
+#endif
         return false;
     }
     
@@ -64,15 +85,23 @@ bool FSAEquivalenceChecker::check() {
  * @author Daniel Dreibrodtx
  **/
 bool FSAEquivalenceChecker::checkStateEquivalence(State *s1, State *s2) {
-    if(matchingStates.find(s1->getName()) != matchingStates.end()) {
+    map<string,string>::iterator foundMatch = matchingStates.find(s1->getName());
+    if(foundMatch != matchingStates.end()) {
         //A counterpart to s1 has already been found        
         //Check whether it is the same as s2
-        return s1->getName().compare(s2->getName()) == 0;
+        if((*foundMatch).second != s2->getName()) {
+#ifdef DEBUG
+            cout << "Couterparts do not match: " << (*foundMatch).second << "!=" << s2->getName() << "\n";
+#endif
+            return false;
+        }
+        else return true;
     }
     
     //Check whether finality matches
-    if(s1->isFinalState() != s2->isFinalState())
+    if(s1->isFinalState() != s2->isFinalState()) {
         return false;
+    }
     
     map<string, Transition*> labelToTrans1, labelToTrans2;
     

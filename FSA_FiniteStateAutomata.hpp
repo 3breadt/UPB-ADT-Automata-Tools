@@ -14,6 +14,8 @@
 #include "FSA_StateConverter.hpp"
 #include <vector>
 #include <sstream>
+#include <map>
+#include <list>
 
 using namespace std;
 
@@ -55,6 +57,7 @@ public:
 	void addTransition(State *p_stBeginningState, string p_szEdge, State *p_stFinalState);
 	void addTransition(string p_szInput);
 	void removeTransition(string p_szBeginningState, string p_szEdge, string p_szFinalState);
+    void removeTransition(Transition* p_transition);
     void outputTransitionList();
 	vector<string> getEdgesFromTransitionList();
 	vector<Transition*>* getTransitions();
@@ -63,10 +66,9 @@ public:
 	void testEdge(string p_szTestEdge);
 	FiniteStateAutomata* fsaConvertNEAtoDEA();
 	FiniteStateAutomata* minimize();
-	FiniteStateAutomata* removeEmptyEdges();
+	void removeEmptyEdges();
 	bool isTotal();
 	Grammar* convertToGrammar();
-	//RegularExpression* toRE(FiniteStateAutomata *fsa);
 };
 
 #endif /* FSA_FINITESTATEAUTOMATA_HPP_ */
