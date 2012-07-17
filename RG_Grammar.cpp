@@ -215,7 +215,7 @@ FiniteStateAutomata* Grammar::convertToFSA()
 {
 	this->initConvert();
 
-	FiniteStateAutomata* automat = new FiniteStateAutomata() ;
+	FiniteStateAutomata* automat = new FiniteStateAutomata();
 
 	/**First end of the Transition */
 	State* pFromState;
@@ -289,11 +289,12 @@ FiniteStateAutomata* Grammar::convertToFSA()
 				}
 			}
 		}
-
-
-
+		
 	}
+	automat->getFinalStates();
+	FiniteStateAutomata* deterministic_automat = automat->fsaConvertNEAtoDEA();
+	delete automat;
 
-	return automat;
+	return deterministic_automat;
 
 }

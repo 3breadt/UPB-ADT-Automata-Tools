@@ -468,7 +468,8 @@ void FiniteStateAutomata::read(string p_szFileName)
 				addState(newState);
 			}
 		}
-  }
+	}
+	getFinalStates();
 }
 
 /**
@@ -739,7 +740,6 @@ vector<string> FiniteStateAutomata::getEdgesFromTransitionList()
  */
 FiniteStateAutomata* FiniteStateAutomata::minimize()
 {
-	this->fsaConvertNEAtoDEA();
 	vector<Group*> vecGroups;
 	Group* gRejectingStates = new Group(this, "G0");
 	Group* gAcceptingStates = new Group(this, "G1");
