@@ -913,7 +913,7 @@ void FiniteStateAutomata::setTargetGroups(vector<Group*>* p_vecGroups)
 
 /**
  * Removes all States with outgoing empty edges that are not essential for the language.
- * Such non-essential states have only one outgoing empty transition and possibly
+ * Such non-essential states have only one outgoing empty transition and possibly empty
  * transitions to itself. Removing such a state and redirecting its incoming transitions
  * does not change the language.
  * @author Daniel Dreibrodt
@@ -942,29 +942,32 @@ void FiniteStateAutomata::removeEmptyEdges() {
         
         for(vector<Transition*>::iterator tit = outgoingTransitions.begin(); tit != outgoingTransitions.end(); ++tit) {
             Transition *currentTrans = *tit;
-            //State has a transition to another state
-            if(currentTrans->getFinishState()->getName() != currentState->getName()) {
-                if(currentTrans->getEdgeName() == "" || currentTrans->getEdgeName()=="<epsilon>") {
+            
+            if(currentTrans->getEdgeName() == "" || currentTrans->getEdgeName()=="<epsilon>") {
+                if(currentTrans->getFinishState()->getName() == currentState->getName()) {
+                    //Empty transition to itself -> useless
+                    removeTransition(currentTrans);
+                } else {
                     if(deleteState) {
-                        //we already found one empty transition
+                        //There exist more than one non-empty transitions to other states
+                        //thus the state is necessary for the language and cannot be
+                        //deleted. The state represents an alternative, an or-operator.
                         deleteState = false;
                         break;
                     }
+                    //The state has an empty transition to another state
+                    //thus we assume it is unnecessary
                     deleteState = true;
                     epsilonTransition = currentTrans;
-                } else {
-                    //State has a non-empty transition to another state, cannot be deleted
-                    deleteState = false;
-                    break;
                 }
-            } else if(currentTrans->getEdgeName() == "" || currentTrans->getEdgeName()=="<epsilon>") {
-                //Empty transition to itself -> useless
-                removeTransition(currentTrans);
+            } else {
+                //The state has a non-empty transition, it is thus necessary for the language
+                deleteState = false;
+                break;
             }
         }
         if(deleteState) {
             //Now we know that the state only contains one empty transition to another state
-            //and possibly loops to itself
             State* targetState = epsilonTransition->getFinishState();
             
             //Remove empty transition
@@ -982,12 +985,7 @@ void FiniteStateAutomata::removeEmptyEdges() {
             vector<Transition*> incomingTransitions = transitionsToState[currentState->getName()];
             for(vector<Transition*>::iterator tit = incomingTransitions.begin(); tit != incomingTransitions.end(); ++tit) {
                 Transition *currentTrans = *tit;
-                currentTrans->setFinishState(*targetState);
-                
-                //If it is a loop, switch also the beginning state
-                if(currentTrans->getBeginningState()->getName() == currentState->getName()) {
-                    currentTrans->setBeginningState(*targetState);
-                }
+                currentTrans->setFinishState(*targetState);                
             }
             
             //Now delete the state
