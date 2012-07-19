@@ -26,9 +26,11 @@ bool FSAEquivalenceChecker::checkEquivalence(FiniteStateAutomata *fsa1, FiniteSt
  **/
 FSAEquivalenceChecker::FSAEquivalenceChecker(FiniteStateAutomata *fsa1, FiniteStateAutomata *fsa2) {
     dfa1 = fsa1->fsaConvertNEAtoDEA();
+    dfa1->removeEmptyEdges();
     dfa1 = dfa1->minimize();
     
-    dfa2 = fsa2->fsaConvertNEAtoDEA();    
+    dfa2 = fsa2->fsaConvertNEAtoDEA();
+    dfa2->removeEmptyEdges();
     dfa2 = dfa2->minimize();
     
 #ifdef DEBUG

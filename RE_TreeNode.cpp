@@ -278,7 +278,7 @@ FiniteStateAutomata *RETreeNode::toFSA(int *labelNum) {
 			// Those two start states are then turned into normal states.
 
 			char *startStateName = new char[20];
-			sprintf(startStateName, "State%d", *labelNum);
+			sprintf(startStateName, "S%d", *labelNum);
 			State *startState = new State(startStateName, true, false);
 			(*labelNum)++;
 
@@ -333,12 +333,12 @@ FiniteStateAutomata *RETreeNode::toFSA(int *labelNum) {
 		FiniteStateAutomata *fsa = new FiniteStateAutomata();
 
 		char *stateAname = new char[20];
-		sprintf(stateAname, "State%da", *labelNum);
+		sprintf(stateAname, "S%da", *labelNum);
 		State *stateA = new State(stateAname, true, false);
 		fsa->addState(stateA);
 
 		char *stateBname = new char[20];
-		sprintf(stateBname, "State%db", *labelNum);
+		sprintf(stateBname, "S%db", *labelNum);
 		(*labelNum)++;
 		State *stateB = new State(stateBname, false, true);
 		fsa->addState(stateB);

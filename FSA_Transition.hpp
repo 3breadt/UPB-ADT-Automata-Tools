@@ -18,19 +18,19 @@ class Transition{
 	friend class FiniteStateAutomata;
 
 private:
-	State stBeginning;
-	State stFinish;
+	State *stBeginning;
+	State *stFinish;
 	string szEdge;
 
 public:
-	Transition(State p_stBeginning, State p_stFinish, string p_szEdge);
+	Transition(State *p_stBeginning, State *p_stFinish, string p_szEdge);
 	//Transition(string p_szInput);
 	string output();
 	State* getBeginningState();
 	State* getFinishState();
 	string getEdgeName();
-	void setBeginningState(State p_stBeginning);
-	void setFinishState(State p_stFinish);
+	void setBeginningState(State *p_stBeginning);
+	void setFinishState(State *p_stFinish);
 	void setEdgeName(string p_szEdge);
 
 

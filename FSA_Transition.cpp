@@ -5,7 +5,7 @@
 #include<cstring>
 
 /**Constructor FSA_Transition*/
-Transition::Transition(State p_stBeginning, State p_stFinish, string p_szEdge)
+Transition::Transition(State *p_stBeginning, State *p_stFinish, string p_szEdge)
 {
 
 	 this->stBeginning = p_stBeginning;
@@ -21,7 +21,7 @@ Transition::Transition(State p_stBeginning, State p_stFinish, string p_szEdge)
  */
 string Transition::output(){
 	string result;
-	result = stBeginning.szName + " " + szEdge + " " + stFinish.szName;
+	result = stBeginning->szName + " " + szEdge + " " + stFinish->szName;
 	return result;
 
 }
@@ -33,7 +33,7 @@ string Transition::output(){
  */
 State* Transition::getBeginningState()
 {
-	return &stBeginning;
+	return stBeginning;
 }
 
 /**
@@ -43,7 +43,7 @@ State* Transition::getBeginningState()
  */
 State* Transition::getFinishState()
 {
-	return &stFinish;
+	return stFinish;
 }
 
 /**
@@ -56,11 +56,11 @@ string Transition::getEdgeName()
 	return szEdge;
 }
 
-void Transition::setBeginningState(State p_stBeginning) {
+void Transition::setBeginningState(State *p_stBeginning) {
 	this->stBeginning = p_stBeginning;
 }
 
-void Transition::setFinishState(State p_stFinish) {
+void Transition::setFinishState(State *p_stFinish) {
 	this->stFinish = p_stFinish;
 }
 

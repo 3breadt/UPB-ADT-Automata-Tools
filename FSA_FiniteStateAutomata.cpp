@@ -275,7 +275,7 @@ void FiniteStateAutomata::addTransition(string p_szBeginningState, string p_szEd
 	/* after both states had been found in transition list start adding the transition and storing it
 	 * at the first empty place of transitionListk, so with the method implemented till now it's possible
 	 * to save one transition more than once, that's maybe critical and maybe has to be fixed*/
-	Transition *newTransition = new Transition(*pBeginning, *pFinal, p_szEdge);
+	Transition *newTransition = new Transition(pBeginning, pFinal, p_szEdge);
 
 	if(isInTransitionList(newTransition)) {
 		delete newTransition;
@@ -318,7 +318,7 @@ void FiniteStateAutomata::addTransition(string p_szInput)
  */
 void FiniteStateAutomata::addTransition(State *p_stBeginningState, string p_szEdge, State *p_stFinalState)
 {
-	Transition *newTransition = new Transition(*p_stBeginningState, *p_stFinalState, p_szEdge);
+	Transition *newTransition = new Transition(p_stBeginningState, p_stFinalState, p_szEdge);
 	
 	if(isInTransitionList(newTransition)) {
 		delete newTransition;
@@ -338,8 +338,9 @@ void FiniteStateAutomata::removeTransition(string p_szBeginningState, string p_s
 {
 
 	for(std::vector<Transition*>::iterator it = vecTransitionList.begin(); it != vecTransitionList.end(); ++it) {
-		if((*it)->stBeginning.szName == p_szBeginningState && (*it)->stFinish.szName == p_szFinalState && (*it)->szEdge == p_szEdge) {
+		if((*it)->stBeginning->szName == p_szBeginningState && (*it)->stFinish->szName == p_szFinalState && (*it)->szEdge == p_szEdge) {
 			vecTransitionList.erase(it);
+            break;
 		}
 	}
 }
@@ -351,7 +352,7 @@ void FiniteStateAutomata::removeTransition(Transition *p_transition) {
 
 bool FiniteStateAutomata::isInTransitionList(Transition* p_tNewTransition) {
 	for(std::vector<Transition*>::iterator it = vecTransitionList.begin(); it != vecTransitionList.end(); ++it) {
-		if((*it)->stBeginning.szName == p_tNewTransition->stBeginning.szName && (*it)->stFinish.szName == p_tNewTransition->stFinish.szName && (*it)->szEdge == p_tNewTransition->szEdge) {
+		if((*it)->stBeginning->szName == p_tNewTransition->stBeginning->szName && (*it)->stFinish->szName == p_tNewTransition->stFinish->szName && (*it)->szEdge == p_tNewTransition->szEdge) {
 			return true;
 		}
 	}
@@ -743,7 +744,7 @@ vector<string> FiniteStateAutomata::getEdgesFromTransitionList()
  * @author skowelek, fabiani
  */
 FiniteStateAutomata* FiniteStateAutomata::minimize()
-{
+{    
 	vector<Group*> vecGroups;
 	Group* gRejectingStates = new Group(this, "G0");
 	Group* gAcceptingStates = new Group(this, "G1");
@@ -836,9 +837,6 @@ FiniteStateAutomata* FiniteStateAutomata::minimize()
 		}
 	}
     
-    //Minimize further by removing empty edges
-    fsaNew->removeEmptyEdges();
-    
 	fsaNew->getFinalStates();
 
 	return fsaNew;
@@ -912,10 +910,10 @@ void FiniteStateAutomata::setTargetGroups(vector<Group*>* p_vecGroups)
 }
 
 /**
- * Removes all States with outgoing empty edges that are not essential for the language.
- * Such non-essential states have only one outgoing empty transition and possibly empty
- * transitions to itself. Removing such a state and redirecting its incoming transitions
- * does not change the language.
+ * Tries to remove all empty transitions thate are not essential for the language.
+ * All empty loops are removed.
+ * When a state's only outgoing transitions are empty transitions to states that 
+ * have no other incoming transitions, then these states will be merged (the source state & the target states).
  * @author Daniel Dreibrodt
  **/
 void FiniteStateAutomata::removeEmptyEdges() {
@@ -926,73 +924,126 @@ void FiniteStateAutomata::removeEmptyEdges() {
 	for(vector<Transition*>::iterator it = vecTransitionList.begin(); it != vecTransitionList.end(); ++it) {
         Transition *currentTrans = *it;
 		//Add transition to transitionsFromState map
-        //transitionsFromState.insert(make_pair(currentTrans->getBeginningState(), currentTrans);
 		transitionsFromState[currentTrans->getBeginningState()->getName()].push_back(currentTrans);
 		//Add transition to transitionsToState map
 		transitionsToState[currentTrans->getFinishState()->getName()].push_back(currentTrans);
 	}
     
-    bool deleteState = false;
+    vector<State*> deletableStates;
+    map<string,bool> stateShouldBeDeleted;
     
-    for(vector<State*>::iterator it = vecStateList.begin(); it != vecStateList.end(); ++it) {
-        State *currentState = *it;
+    for(vector<State*>::iterator sit = vecStateList.begin(); sit != vecStateList.end(); ++sit) {
+        State* currentState = *sit;
+        map<string,bool>::iterator dit = stateShouldBeDeleted.find(currentState->getName());
+        if(dit!=stateShouldBeDeleted.end()) {
+            if((*dit).second)
+                continue;
+        }
+            
+        
         vector<Transition*> outgoingTransitions = transitionsFromState[currentState->getName()];
-        deleteState = false;
-        Transition* epsilonTransition = NULL;
+        vector<Transition*> epsilonTransitions;
+        vector<State*> targetStates;
+        bool deleteState = false;
+        bool targetStatesHaveNoOtherIncomingTransitions = false;
         
         for(vector<Transition*>::iterator tit = outgoingTransitions.begin(); tit != outgoingTransitions.end(); ++tit) {
-            Transition *currentTrans = *tit;
-            
-            if(currentTrans->getEdgeName() == "" || currentTrans->getEdgeName()=="<epsilon>") {
-                if(currentTrans->getFinishState()->getName() == currentState->getName()) {
-                    //Empty transition to itself -> useless
+            Transition* currentTrans = *tit;
+            if(currentTrans->getEdgeName() == "" || currentTrans->getEdgeName() == "<epsilon>") {
+                if(currentTrans->getFinishState() == currentState) {
+                    //empty loop, useless
                     removeTransition(currentTrans);
-                } else {
-                    if(deleteState) {
-                        //There exist more than one non-empty transitions to other states
-                        //thus the state is necessary for the language and cannot be
-                        //deleted. The state represents an alternative, an or-operator.
+                }
+                else if(deleteState) {                    
+                    if(!targetStatesHaveNoOtherIncomingTransitions
+                       || transitionsToState[currentTrans->getFinishState()->getName()].size() != 1
+                       || currentTrans->getFinishState()->isStartState()) {
                         deleteState = false;
+                        targetStatesHaveNoOtherIncomingTransitions = false;
                         break;
+                    } else {
+                        targetStates.push_back(currentTrans->getFinishState());
+                        epsilonTransitions.push_back(currentTrans);
                     }
-                    //The state has an empty transition to another state
-                    //thus we assume it is unnecessary
+                } else {
                     deleteState = true;
-                    epsilonTransition = currentTrans;
+                    targetStates.push_back(currentTrans->getFinishState());
+                    epsilonTransitions.push_back(currentTrans);
+                    targetStatesHaveNoOtherIncomingTransitions = transitionsToState[currentTrans->getFinishState()->getName()].size() == 1 && !currentTrans->getFinishState()->isStartState();
                 }
             } else {
-                //The state has a non-empty transition, it is thus necessary for the language
                 deleteState = false;
                 break;
             }
         }
-        if(deleteState) {
-            //Now we know that the state only contains one empty transition to another state
-            State* targetState = epsilonTransition->getFinishState();
-            
-            //Remove empty transition
-            removeTransition(epsilonTransition);
-
-            //Check if the state that is to be deleted was the start state
-            if(currentState->isStartState()) {
-                targetState->setStartState(true);
+        
+        if(deleteState) {            
+            if(targetStatesHaveNoOtherIncomingTransitions) {
+#ifdef DEBUG
+                cout << "Deleting target states of " << currentState->getName() << "\n";
+#endif
+                //Delete target states
+                for(vector<State*>::iterator sit2 = targetStates.begin(); sit2 != targetStates.end(); ++sit2) {
+                    State *targetState = *sit2;
+#ifdef DEBUG
+                    cout << " Deleting target state " << targetState->getName() << "\n";
+#endif
+                    vector<Transition*> outgoingTransitions = transitionsFromState[targetState->getName()];
+                
+                    for(vector<Transition*>::iterator tit = outgoingTransitions.begin(); tit != outgoingTransitions.end(); ++tit) {
+                        Transition* currentTrans = *tit;
+#ifdef DEBUG
+                        cout << "  Changing transition " << currentTrans->output() << " to start from "
+                        << currentState->getName() << "\n";
+#endif
+                        currentTrans->setBeginningState(currentState);
+                    }
+                    
+                    deletableStates.push_back(targetState);
+                    stateShouldBeDeleted[targetState->getName()] = true;
+                }
+                
+            } else {
+                //Delete source state
+#ifdef DEBUG
+                cout << "Deleting source state "<<currentState->getName()<<"\n";
+#endif
+                State* targetState = targetStates[0];
+                if(currentState->isStartState()) {
+                    targetState->setStartState(true);
+                }
+                if(currentState->isFinalState()) {
+                    targetState->setFinalState(true);
+                }
+                vector<Transition*> incomingTransitions = transitionsToState[currentState->getName()];
+                for(vector<Transition*>::iterator tit = incomingTransitions.begin(); tit != incomingTransitions.end(); ++tit) {
+                    Transition* currentTrans = *tit;
+#ifdef DEBUG
+                    cout << " Changing transition " << currentTrans->output() << " to point to " << targetState->getName() << "\n";
+#endif
+                    currentTrans->setFinishState(targetState);
+                    
+                }
+                deletableStates.push_back(currentState);
+                stateShouldBeDeleted[currentState->getName()] = true;
             }
-            
-            //Whether the state to be deleted was final does not matter
-            //as it would be left immediately with the empty transition
-                        
-            //Switch all incoming transitions to lead to the new target state
-            vector<Transition*> incomingTransitions = transitionsToState[currentState->getName()];
-            for(vector<Transition*>::iterator tit = incomingTransitions.begin(); tit != incomingTransitions.end(); ++tit) {
-                Transition *currentTrans = *tit;
-                currentTrans->setFinishState(*targetState);                
+            //remove empty transitions
+            for(vector<Transition*>::iterator tit = epsilonTransitions.begin(); tit != epsilonTransitions.end(); ++tit) {
+                removeTransition(*tit);
             }
-            
-            //Now delete the state
-            it = vecStateList.erase(it);
         }
     }
-
+    if(deletableStates.size() > 0) {
+        for(vector<State*>::iterator sit = deletableStates.begin(); sit != deletableStates.end(); ++sit) {
+            State* currentState = *sit;        
+            removeState(currentState->getName());
+        }
+        //Further simplifications might be possible now
+        removeEmptyEdges();
+    } else {
+        //Update final state list
+        getFinalStates();
+    }
 }
 
 bool FiniteStateAutomata::isTotal() {
