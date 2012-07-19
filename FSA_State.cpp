@@ -93,6 +93,11 @@ string State::getName()
 	return this->szName ;
 }
 
+void State::setName(string name)
+{
+	this->szName = name ;
+}
+
 /**
  * @brief compares two States
  * @author Yacine Smaoui

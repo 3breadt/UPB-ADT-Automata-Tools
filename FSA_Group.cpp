@@ -81,7 +81,7 @@ void Group::setName(string p_szName)
  */
 bool Group::compareElements(GroupElement* p_geElementA, GroupElement* p_geElementB)
 {
-	for(int idx = 0; idx < vecAutomataEdges.size() ; idx++) {
+	for(unsigned int idx = 0; idx < vecAutomataEdges.size() ; idx++) {
 	
 		string szGroupA = p_geElementA->getTargetGroups()->at(idx);
 		string szGroupB = p_geElementB->getTargetGroups()->at(idx);

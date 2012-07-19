@@ -68,4 +68,13 @@ void Transition::setEdgeName(string p_szEdge) {
 	this->szEdge = p_szEdge;
 }
 
-
+int Transition::compare(Transition* transition)
+{
+	if (this->getBeginningState()->compare(transition->getBeginningState())==0
+			&& this->getFinishState()->compare(transition->getFinishState())==0
+			&& this->getEdgeName().compare(transition->getEdgeName()) == 0)
+	{
+		return 0 ;
+	}
+	return 1;
+}

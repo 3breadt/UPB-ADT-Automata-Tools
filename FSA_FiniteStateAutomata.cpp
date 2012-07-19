@@ -578,7 +578,7 @@ FiniteStateAutomata* FiniteStateAutomata::fsaConvertNEAtoDEA()
 	scNewStartState->addReferencedState(stStartState);
 	vecStateConverters.push_back(scNewStartState);
 
-	int idx = 0;
+	unsigned int idx = 0;
 	int iStateCounter = 1;
 
 	// for each item in the StateConverters vector (this vector increases in size while in this loop, hence no foreach loop)
@@ -779,7 +779,7 @@ FiniteStateAutomata* FiniteStateAutomata::minimize()
 			int iGroupStart = findGroupByGroupName(szGroupName, &vecNewGroups);
 			for(std::vector<GroupElement*>::iterator itel = (*itgroup)->getElements()->begin(); itel != (*itgroup)->getElements()->end(); ++itel) {
 				bool bIsAdded = false;
-				for(int idx = iGroupStart; idx < vecNewGroups.size(); idx++) {
+				for(unsigned int idx = iGroupStart; idx < vecNewGroups.size(); idx++) {
 					if((*itgroup)->compareElements(*itel, vecNewGroups.at(idx)->getElements()->at(0))) {
 						if((*itel)->getState()->output() != vecNewGroups.at(idx)->getElements()->at(0)->getState()->output()) {
 							vecNewGroups.at(idx)->addElementToGroup((*itel));
@@ -826,7 +826,7 @@ FiniteStateAutomata* FiniteStateAutomata::minimize()
 	vector<string> vecEdges = getEdgesFromTransitionList();
 	for(std::vector<Group*>::iterator itgroup = vecGroups.begin(); itgroup != vecGroups.end(); ++itgroup) {
 		for(std::vector<GroupElement*>::iterator itel = (*itgroup)->getElements()->begin(); itel != (*itgroup)->getElements()->end(); ++itel) {
-			for(int idx = 0; idx < vecEdges.size(); idx++) {
+			for(unsigned int idx = 0; idx < vecEdges.size(); idx++) {
 				State* stStart = fsaNew->getState((*itgroup)->getName());
 				State* stFinish = fsaNew->getState((*itel)->getTargetGroups()->at(idx));
 				string szEdge = vecEdges.at(idx);

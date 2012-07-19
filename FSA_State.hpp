@@ -33,6 +33,7 @@ public:
 	string output();
 
 	string getName();
+	void setName(string name);
 	int compare(State* state);
 };
 

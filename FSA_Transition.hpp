@@ -32,7 +32,7 @@ public:
 	void setBeginningState(State *p_stBeginning);
 	void setFinishState(State *p_stFinish);
 	void setEdgeName(string p_szEdge);
-
+	int compare(Transition* transition);
 
 };
 
