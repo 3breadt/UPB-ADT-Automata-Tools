@@ -1,8 +1,6 @@
-/*
- * FSA_FSAtoREConverter.cpp
- *
- *  Created on: 21.06.2012
- *      Author: daniel
+/**
+ * @file FSA_FSAtoREConverter.cpp
+ * Contains the implementation of the FSAtoREConverter class.
  */
 
 #include "FSA_FSAtoREConverter.hpp"
@@ -26,7 +24,7 @@ namespace std {
  * @return A regular expression equivalent to the given automaton.
  * @author Daniel Dreibrodt
  */
-RegularExpression *FSAtoREConverter::toRE(FiniteStateAutomata *fsa) {
+RegularExpression *FSAtoREConverter::toRE(FiniteStateAutomaton *fsa) {
     fsa = fsa->fsaConvertNEAtoDEA();
     fsa = fsa->minimize();
     

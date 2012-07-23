@@ -1,9 +1,14 @@
+/**
+ * @file FSA_Group.hpp
+ * Contains the definition of the Group class.
+ */
+
 #ifndef FSA_GROUP_HPP_
 #define FSA_GROUP_HPP_
 
 #include <iostream>
 #include <vector>
-#include "FSA_FiniteStateAutomata.hpp"
+#include "FSA_FiniteStateAutomaton.hpp"
 #include "FSA_State.hpp"
 #include "FSA_GroupElement.hpp"
 
@@ -12,13 +17,13 @@ using namespace std;
 class Group{
 private:
 	string szName;
-	FiniteStateAutomata* fsaAutomata;
+	FiniteStateAutomaton* fsaAutomata;
 	vector<string> vecAutomataEdges;
 	vector<GroupElement*> vecElements;
 
 public:
-	Group(FiniteStateAutomata* p_fsaAutomata);
-	Group(FiniteStateAutomata* p_fsaAutomata, string p_szName);
+	Group(FiniteStateAutomaton* p_fsaAutomata);
+	Group(FiniteStateAutomaton* p_fsaAutomata, string p_szName);
 	void addElementToGroup(GroupElement* p_geElement);
 	void removeElementFromGroup(GroupElement* p_geElement);
 	string getName();

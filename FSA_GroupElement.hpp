@@ -1,3 +1,9 @@
+/**
+ * @file FSA_GroupElement.hpp
+ * Contains the definition of the GroupElement class.
+ */
+
+
 #ifndef FSA_GROUPELEMENT_HPP_
 #define FSA_GROUPELEMENT_HPP_
 

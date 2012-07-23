@@ -19,7 +19,7 @@ using namespace std;
 class StateConverter{
 
 	friend class Transition;
-	friend class FiniteStateAutomata;
+	friend class FiniteStateAutomaton;
 	friend class State;
 
 private:

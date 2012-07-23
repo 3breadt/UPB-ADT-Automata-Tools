@@ -1,3 +1,7 @@
+/**
+ * @file FSA_Group.cpp
+ * Contains the implementation of the Group class.
+ */
 #include "FSA_Group.hpp"
 
 using namespace std;
@@ -7,7 +11,7 @@ using namespace std;
  * @param p_fsaAutomata A reference to the  automata this group belongs to.
  * @author skowelek, fabiani
  */
-Group::Group(FiniteStateAutomata* p_fsaAutomata)
+Group::Group(FiniteStateAutomaton* p_fsaAutomata)
 {
 	fsaAutomata = p_fsaAutomata;
 	vecAutomataEdges = fsaAutomata->getEdgesFromTransitionList();
@@ -20,7 +24,7 @@ Group::Group(FiniteStateAutomata* p_fsaAutomata)
  * @param p_szName Name for this group.
  * @author skowelek, fabiani
  */
-Group::Group(FiniteStateAutomata* p_fsaAutomata, string p_szName)
+Group::Group(FiniteStateAutomaton* p_fsaAutomata, string p_szName)
 {
 	fsaAutomata = p_fsaAutomata;
 	vecAutomataEdges = fsaAutomata->getEdgesFromTransitionList();

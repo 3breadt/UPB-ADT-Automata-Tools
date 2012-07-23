@@ -6,7 +6,7 @@
 
 #include "RE_RegularExpression.hpp"
 #include "RE_ReaderWriter.hpp"
-#include "FSA_FiniteStateAutomata.hpp"
+#include "FSA_FiniteStateAutomaton.hpp"
 #include "RG_Grammar.h"
 
 const string RegularExpression::re_orOp = "|";
@@ -64,9 +64,9 @@ RETreeNode *RegularExpression::getTreeRoot() {
  * @return A finite state automaton representing this regular expression.
  * @author Daniel Dreibrodt, Konstantin Steinmiller
  */
-FiniteStateAutomata *RegularExpression::toFSA() {
+FiniteStateAutomaton *RegularExpression::toFSA() {
 	int labelCounter = 1;
-	FiniteStateAutomata *nda = p_treeRoot->toFSA(&labelCounter);
+	FiniteStateAutomaton *nda = p_treeRoot->toFSA(&labelCounter);
     nda->removeEmptyEdges();
     return nda;
 }
@@ -79,7 +79,7 @@ FiniteStateAutomata *RegularExpression::toFSA() {
  * @author Daniel Dreibrodt
  **/
 Grammar *RegularExpression::toRG() {
-    FiniteStateAutomata *dfa = toFSA();
+    FiniteStateAutomaton *dfa = toFSA();
     return dfa->convertToGrammar();
 }
 

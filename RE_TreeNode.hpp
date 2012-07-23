@@ -8,7 +8,7 @@
 #define RETREENODE_H_
 
 #include <string>
-#include "FSA_FiniteStateAutomata.hpp"
+#include "FSA_FiniteStateAutomaton.hpp"
 
 using namespace std;
 
@@ -34,7 +34,7 @@ public:
 	bool isEmpty();
 	void simplify();
 	RETreeNode *clone();
-	FiniteStateAutomata *toFSA(int *labelNum);
+	FiniteStateAutomaton *toFSA(int *labelNum);
 	string toString();
 
 private:

@@ -1,3 +1,9 @@
+/**
+ * @file FSA_GroupElement.cpp
+ * Contains the implementation of the GroupElement class.
+ */
+
+
 #include "FSA_GroupElement.hpp"
 #include <string>
 

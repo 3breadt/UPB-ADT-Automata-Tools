@@ -11,7 +11,7 @@
 
 #include "RG_DynArray.h"
 #include "RG_Production.h"
-#include "FSA_FiniteStateAutomata.hpp"
+#include "FSA_FiniteStateAutomaton.hpp"
 
 using namespace std;
 
@@ -67,7 +67,7 @@ public:
 
 	void initConvert();
 
-	FiniteStateAutomata* convertToFSA();
+	FiniteStateAutomaton* convertToFSA();
 
 };
 

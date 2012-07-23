@@ -9,7 +9,7 @@
 
 #include <string>
 #include "RE_TreeNode.hpp"
-#include "FSA_FiniteStateAutomata.hpp"
+#include "FSA_FiniteStateAutomaton.hpp"
 #include "RG_Grammar.h"
 
 using namespace std;
@@ -44,7 +44,7 @@ public:
 	virtual ~RegularExpression();
 	void setTreeRoot(RETreeNode *p_tR);
 	RETreeNode *getTreeRoot();
-	FiniteStateAutomata *toFSA();
+	FiniteStateAutomaton *toFSA();
 	Grammar *toRG();
 	string toString();
 

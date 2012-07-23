@@ -15,7 +15,7 @@ using namespace std;
 class State{
 
 	friend class Transition;
-	friend class FiniteStateAutomata;
+	friend class FiniteStateAutomaton;
 
 private:
 	string szName;

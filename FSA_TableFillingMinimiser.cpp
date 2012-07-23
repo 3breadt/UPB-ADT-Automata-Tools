@@ -33,12 +33,12 @@ void printVector(vector<string>* pVector)
 
 }
 
-int getNumberOfStates(FiniteStateAutomata* pAutomat)
+int getNumberOfStates(FiniteStateAutomaton* pAutomat)
 {
 	return pAutomat->getStateList()->size();
 }
 
-void TableFillingFSAMinimiser::minimize(FiniteStateAutomata* pAutomat)
+void TableFillingFSAMinimiser::minimize(FiniteStateAutomaton* pAutomat)
 {
 	vector<string> allInputs;
 
@@ -82,7 +82,7 @@ void TableFillingFSAMinimiser::printMinTableStruct(vector< vector<StatesPair> > 
 		}
 }
 
-void TableFillingFSAMinimiser::initMinimizingTableStruct(FiniteStateAutomata* pAutomat, vector< vector<StatesPair> >* pMinTable)
+void TableFillingFSAMinimiser::initMinimizingTableStruct(FiniteStateAutomaton* pAutomat, vector< vector<StatesPair> >* pMinTable)
 {
 	vector<State*>* pStates = pAutomat->getStateList();
 	bool stateIsFinal;
@@ -113,7 +113,7 @@ void TableFillingFSAMinimiser::initMinimizingTableStruct(FiniteStateAutomata* pA
 
 }
 
-void TableFillingFSAMinimiser::fillMinimizingTableStruct(vector< vector<StatesPair> > * pMinTable , vector<string>* pAllInputs,  FiniteStateAutomata* pAutomat)
+void TableFillingFSAMinimiser::fillMinimizingTableStruct(vector< vector<StatesPair> > * pMinTable , vector<string>* pAllInputs,  FiniteStateAutomaton* pAutomat)
 {
 	/** For every element in minTable*/
 	for(unsigned int i=1; i < pMinTable->size() ; i++ )
@@ -169,7 +169,7 @@ void TableFillingFSAMinimiser::fillMinimizingTableStruct(vector< vector<StatesPa
 	}
 }
 
-void TableFillingFSAMinimiser::removeRedundantStates(FiniteStateAutomata* pAutomat)
+void TableFillingFSAMinimiser::removeRedundantStates(FiniteStateAutomaton* pAutomat)
 {
 	vector<State*>* pAutomatStates;
 	pAutomatStates = pAutomat->getStateList();
@@ -187,7 +187,7 @@ void TableFillingFSAMinimiser::removeRedundantStates(FiniteStateAutomata* pAutom
 	}
 }
 
-void TableFillingFSAMinimiser::removeRedundantTransitions(FiniteStateAutomata* pAutomat)
+void TableFillingFSAMinimiser::removeRedundantTransitions(FiniteStateAutomaton* pAutomat)
 {
 	vector<Transition*>* pAutomatTransitions;
 	pAutomatTransitions = pAutomat->getTransitions();
@@ -205,7 +205,7 @@ void TableFillingFSAMinimiser::removeRedundantTransitions(FiniteStateAutomata* p
 	}
 }
 
-void TableFillingFSAMinimiser::mergeStates(vector< vector<StatesPair> > * pMinTable, FiniteStateAutomata* pAutomat)
+void TableFillingFSAMinimiser::mergeStates(vector< vector<StatesPair> > * pMinTable, FiniteStateAutomaton* pAutomat)
 {
 	vector<Transition*>* pAutomatTransitions;
 	pAutomatTransitions = pAutomat->getTransitions();
@@ -275,7 +275,7 @@ void TableFillingFSAMinimiser::mergeStates(vector< vector<StatesPair> > * pMinTa
 	removeRedundantTransitions(pAutomat);
 }
 
-int TableFillingFSAMinimiser::getNextStateIndex(int stateIndex, string input, FiniteStateAutomata* pAutomat)
+int TableFillingFSAMinimiser::getNextStateIndex(int stateIndex, string input, FiniteStateAutomaton* pAutomat)
 {
 	vector<Transition*>* pAutomatTransitions;
 	vector<State*>* pAutomatStates;
@@ -318,7 +318,7 @@ void TableFillingFSAMinimiser::printMinTable(vector< vector<int> > * pMinTable)
 
 }
 
-void TableFillingFSAMinimiser::initMinimizingTable(FiniteStateAutomata* pAutomat, vector< vector<int> >* pMinTable)
+void TableFillingFSAMinimiser::initMinimizingTable(FiniteStateAutomaton* pAutomat, vector< vector<int> >* pMinTable)
 {
 	vector<State*>* pStates = pAutomat->getStateList();
 	bool stateIsFinal;
@@ -349,7 +349,7 @@ void TableFillingFSAMinimiser::initMinimizingTable(FiniteStateAutomata* pAutomat
 	}
 }
 
-int TableFillingFSAMinimiser::getIndexOfState(State* pState, FiniteStateAutomata* pAutomat)
+int TableFillingFSAMinimiser::getIndexOfState(State* pState, FiniteStateAutomaton* pAutomat)
 {
 	vector<State*>* pAutomatStates;
 
@@ -373,7 +373,7 @@ int TableFillingFSAMinimiser::getIndexOfState(State* pState, FiniteStateAutomata
  * @param pAutomat
  * @param pOutputVector
  */
-void TableFillingFSAMinimiser::searchForPredecessorState(int stateIndex, string input, FiniteStateAutomata* pAutomat, vector<int>* pOutputVector)
+void TableFillingFSAMinimiser::searchForPredecessorState(int stateIndex, string input, FiniteStateAutomaton* pAutomat, vector<int>* pOutputVector)
 {
 	vector<Transition*>* pAutomatTransitions;
 	vector<State*>* pAutomatStates;
@@ -490,7 +490,7 @@ int markDistiguishableStates(vector< vector<int> > * pMinTable, vector<int>* pPr
 	return changeIsMade;
 }
 
-void TableFillingFSAMinimiser::fillMinimizingTable(vector< vector<int> > * pMinTable , vector<string>* pAllInputs,  FiniteStateAutomata* pAutomat)
+void TableFillingFSAMinimiser::fillMinimizingTable(vector< vector<int> > * pMinTable , vector<string>* pAllInputs,  FiniteStateAutomaton* pAutomat)
 {
 	unsigned int minTableSize = pMinTable->size();
 	int numberOfStates = getNumberOfStates(pAutomat);

@@ -15,7 +15,7 @@ using namespace std;
 
 class Transition{
 
-	friend class FiniteStateAutomata;
+	friend class FiniteStateAutomaton;
 
 private:
 	State *stBeginning;

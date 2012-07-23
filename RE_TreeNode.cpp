@@ -9,7 +9,7 @@
 #include <vector>
 #include "RE_TreeNode.hpp"
 #include "RE_RegularExpression.hpp"
-#include "FSA_FiniteStateAutomata.hpp"
+#include "FSA_FiniteStateAutomaton.hpp"
 #include "FSA_State.hpp"
 
 using namespace std;
@@ -226,7 +226,7 @@ void RETreeNode::simplify() {
  * @return A NDFSA representing the regular expression tree with this node as its root.
  * @author Daniel Dreibrodt, Konstantin Steinmiller
  */
-FiniteStateAutomata *RETreeNode::toFSA(int *labelNum) {
+FiniteStateAutomaton *RETreeNode::toFSA(int *labelNum) {
 	//Self-developed algorithm
 	if(isOperator()) {
 		if(content == RegularExpression::re_andOp) {
@@ -236,8 +236,8 @@ FiniteStateAutomata *RETreeNode::toFSA(int *labelNum) {
 			// All final states of the left FSA have to be turned into normal states.
 			// The start state of the right FSA has to be turned into a normal state.
 
-			FiniteStateAutomata *leftFSA = p_left->toFSA(labelNum);
-			FiniteStateAutomata *rightFSA = p_right->toFSA(labelNum);
+			FiniteStateAutomaton *leftFSA = p_left->toFSA(labelNum);
+			FiniteStateAutomaton *rightFSA = p_right->toFSA(labelNum);
 
 			vector<State*> *leftStates = leftFSA->getStateList();
 			vector<State*> *leftFinalStates = leftFSA->getFinalStates();
@@ -282,8 +282,8 @@ FiniteStateAutomata *RETreeNode::toFSA(int *labelNum) {
 			State *startState = new State(startStateName, true, false);
 			(*labelNum)++;
 
-			FiniteStateAutomata *leftFSA = p_left->toFSA(labelNum);
-			FiniteStateAutomata *rightFSA = p_right->toFSA(labelNum);
+			FiniteStateAutomaton *leftFSA = p_left->toFSA(labelNum);
+			FiniteStateAutomaton *rightFSA = p_right->toFSA(labelNum);
 
 			vector<State*> *leftStates = leftFSA->getStateList();
 			vector<State*> *rightStates = rightFSA->getStateList();
@@ -314,7 +314,7 @@ FiniteStateAutomata *RETreeNode::toFSA(int *labelNum) {
 			// FSA are connected to its starting state.
 			// Then the starting state is also turned into a final state.
 
-			FiniteStateAutomata *leftFSA = p_left->toFSA(labelNum);
+			FiniteStateAutomaton *leftFSA = p_left->toFSA(labelNum);
 			vector<State*> *finalStates = leftFSA->getFinalStates();
 			State *startState = leftFSA->getStartState();
 			unsigned int i=0;
@@ -330,7 +330,7 @@ FiniteStateAutomata *RETreeNode::toFSA(int *labelNum) {
 	} else {
 		//For literals create one start state A and one final state B
 		//The transition between A and B is marked by the literal itself
-		FiniteStateAutomata *fsa = new FiniteStateAutomata();
+		FiniteStateAutomaton *fsa = new FiniteStateAutomaton();
 
 		char *stateAname = new char[20];
 		sprintf(stateAname, "S%da", *labelNum);
