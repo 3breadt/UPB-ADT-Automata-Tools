@@ -45,8 +45,8 @@ public:
 	void setTreeRoot(RETreeNode *p_tR);
 	RETreeNode *getTreeRoot();
 	FiniteStateAutomata *toFSA();
-    Grammar *toRG();
-    string toString();
+	Grammar *toRG();
+	string toString();
 
 	/** String representation of the boolean or operator **/
 	static const string re_orOp;

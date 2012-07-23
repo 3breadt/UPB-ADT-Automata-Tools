@@ -32,10 +32,10 @@ public:
 	string getContent();
 	void setContent(string c);
 	bool isEmpty();
-    void simplify();
-    RETreeNode *clone();
+	void simplify();
+	RETreeNode *clone();
 	FiniteStateAutomata *toFSA(int *labelNum);
-    string toString();
+	string toString();
 
 private:
 	//Contains the operand or the value of the literal represented by this node.
