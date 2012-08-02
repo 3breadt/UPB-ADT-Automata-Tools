@@ -9,8 +9,6 @@
 #include "RE_RegularExpression.hpp"
 #include "FSA_FiniteStateAutomaton.hpp"
 
-namespace std {
-
 /**
  * Converts Finite State Automata to Regular Expressions.
  * @author Daniel Dreibrodt
@@ -20,5 +18,4 @@ public:
 	static RegularExpression *toRE(FiniteStateAutomaton *fsa);
 };
 
-} /* namespace std */
 #endif /* FSA_FSATORECONVERTER_HPP_ */

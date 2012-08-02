@@ -52,7 +52,7 @@ public:
 	static const string re_orOp;
 	/** String representation of the concatenation operator **/
 	static const string re_andOp;
-	/** String representation of the star operator (preceding element occurs zero or more times) **/
+	/** String representation of the Kleene-star operator (preceding element occurs zero or more times) **/
 	static const string re_starOp;
 	/** String representation of the opening parenthesis **/
 	static const string re_lParen;

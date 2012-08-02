@@ -1,5 +1,5 @@
 /**
- * @file FSA_FiniteStateAutomaton.cpp
+ * @file FSA_FiniteStateAutomaton.hpp
  * Contains the definition of the FiniteStateAutomaton class.
  */
 

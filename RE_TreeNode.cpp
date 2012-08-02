@@ -103,12 +103,12 @@ void RETreeNode::setLeft(RETreeNode *p_l) {
 }
 
 /**
- * Sets the right operand of this operator. Literals can have no right operand.
+ * Sets the right operand of this operator. Literals and Kleene-Stars can have no right operand.
  * @param p_r Right operand.
  * @author Daniel Dreibrodt, Konstantin Steinmiller
  */
 void RETreeNode::setRight(RETreeNode *p_r) {
-	if(isOperator()||p_r==NULL)
+	if((isOperator() && content!=RegularExpression::re_starOp) || p_r==NULL)
 		p_right = p_r;
 	else
 		throw "Node ("+content+") does not represent an operator. Cannot add right child: "+p_r->getContent();

@@ -12,8 +12,7 @@
 #include "RE_RegularExpression.hpp"
 #include "RE_TreeNode.hpp"
 
-namespace std {
-
+using namespace std;
 
 /**
  * @brief Converts a FSA to a regular expression using Brzozowski's algebraic method.
@@ -203,6 +202,4 @@ RegularExpression *FSAtoREConverter::toRE(FiniteStateAutomaton *fsa) {
     }
     
 	return new RegularExpression(root);
-}
-
 }
