@@ -21,6 +21,7 @@ using namespace std;
  * @class DynArray
  * @brief a container template class where the different components of a Grammar are stored
  * represents a dynamic array with the possibility of dynamically increase the length.
+ * (a self implemented Vector class )
  */
 template <class T > class DynArray
 {
@@ -55,9 +56,9 @@ template <class T > DynArray<T>::DynArray()
 		: uiMaxSize(MAX_INITIAL_ARRAY_SIZE) , uiSize(0)
 {
 	pArray = new T [uiMaxSize];
-	#ifdef DEBUG
+/*
 	cout << "****DynArray constructor called" << endl ;
-	#endif
+*/
 }
 
 /**

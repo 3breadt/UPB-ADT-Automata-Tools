@@ -86,6 +86,7 @@ string State::output()
 }
 
 /**
+ * @brief  gets the name of the State.
  * @author Yacine Smaoui
  */
 string State::getName()
@@ -99,7 +100,7 @@ void State::setName(string name)
 }
 
 /**
- * @brief compares two States
+ * @brief compares two States.
  * @author Yacine Smaoui
  */
 int State::compare(State* state)

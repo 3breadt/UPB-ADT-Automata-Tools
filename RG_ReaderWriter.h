@@ -11,7 +11,10 @@
 #include "RG_Grammar.h"
 
 
-
+/**
+ * @class RGReaderWriter
+ * @brief provides methods to read/write a Grammar from/to a text file
+ */
 class RGReaderWriter
 {
 private:
@@ -23,6 +26,8 @@ public:
 	Grammar* Read();
 	void write(Grammar* g);
 	void setFileName(string fileName);
+private:
+	int lineIsTag(string s);
 };
 
 

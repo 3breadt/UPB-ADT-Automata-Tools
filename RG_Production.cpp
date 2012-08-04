@@ -14,9 +14,9 @@
  */
 Production::Production()
 {
-	#ifdef DEBUG
+/*
 	cout << "****Production constructor called: constructing Production" << endl ;
-	#endif
+*/
 
 }
 
@@ -25,9 +25,9 @@ Production::Production()
  */
 Production::~Production()
 {
-	#ifdef DEBUG
+/*
 	cout << "**Production destructor called: destructing Production" << endl ;
-	#endif
+*/
 }
 
 /**
@@ -111,7 +111,10 @@ void Production::printProduction()
 	//cout << this->left << " --> " << this->getSubstitution()->toString() << endl;
 	cout << this->toString() << endl;
 }
-
+/**
+ * @brief returns the left side of a Production
+ * @return the leftSide of a Production
+ */
 string Production::getLeftSide()
 {
 	return this->left;

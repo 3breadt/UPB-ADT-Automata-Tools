@@ -1,12 +1,12 @@
-/*
- * FSA_TableFillingMinimiser.cpp
+/**
+ * @file FSA_TableFillingMinimiser.h
+ * @author Yacine Smaoui
  *
- *  Created on: 5 juil. 2012
- *      Author: yessine
+ * @brief implementation of the Table filling algorithm to minimize a finite states automaton
  */
 
 #include <cstdlib>
-#include "FSA_TableFillingMinimiser.h"
+#include "FSA_TableFillingMinimizer.h"
 
 #define DISTINGUISHABLE 9
 #define ELEMENT_ON_DIAG_MINTABLE 8
@@ -16,29 +16,20 @@
 
 using namespace std;
 
-void printVector(vector<string>* pVector)
-{
-
-	cout << "Printing input vector" << endl;
-
-	cout << "Size:  " << pVector->size() << endl;
-	for( unsigned int i = 0; i< pVector->size(); i++)
-	{
-		cout << (*pVector)[i] << "    " ;
-		if (i == pVector->size() -1)
-		{
-			cout << endl;
-		}
-	}
-
-}
-
-int getNumberOfStates(FiniteStateAutomaton* pAutomat)
-{
-	return pAutomat->getStateList()->size();
-}
-
-void TableFillingFSAMinimiser::minimize(FiniteStateAutomaton* pAutomat)
+/**
+ * @brief the main function to call to use the Table filling Algorithm for minimization
+ * steps in this implementation:
+ *
+ * 1)initialization of the minimization table
+ * 2)filling the minimization table by finding the distinguishable pairs of states
+ * 3)merging the distinguishable states in one equivalent state
+ *
+ * 4) finally the automat is written in a text file to see result.
+ *
+ * @param pAutomat the FSA to minimize
+ * @author Yacine Smaoui
+ */
+void TableFillingFSAMinimizer::minimize(FiniteStateAutomaton* pAutomat)
 {
 	vector<string> allInputs;
 
@@ -59,7 +50,12 @@ void TableFillingFSAMinimiser::minimize(FiniteStateAutomaton* pAutomat)
 	pAutomat->write("Beispieldateien/FSA-exampleFromMinimisingDocument_TotalFSA_minimized.txt");
 }
 
-void TableFillingFSAMinimiser::printMinTableStruct(vector< vector<StatesPair> > * pMinTable)
+/**
+ * @brief a method to print to contents of the minimization table used in this algorithm
+ * @param pMinTable
+ * @author Yacine Smaoui
+ */
+void TableFillingFSAMinimizer::printMinTableStruct(vector< vector<StatesPair> > * pMinTable)
 {
 	for(unsigned int i=1; i < pMinTable->size() ; i++ )
 		{
@@ -82,7 +78,14 @@ void TableFillingFSAMinimiser::printMinTableStruct(vector< vector<StatesPair> > 
 		}
 }
 
-void TableFillingFSAMinimiser::initMinimizingTableStruct(FiniteStateAutomaton* pAutomat, vector< vector<StatesPair> >* pMinTable)
+
+/**
+ * @brief Initializing the minimization table, by marking all pairs of one accepting state and one rejecting state as distiguishable pairs of states
+ * @param pAutomat
+ * @param pMinTable
+ * @author Yacine Smaoui
+ */
+void TableFillingFSAMinimizer::initMinimizingTableStruct(FiniteStateAutomaton* pAutomat, vector< vector<StatesPair> >* pMinTable)
 {
 	vector<State*>* pStates = pAutomat->getStateList();
 	bool stateIsFinal;
@@ -113,7 +116,14 @@ void TableFillingFSAMinimiser::initMinimizingTableStruct(FiniteStateAutomaton* p
 
 }
 
-void TableFillingFSAMinimiser::fillMinimizingTableStruct(vector< vector<StatesPair> > * pMinTable , vector<string>* pAllInputs,  FiniteStateAutomaton* pAutomat)
+/**
+ * @brief filling the Minimization Table by finding all distiguishable pairs of states using the algorithm.
+ * @param pMinTable the minimization table
+ * @param pAllInputs the inputs of all transitions in this FSA
+ * @param pAutomat the Automat to minimize
+ * @author Yacine Smaoui
+ */
+void TableFillingFSAMinimizer::fillMinimizingTableStruct(vector< vector<StatesPair> > * pMinTable , vector<string>* pAllInputs,  FiniteStateAutomaton* pAutomat)
 {
 	/** For every element in minTable*/
 	for(unsigned int i=1; i < pMinTable->size() ; i++ )
@@ -169,7 +179,12 @@ void TableFillingFSAMinimiser::fillMinimizingTableStruct(vector< vector<StatesPa
 	}
 }
 
-void TableFillingFSAMinimiser::removeRedundantStates(FiniteStateAutomaton* pAutomat)
+/**
+ * @brief removes all states doubles in the given FSA
+ * @param pAutomat
+ * @author Yacine Smaoui
+ */
+void TableFillingFSAMinimizer::removeRedundantStates(FiniteStateAutomaton* pAutomat)
 {
 	vector<State*>* pAutomatStates;
 	pAutomatStates = pAutomat->getStateList();
@@ -187,7 +202,12 @@ void TableFillingFSAMinimiser::removeRedundantStates(FiniteStateAutomaton* pAuto
 	}
 }
 
-void TableFillingFSAMinimiser::removeRedundantTransitions(FiniteStateAutomaton* pAutomat)
+/**
+ * @brief removes all Transitions doubles in the given FSA
+ * @param pAutomat
+ * @author Yacine Smaoui
+ */
+void TableFillingFSAMinimizer::removeRedundantTransitions(FiniteStateAutomaton* pAutomat)
 {
 	vector<Transition*>* pAutomatTransitions;
 	pAutomatTransitions = pAutomat->getTransitions();
@@ -205,7 +225,24 @@ void TableFillingFSAMinimiser::removeRedundantTransitions(FiniteStateAutomaton* 
 	}
 }
 
-void TableFillingFSAMinimiser::mergeStates(vector< vector<StatesPair> > * pMinTable, FiniteStateAutomaton* pAutomat)
+/**
+ * @brief merges every pair of equivalent states into one state
+ *
+ * steps:
+ * 1) for every distinguishable pair of states, change the name and properties of both states, so that they become equal states
+ * the result of 1) is an FSA with redundant states and Transitions
+ * 2)remove all redundant states
+ * 3) remove all redundant transitions
+ *
+ *
+ * NB: what is not dealt with in this version of the merge method is:
+ * the transitivity of the relation "distinguishable": that means, if more than two states are equivalent.
+ *
+ * @param pMinTable
+ * @param pAutomat
+ * @author Yacine Smaoui
+ */
+void TableFillingFSAMinimizer::mergeStates(vector< vector<StatesPair> > * pMinTable, FiniteStateAutomaton* pAutomat)
 {
 	vector<Transition*>* pAutomatTransitions;
 	pAutomatTransitions = pAutomat->getTransitions();
@@ -275,7 +312,15 @@ void TableFillingFSAMinimiser::mergeStates(vector< vector<StatesPair> > * pMinTa
 	removeRedundantTransitions(pAutomat);
 }
 
-int TableFillingFSAMinimiser::getNextStateIndex(int stateIndex, string input, FiniteStateAutomaton* pAutomat)
+/**
+ * @brief returns the next state to "StateIndex" for the given "input" in the FSA "pAutomat"
+ * @param stateIndex
+ * @param input
+ * @param pAutomat
+ * @return
+ * @author Yacine Smaoui
+ */
+int TableFillingFSAMinimizer::getNextStateIndex(int stateIndex, string input, FiniteStateAutomaton* pAutomat)
 {
 	vector<Transition*>* pAutomatTransitions;
 	vector<State*>* pAutomatStates;
@@ -297,11 +342,24 @@ int TableFillingFSAMinimiser::getNextStateIndex(int stateIndex, string input, Fi
 	return ERROR_STATE_NOT_FOUND;
 }
 
+int TableFillingFSAMinimizer::getNumberOfStates(FiniteStateAutomaton* pAutomat)
+{
+	return pAutomat->getStateList()->size();
+}
 
+/*=======================================================================================================================================================*/
+/*=======================================================================================================================================================*/
+/*===================The following Methods were used at first to implement the algorithm in one way but it didn't wowrk correctly========================*/
+/*===================They are not deleted just in case someone can find the error and improve it========================================================*/
+/*=======================================================================================================================================================*/
+/*=======================================================================================================================================================*/
 
-
-
-void TableFillingFSAMinimiser::printMinTable(vector< vector<int> > * pMinTable)
+/**
+ * @brief a method to print to contents of the minimization table used in this algorithm
+ * @param pMinTable
+ * @author Yacine Smaoui
+ */
+void TableFillingFSAMinimizer::printMinTable(vector< vector<int> > * pMinTable)
 {
 	for(unsigned int i=1; i < pMinTable->size() ; i++ )
 	{
@@ -318,7 +376,13 @@ void TableFillingFSAMinimiser::printMinTable(vector< vector<int> > * pMinTable)
 
 }
 
-void TableFillingFSAMinimiser::initMinimizingTable(FiniteStateAutomaton* pAutomat, vector< vector<int> >* pMinTable)
+/**
+ * @brief Initializing the minimization table, by marking all pairs of one accepting state and one rejecting state as distiguishable pairs of states
+ * @param pAutomat
+ * @param pMinTable
+ * @author Yacine Smaoui
+ */
+void TableFillingFSAMinimizer::initMinimizingTable(FiniteStateAutomaton* pAutomat, vector< vector<int> >* pMinTable)
 {
 	vector<State*>* pStates = pAutomat->getStateList();
 	bool stateIsFinal;
@@ -349,7 +413,14 @@ void TableFillingFSAMinimiser::initMinimizingTable(FiniteStateAutomaton* pAutoma
 	}
 }
 
-int TableFillingFSAMinimiser::getIndexOfState(State* pState, FiniteStateAutomaton* pAutomat)
+/**
+ * @brief filling the Minimization Table by finding all distinguishable pairs of states using the algorithm.
+ * @param pMinTable the minimization table
+ * @param pAllInputs the inputs of all transitions in this FSA
+ * @param pAutomat the Automaton to minimize
+ * @author Yacine Smaoui
+ */
+int TableFillingFSAMinimizer::getIndexOfState(State* pState, FiniteStateAutomaton* pAutomat)
 {
 	vector<State*>* pAutomatStates;
 
@@ -367,13 +438,18 @@ int TableFillingFSAMinimiser::getIndexOfState(State* pState, FiniteStateAutomato
 	return 0;
 }
 /**
- * @brief search for every State that leads to the State with index stateIndex , through a Transition input
+ * @brief search for every State that leads to the State with index stateIndex , through a sequence of "input"
+ *
+ * for example:  A -1-> B -1-> C-1-> D
+ * A,B and C are the predecessor States of D with the input 1
+ *
  * @param stateIndex
  * @param input
  * @param pAutomat
  * @param pOutputVector
+ * @author Yacine Smaoui
  */
-void TableFillingFSAMinimiser::searchForPredecessorState(int stateIndex, string input, FiniteStateAutomaton* pAutomat, vector<int>* pOutputVector)
+void TableFillingFSAMinimizer::searchForPredecessorState(int stateIndex, string input, FiniteStateAutomaton* pAutomat, vector<int>* pOutputVector)
 {
 	vector<Transition*>* pAutomatTransitions;
 	vector<State*>* pAutomatStates;
@@ -401,52 +477,15 @@ void TableFillingFSAMinimiser::searchForPredecessorState(int stateIndex, string 
 	}
 }
 
-bool TableFillingFSAMinimiser::existInIntVector(vector<int>* pVector, int element)
-{
-	for (unsigned int i =0 ; i < pVector->size() ; i++)
-	{
-		if((*pVector)[i] == element)
-		{
-			return true;
-		}
-	}
-	return false ;
-}
-
-bool TableFillingFSAMinimiser::existInStringVector(vector<string>* pVector, string element)
-{
-	for (unsigned int i =0 ; i < pVector->size() ; i++)
-	{
-		if((*pVector)[i].compare(element) == 0 )
-		{
-			return true;
-		}
-	}
-	return false ;
-}
-
-void printVector(vector<int>* v)
-{
-	for(unsigned int i = 0 ; i < v->size() ; i++ )
-	{
-		cout << (*v)[i] << "     " ;
-		if(i== v->size() -1)
-		{
-			cout << endl;
-		}
-	}
-}
-
-
-
 /**
- *
+ * @brief mark as distiguishable all the pairs of states such as one is in pPredecessorsOfI and the other in pPredecessorsOfJ
  * @param pMinTable
  * @param pPredecessorsOfI
  * @param pPredecessorsOfJ
  * @return 1 if changes to MinTable are made, 0 if no changes are made
+ * @author Yacine Smaoui
  */
-int markDistiguishableStates(vector< vector<int> > * pMinTable, vector<int>* pPredecessorsOfI, vector<int>* pPredecessorsOfJ )
+int TableFillingFSAMinimizer::markDistiguishableStates(vector< vector<int> > * pMinTable, vector<int>* pPredecessorsOfI, vector<int>* pPredecessorsOfJ )
 {
 	int changeIsMade = 0;
 	/** For every pair of elements in pPredecessorsOfI and pPredecessorsOfJ */
@@ -490,7 +529,14 @@ int markDistiguishableStates(vector< vector<int> > * pMinTable, vector<int>* pPr
 	return changeIsMade;
 }
 
-void TableFillingFSAMinimiser::fillMinimizingTable(vector< vector<int> > * pMinTable , vector<string>* pAllInputs,  FiniteStateAutomaton* pAutomat)
+/**
+ * @brief filling the Minimization Table by finding all distiguishable pairs of states using the algorithm.
+ * @param pMinTable the minimization table
+ * @param pAllInputs the inputs of all transitions in this FSA
+ * @param pAutomat the Automat to minimize
+ * @author Yacine Smaoui
+ */
+void TableFillingFSAMinimizer::fillMinimizingTable(vector< vector<int> > * pMinTable , vector<string>* pAllInputs,  FiniteStateAutomaton* pAutomat)
 {
 	unsigned int minTableSize = pMinTable->size();
 	int numberOfStates = getNumberOfStates(pAutomat);
@@ -532,9 +578,9 @@ void TableFillingFSAMinimiser::fillMinimizingTable(vector< vector<int> > * pMinT
 					searchForPredecessorState(i,input, pAutomat, &predecessorStatesOfI );
 					searchForPredecessorState(j,input, pAutomat, &predecessorStatesOfJ );
 					cout<< "======================================" << endl;
-					printVector(&predecessorStatesOfI);
+					printIntVector(&predecessorStatesOfI);
 					cout << "-------------------------------------" <<endl;
-					printVector(&predecessorStatesOfJ);
+					printIntVector(&predecessorStatesOfJ);
 					cout<< "======================================" << endl;
 
 					changeIsMade = markDistiguishableStates(pMinTable,&predecessorStatesOfI, &predecessorStatesOfJ);
@@ -560,3 +606,87 @@ void TableFillingFSAMinimiser::fillMinimizingTable(vector< vector<int> > * pMinT
 	}
 
 }
+
+
+
+
+/*=======================================================================================================================================================*/
+/*=======================================================================================================================================================*/
+/*===================The following Methods are just used to help doing some simple tasks: print, search,...==============================================*/
+/*=======================================================================================================================================================*/
+/*=======================================================================================================================================================*/
+/**
+ *
+ * @param pVector
+ * @param element
+ * @return
+ * @author Yacine Smaoui
+ */
+bool TableFillingFSAMinimizer::existInIntVector(vector<int>* pVector, int element)
+{
+	for (unsigned int i =0 ; i < pVector->size() ; i++)
+	{
+		if((*pVector)[i] == element)
+		{
+			return true;
+		}
+	}
+	return false ;
+}
+/**
+ *
+ * @param pVector
+ * @param element
+ * @return
+ * @author Yacine Smaoui
+ */
+bool TableFillingFSAMinimizer::existInStringVector(vector<string>* pVector, string element)
+{
+	for (unsigned int i =0 ; i < pVector->size() ; i++)
+	{
+		if((*pVector)[i].compare(element) == 0 )
+		{
+			return true;
+		}
+	}
+	return false ;
+}
+/**
+ *
+ * @param v
+ * @author Yacine Smaoui
+ */
+void TableFillingFSAMinimizer::printIntVector(vector<int>* v)
+{
+	for(unsigned int i = 0 ; i < v->size() ; i++ )
+	{
+		cout << (*v)[i] << "     " ;
+		if(i== v->size() -1)
+		{
+			cout << endl;
+		}
+	}
+}
+
+/**
+ *
+ * @param pVector
+ * @author Yacine Smaoui
+ */
+void TableFillingFSAMinimizer::printStringVector(vector<string>* pVector)
+{
+
+	cout << "Printing input vector" << endl;
+
+	cout << "Size:  " << pVector->size() << endl;
+	for( unsigned int i = 0; i< pVector->size(); i++)
+	{
+		cout << (*pVector)[i] << "    " ;
+		if (i == pVector->size() -1)
+		{
+			cout << endl;
+		}
+	}
+
+}
+

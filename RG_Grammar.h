@@ -12,6 +12,7 @@
 #include "RG_DynArray.h"
 #include "RG_Production.h"
 #include "FSA_FiniteStateAutomaton.hpp"
+#include "RE_RegularExpression.hpp"
 
 using namespace std;
 
@@ -68,6 +69,8 @@ public:
 	void initConvert();
 
 	FiniteStateAutomaton* convertToFSA();
+
+	//RegularExpression *convertToRE();
 
 };
 

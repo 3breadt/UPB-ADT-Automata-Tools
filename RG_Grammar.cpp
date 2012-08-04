@@ -6,6 +6,7 @@
  */
 
 #include "RG_Grammar.h"
+#include "FSA_FSAtoREConverter.hpp"
 #include <stdlib.h>
 #include <sstream>
 
@@ -14,9 +15,9 @@
  */
 Grammar::Grammar()
 {
-	#ifdef DEBUG
-	cout << "****Grammar constructor called" << endl ;
-	#endif
+
+	//cout << "****Grammar constructor called" << endl ;
+
 
 }
 
@@ -25,9 +26,9 @@ Grammar::Grammar()
  */
 Grammar::~Grammar()
 {
-	#ifdef DEBUG
-	cout << "**Grammar destructor called: destructing Grammar" << endl ;
-	#endif
+
+	//cout << "**Grammar destructor called: destructing Grammar" << endl ;
+
 }
 
 /**
@@ -79,9 +80,9 @@ void Grammar::processGrammarProductions()
 	for(i=0; i<this->Productions.getLength(); i++)
 	{
 		Productions[i]->getSubstitution()->decode(this->Terminals, this->NonTerminals);
-		#ifdef DEBUG
+/*
 		cout << "substitution decoded" << endl ;
-		#endif
+*/
 	}
 }
 
@@ -144,13 +145,13 @@ void Grammar::checkIfRegular()
 		/**
 		 * check if the First Symbol of the Substitution is a Terminal
 		 */
-		if(this->getProductions()[i]->getSubstitution()->symbolIsTerminal(0) != 1  /*TODO and not <epsilon> */ ) //First Symbol in Substitution is not a Terminal
+		if(this->getProductions()[i]->getSubstitution()->symbolIsTerminal(0) != 1 ) //First Symbol in Substitution is not a Terminal
 		{
 			this->isRegular = 0 ;
-#ifdef DEBUG
+/*
 			this->getProductions()[i]->printProduction();
 			cout << "Grammar is not regular: First Substitution Symbol of Production "<<i<<" is not a Terminal" << endl;
-#endif
+*/
 			return;
 		}
 
@@ -163,26 +164,38 @@ void Grammar::checkIfRegular()
 					&& this->getProductions()[i]->getSubstitution()->getDecodedSubstitutionLength()-1 > j) // there is more symbols after this NonTerminal
 			{
 				this->isRegular = 0 ;
-#ifdef DEBUG
+/*
 				this->getProductions()[i]->printProduction();
 			cout << "Grammar is not regular: Substitution of Production "<<i<<" doesn't correspond to regular grammar form" << endl;
-#endif
+*/
 				return;
 			}
 		}
 	}
 }
-
+/**
+ * @brief a getter method
+ * @return how many Productions in the Grammar
+ */
 int Grammar::getNumberOfProductions()
 {
 	return this->getProductions().getLength() ;
 }
-
+/**
+ * @brief a getter method
+ * @param index Productions are stored in a Dynamic Array, index is the index of the needed Production
+ * @return
+ */
 Production* Grammar::getProduction(int index)
 {
 	return this->getProductions()[index];
 }
 
+/**
+ * @brief compares the startSymbol of the Grammar with the parameter symbol
+ * @param symbol is one string used in the grammar
+ * @return
+ */
 int Grammar::isStartSymbol(string symbol)
 {
 	if(this->getStartSymbol().compare(symbol)==0)
@@ -192,6 +205,9 @@ int Grammar::isStartSymbol(string symbol)
 	return 0;
 }
 
+/**
+ * @brief checks if Grammar is a regular Grammar, if it is not the conversion cannot be proceeded.
+ */
 void Grammar::initConvert()
 {
 	this->checkIfRegular();
@@ -205,7 +221,7 @@ void Grammar::initConvert()
 /**
  * @brief converts a Regular Grammar to a Finite States Automaton
  *
- * Not verified!!!
+ *
  *
  * @return the FSA
  */
@@ -259,7 +275,7 @@ FiniteStateAutomaton* Grammar::convertToFSA()
 						}
 						automat->addTransition(pFromState->output(),pSubs->getSymbolstring(j),"endState");
 					}
-					/** the current symbol is not the last one in the substitution, there is more HiHi :p */
+					/** the current symbol is not the last one in the substitution */
 					else
 					{
 						/** the next symbol in the Substitution is a NonTerminal */
@@ -296,3 +312,21 @@ FiniteStateAutomaton* Grammar::convertToFSA()
 	return deterministic_automat;
 
 }
+
+/**
+ * @brief converts a Grammar to a regular expression
+ *
+ * uses the conversion from FSA to RE
+ *
+ * @return
+ */
+/*****************************************
+RegularExpression* Grammar::convertToRE()
+{
+	this->initConvert();
+
+	return FSAtoREConverter::toRE(this->convertToFSA());
+
+}
+******************************************/
+

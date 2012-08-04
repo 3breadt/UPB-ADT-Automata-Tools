@@ -23,25 +23,31 @@ using namespace std;
 #define   NONTERMINALS 2
 #define   PRODUCTIONS  3
 
-
-//Prototypes
-int _lineIsTag(string s);
-
+/**
+ * @brief RGReaderWriter Constructor with the full path of the file to read from as a parameter
+ * @param filename full path of the file to read from.
+ */
 RGReaderWriter::RGReaderWriter(string filename) : fileName(filename)
 {
-	#ifdef DEBUG
+/*
 	cout << "****Reader constructor called" << endl ;
-	#endif
+*/
 
 }
-
+/**
+ * @brief Destructor
+ */
 RGReaderWriter::~RGReaderWriter()
 {
-	#ifdef DEBUG
+/*
 	cout << "**Reader destructor called" << endl ;
-	#endif
+*/
 }
 
+/**
+ * @brief read a Grammar from a text file.
+ * @return the read Grammar.
+ */
 Grammar* RGReaderWriter::Read()
 {
 	Grammar* grammar = new Grammar();
@@ -49,9 +55,9 @@ Grammar* RGReaderWriter::Read()
 	ifstream file (fileName.c_str());
 	string line = "";
 
-	#ifdef DEBUG
+/*
 	cout << "filename: " << fileName.c_str() << endl ;
-	#endif
+*/
 
 	if(!file)
 	{
@@ -61,14 +67,14 @@ Grammar* RGReaderWriter::Read()
 	while(!file.eof())
 	{
 		getline(file,line);
-		#ifdef DEBUG
+/*
 		cout << "line: " << line << endl ;
-		#endif
-		if(_lineIsTag(line))
+*/
+		if(lineIsTag(line))
 		{
-			#ifdef DEBUG
+/*
 			cout << "line is Tag : " << line << endl ;
-			#endif
+*/
 			if(line.compare("[Start]")==0)
 			{
 				tag = STARTSYMBOL ;
@@ -90,10 +96,10 @@ Grammar* RGReaderWriter::Read()
 		else
 		{
 
-			#ifdef DEBUG
+/*
 			cout << "line is not a Tag: " << line << endl ;
 			cout << "TagCode: " << tag << endl;
-			#endif
+*/
 
 			if(tag == STARTSYMBOL)
 			{
@@ -126,7 +132,13 @@ Grammar* RGReaderWriter::Read()
 	return grammar;
 }
 
-int _lineIsTag(string s)
+/**
+ * @brief checks if the line (given as a parameter) is a tag
+ * different sections in the text file are distinguished by tags, for example [Productions] , [Terminals] ...
+ * @param s the line in a string form.
+ * @return result of test
+ */
+int RGReaderWriter::lineIsTag(string s)
 {
 	if (s.compare("[Start]") == 0 || s.compare("[Terminals]")==0 || s.compare("[NonTerminals]")==0 || s.compare("[Productions]")==0 )
 	{
@@ -171,6 +183,10 @@ void RGReaderWriter::write(Grammar* g)
 	oFile << (g->getProductions())[g->getProductions().getLength()-1]->toString() ;
 }
 
+/**
+ * @brief gives a new path of a new file to read/write from/to.
+ * @param fileName
+ */
 void RGReaderWriter::setFileName(string fileName )
 {
 	this->fileName = fileName ;
