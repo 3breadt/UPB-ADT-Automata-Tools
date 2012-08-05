@@ -1,23 +1,23 @@
 \chapter{Reguläre Ausdrücke}
 \cite{regEx1,regEx2}
 \section{Syntax}
-In der gewählten Implementation stehen die Operatoren Konkatenation (x.y),
-Alternative (x|y) und Kleene-Stern (x*) zur Verfügung. Im Unterschied zu den
-meisten gängigen Implementationen (vergl. POSIX1, Perl2) müssen Konkatenationen
+In der gewählten Implementation stehen die Operatoren Konkatenation ($x.y$),
+Alternative ($x|y$) und Kleene-Stern ($x*$) zur Verfügung. Im Unterschied zu den
+meisten gängigen Implementationen (vergl. POSIX\cite{RegExPOSIX}, Perl\cite{RegExPerl}) müssen Konkatenationen
 explizit angegeben werden.
 
 Des weiteren können Ausdrücke durch Klammern zusammengefasst sein und so die
 Präzedenz der Operatoren festlegen. Wird die Präzendenz nicht durch Klammerung
 festgelegt, so hat der jeweils am weitesten rechts stehende Operator Präzendenz.
 
-So entspricht ``a|b.c*'' dem geklammerten Ausdruck ``(a|(b.(c*)))''.
+So entspricht $a|b.c*$ dem geklammerten Ausdruck $(a|(b.(c*)))$.
 
 Die Literale bestehen aus beliebig langen Zeichenketten ohne Leerzeichen und
-Operatoren. Im Gegensatz zu den gängigen Implementation (vergl. POSIX, Perl) wird
+Operatoren. Im Gegensatz zu den gängigen Implementation (vergl. POSIX\cite{RegExPOSIX}, Perl\cite{RegExPerl}) wird
 hier die gesamte Zeichenkette als ein Literal aufgefasst und nicht als Konkatenation
 der einzelnen Zeichen.
 
-Ein besonderes Literal ist die Zeichenfolge ``<epsilon>''. Sie
+Ein besonderes Literal ist die Zeichenfolge <$epsilon$>. Sie
 entspricht einem leeren Ausdruck.
 
 \section{Datenstruktur}
@@ -46,19 +46,18 @@ Die Nachfolger eines Knotens sind in den Pointern \textit{p\_left} und
 
 \begin{figure}[h]
   \begin{center}
-  \includegraphics{objectsToInclude/umlRegEx.jpg}
+  \includegraphics{objectsToInclude/re_uml_ds.pdf}
   \caption{UML Diagramm zu \textit{RegularExpression} und \textit{RETreeNode}}
   \label{fig:UMLRegEx}
   \end{center}
 \end{figure}
-
 
 \section{Einlesen von Regulären Ausdrücken}
 Das parsen von Regulären Ausdrücken ist in der Klasse REReaderWriter
 implementiert. Während des Parsens wird die Eingabezeichenfolge von links nach
 rechts durchgelaufen und der Ausdrucksbaum von unten nach oben aufgebaut.
 
-Somit ähnelt der Prozess dem eines Shift-Reduce-Parsers\cite{regEx3}, der
+Somit ähnelt der Prozess dem eines Shift-Reduce-Parsers\cite{RegExShiftReduce}, der
 jedoch nicht nach formalen Methoden konstruiert wurde.
 
 \section{Konvertierungen}
@@ -79,14 +78,11 @@ mit dem Literal als Eingabe.
 
 \begin{figure}[h]
   \begin{center}
-  \includegraphics{objectsToInclude/fsaFor_a.jpg}
-  \caption{FSA für ``a''}
+  \includegraphics{objectsToInclude/re_fsa_a.pdf}
+  \caption{FSA für $a$}
   \label{fig:literal}
   \end{center}
 \end{figure}
-
-
-
 
 \subsubsection{Konkatenation}
 Bei einer Konkatenation wird der Automat des
@@ -101,12 +97,11 @@ Startzustand mehr.
 
 \begin{figure}[h]
   \begin{center}
-  \includegraphics{objectsToInclude/konkatenation.jpg}
-  \caption{FSA für ``a.b''}
+  \includegraphics{objectsToInclude/re_fsa_aANDb.pdf}
+  \caption{FSA für $a.b$}
   \label{fig:Konkatenation}
   \end{center}
 \end{figure}
-
 
 \subsubsection{Alternative}
 Bei einem Knoten, der eine
@@ -118,9 +113,9 @@ linken und rechten Nachfolgers hat.
 
 \begin{figure}[h]
   \begin{center}
-  \includegraphics{objectsToInclude/alternative.jpg}
-  \caption{FSA für ``a/b''}
-  \label{fig:Alternative}
+  \includegraphics{objectsToInclude/re_fsa_aOrb.pdf}
+  \caption{FSA für $a|b$}
+  \label{fig:Alternative1}
   \end{center}
 \end{figure}
 
@@ -131,8 +126,8 @@ zum Startzustand. Der Startzustand wird auch zu einem Endzustand.
 
 \begin{figure}[h]
   \begin{center}
-  \includegraphics{objectsToInclude/k_stern.jpg}
-  \caption{FSA für ``(a/b)*''}
+  \includegraphics{objectsToInclude/re_fsa_(aOrb)STAR.pdf}
+  \caption{FSA für $(a|b)*$}
   \label{fig:Kleene-Stern}
   \end{center}
 \end{figure}
