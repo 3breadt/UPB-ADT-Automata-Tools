@@ -1,19 +1,19 @@
-\chapter{Reguläre Ausdrücke}
-\cite{regEx1,regEx2}
+\chapter{Regulï¿½re Ausdrï¿½cke}
+
 \section{Syntax}
-In der gewählten Implementation stehen die Operatoren Konkatenation ($x.y$),
-Alternative ($x|y$) und Kleene-Stern ($x*$) zur Verfügung. Im Unterschied zu den
-meisten gängigen Implementationen (vergl. POSIX\cite{RegExPOSIX}, Perl\cite{RegExPerl}) müssen Konkatenationen
+In der gewï¿½hlten Implementation stehen die Operatoren Konkatenation ($x.y$),
+Alternative ($x|y$) und Kleene-Stern ($x*$) zur Verfï¿½gung. Im Unterschied zu den
+meisten gï¿½ngigen Implementationen (vergl. POSIX\cite{RegExPOSIX}, Perl\cite{RegExPerl}) mï¿½ssen Konkatenationen
 explizit angegeben werden.
 
-Des weiteren können Ausdrücke durch Klammern zusammengefasst sein und so die
-Präzedenz der Operatoren festlegen. Wird die Präzendenz nicht durch Klammerung
-festgelegt, so hat der jeweils am weitesten rechts stehende Operator Präzendenz.
+Des weiteren kï¿½nnen Ausdrï¿½cke durch Klammern zusammengefasst sein und so die
+Prï¿½zedenz der Operatoren festlegen. Wird die Prï¿½zendenz nicht durch Klammerung
+festgelegt, so hat der jeweils am weitesten rechts stehende Operator Prï¿½zendenz.
 
 So entspricht $a|b.c*$ dem geklammerten Ausdruck $(a|(b.(c*)))$.
 
 Die Literale bestehen aus beliebig langen Zeichenketten ohne Leerzeichen und
-Operatoren. Im Gegensatz zu den gängigen Implementation (vergl. POSIX\cite{RegExPOSIX}, Perl\cite{RegExPerl}) wird
+Operatoren. Im Gegensatz zu den gï¿½ngigen Implementation (vergl. POSIX\cite{RegExPOSIX}, Perl\cite{RegExPerl}) wird
 hier die gesamte Zeichenkette als ein Literal aufgefasst und nicht als Konkatenation
 der einzelnen Zeichen.
 
@@ -21,24 +21,24 @@ Ein besonderes Literal ist die Zeichenfolge <$epsilon$>. Sie
 entspricht einem leeren Ausdruck.
 
 \section{Datenstruktur}
-Reguläre Ausdrücke werden in diesem Projekt als binärer Ausdrucksbaum
-repräsentiert.
+Regulï¿½re Ausdrï¿½cke werden in diesem Projekt als binï¿½rer Ausdrucksbaum
+reprï¿½sentiert.
 
-Jeder Knoten enthält dabei entweder einen Operator oder ein Literal.
+Jeder Knoten enthï¿½lt dabei entweder einen Operator oder ein Literal.
 Die Operanden werden in den Nachfolgern des Operator-Knoten gespeichert. Bei
 einem Kleene-Stern gibt es nur einen Operand, welcher im linken Nachfolger
 gespeichert wird. Der rechte Nachfolger muss leer bleiben.
 
-Literale können keine Nachfolger haben, sie sind immer Blätter des Ausdrucksbaums.
+Literale kï¿½nnen keine Nachfolger haben, sie sind immer Blï¿½tter des Ausdrucksbaums.
 
 \subsection{Implementation}
-Die Klasse \textit{RegularExpression} repräsentiert einen Regulären Ausdruck.
+Die Klasse \textit{RegularExpression} reprï¿½sentiert einen Regulï¿½ren Ausdruck.
 Dies tut sie durch Verweis auf den Wurzelknoten des Ausdrucksbaums.
 
 Die Knoten sind Objekte der Klasse \textit{RETreeNode}.
 
 Ein Knoten hat einen Inhalt, welcher in der Textvariable content gespeichert ist.
-Diese Variable enthält entweder die textuelle Repräsentation eines Literals oder eines
+Diese Variable enthï¿½lt entweder die textuelle Reprï¿½sentation eines Literals oder eines
 Operanden.
 
 Die Nachfolger eines Knotens sind in den Pointern \textit{p\_left} und
@@ -52,53 +52,53 @@ Die Nachfolger eines Knotens sind in den Pointern \textit{p\_left} und
   \end{center}
 \end{figure}
 
-\section{Einlesen von Regulären Ausdrücken}
-Das parsen von Regulären Ausdrücken ist in der Klasse REReaderWriter
-implementiert. Während des Parsens wird die Eingabezeichenfolge von links nach
+\section{Einlesen von Regulï¿½ren Ausdrï¿½cken}
+Das parsen von Regulï¿½ren Ausdrï¿½cken ist in der Klasse REReaderWriter
+implementiert. Wï¿½hrend des Parsens wird die Eingabezeichenfolge von links nach
 rechts durchgelaufen und der Ausdrucksbaum von unten nach oben aufgebaut.
 
-Somit ähnelt der Prozess dem eines Shift-Reduce-Parsers\cite{RegExShiftReduce}, der
+Somit ï¿½hnelt der Prozess dem eines Shift-Reduce-Parsers\cite{RegExShiftReduce}, der
 jedoch nicht nach formalen Methoden konstruiert wurde.
 
 \section{Konvertierungen}
 
 \subsection{Konvertierung zu Endlichem Automaten}
 
-Bei der Konvertierung eines Regulären Ausdrucks zu einem endlichen Automaten
-wird der Ausdrucksbaum in symmetrischer Reihenfolge (in-order) durchlaufen und für
+Bei der Konvertierung eines Regulï¿½ren Ausdrucks zu einem endlichen Automaten
+wird der Ausdrucksbaum in symmetrischer Reihenfolge (in-order) durchlaufen und fï¿½r
 jeden Knoten ein Automat erstellt. Die Konvertierung wurde im Rahmen des
-Projektes selbstständig entworfen. Das Ergebnis der Konvertierung ist ein nichtdeterministischer
+Projektes selbststï¿½ndig entworfen. Das Ergebnis der Konvertierung ist ein nichtdeterministischer
 endlicher Automat.
 
 \subsubsection{Literal}
-Enthält ein Knoten ein Literal, so wird ein Automat
+Enthï¿½lt ein Knoten ein Literal, so wird ein Automat
 einem Start- und einem Endzustand erzeugt. Der
-Startzustand erhält einen Übergang zum Endzustand
+Startzustand erhï¿½lt einen ï¿½bergang zum Endzustand
 mit dem Literal als Eingabe.
 
 \begin{figure}[h]
   \begin{center}
   \includegraphics{objectsToInclude/re_fsa_a.pdf}
-  \caption{FSA für $a$}
+  \caption{FSA fï¿½r $a$}
   \label{fig:literal}
   \end{center}
 \end{figure}
 
 \subsubsection{Konkatenation}
 Bei einer Konkatenation wird der Automat des
-rechten Knotens an den des linken angehängt.
-Dazu erhalten alle Endzustände des linken
-Automaten einen Übergang mit leerer Eingabe
+rechten Knotens an den des linken angehï¿½ngt.
+Dazu erhalten alle Endzustï¿½nde des linken
+Automaten einen ï¿½bergang mit leerer Eingabe
 zu dem Startzustand des rechten Automaten.
-Anschließend sind alle Endzustände des linken
-Automaten nicht mehr Endzustände und der
+Anschlieï¿½end sind alle Endzustï¿½nde des linken
+Automaten nicht mehr Endzustï¿½nde und der
 Starzustand des rechten Automaten ist kein
 Startzustand mehr.
 
 \begin{figure}[h]
   \begin{center}
   \includegraphics{objectsToInclude/re_fsa_aANDb.pdf}
-  \caption{FSA für $a.b$}
+  \caption{FSA fï¿½r $a.b$}
   \label{fig:Konkatenation}
   \end{center}
 \end{figure}
@@ -107,59 +107,59 @@ Startzustand mehr.
 Bei einem Knoten, der eine
 Alternative darstellt wird ein neuer
 Automaterzeugt, dessen
-Startzustand leere Übergänge zu den
-Startzuständen der Automaten des
+Startzustand leere ï¿½bergï¿½nge zu den
+Startzustï¿½nden der Automaten des
 linken und rechten Nachfolgers hat.
 
 \begin{figure}[h]
   \begin{center}
   \includegraphics{objectsToInclude/re_fsa_aOrb.pdf}
-  \caption{FSA für $a|b$}
+  \caption{FSA fï¿½r $a|b$}
   \label{fig:Alternative1}
   \end{center}
 \end{figure}
 
 \subsubsection{Kleene-Stern}
-Enthält ein Knoten einen Kleene-Stern, so wird nur mit dem Automaten des linken
-Nachfolgers gearbeitet. Alle Endzustände des Automaten erhalten leere Übergänge
+Enthï¿½lt ein Knoten einen Kleene-Stern, so wird nur mit dem Automaten des linken
+Nachfolgers gearbeitet. Alle Endzustï¿½nde des Automaten erhalten leere ï¿½bergï¿½nge
 zum Startzustand. Der Startzustand wird auch zu einem Endzustand.
 
 \begin{figure}[h]
   \begin{center}
   \includegraphics{objectsToInclude/re_fsa_(aOrb)STAR.pdf}
-  \caption{FSA für $(a|b)*$}
+  \caption{FSA fï¿½r $(a|b)*$}
   \label{fig:Kleene-Stern}
   \end{center}
 \end{figure}
 
-\subsubsection{Entfernung der unnötigen leeren Übergänge}
-In vielen Fällen sind die bei der Konvertierung entstandenen Zustände mit leeren
-Übergängen unnötig.
+\subsubsection{Entfernung der unnï¿½tigen leeren ï¿½bergï¿½nge}
+In vielen Fï¿½llen sind die bei der Konvertierung entstandenen Zustï¿½nde mit leeren
+ï¿½bergï¿½ngen unnï¿½tig.
 
 Die implementierten Minimierungs-Algorithmen (Moore und Table-Filling) sind
-allerdings nicht in der Lage diese unnötigen Zustände und Übergänge zu entfernen.
-Daher wurde ein eigener Algorithmus entworfen der möglichst alle Knoten welche mit
-leeren Übergängen verbunden sind zu vereinen, solange dies die akzeptierte Sprache
-nicht verändert.
+allerdings nicht in der Lage diese unnï¿½tigen Zustï¿½nde und ï¿½bergï¿½nge zu entfernen.
+Daher wurde ein eigener Algorithmus entworfen der mï¿½glichst alle Knoten welche mit
+leeren ï¿½bergï¿½ngen verbunden sind zu vereinen, solange dies die akzeptierte Sprache
+nicht verï¿½ndert.
 
-In diesem Algorithmus werden alle Zustände des Automaten durchlaufen und für
+In diesem Algorithmus werden alle Zustï¿½nde des Automaten durchlaufen und fï¿½r
 jeden Zustand seine ausgehenden Kanten.
 
-Wird eine leere Kante auf sich selbst gefunden, so wird diese einfach gelöscht.
+Wird eine leere Kante auf sich selbst gefunden, so wird diese einfach gelï¿½scht.
 
-Werden leere Transitionen zu anderen Zuständen gefunden so können der
-Ausgangszustand und alle Zielzustände unter Umständen zu einem Zustand vereint
-werden. Dies kann nur unter der Bedingung geschehen, dass alle Zielzustände keine
-weiteren Eingangszustände haben, da sonst beim Vereinen der Zustände die Sprache
-verändert würde.
+Werden leere Transitionen zu anderen Zustï¿½nden gefunden so kï¿½nnen der
+Ausgangszustand und alle Zielzustï¿½nde unter Umstï¿½nden zu einem Zustand vereint
+werden. Dies kann nur unter der Bedingung geschehen, dass alle Zielzustï¿½nde keine
+weiteren Eingangszustï¿½nde haben, da sonst beim Vereinen der Zustï¿½nde die Sprache
+verï¿½ndert wï¿½rde.
 
 Wird eine nicht-leere, ausgehende Kante gefunden so kann der Zustand nicht einfach
-mit anderen Zuständen zu denen er leere Übergänge hat vereint werden, da auch
-dann die akzeptierte Sprache verändert werden würde.
+mit anderen Zustï¿½nden zu denen er leere ï¿½bergï¿½nge hat vereint werden, da auch
+dann die akzeptierte Sprache verï¿½ndert werden wï¿½rde.
 
-Dieser Durchlauf wird so-oft durchgeführt, bis keine Vereinigungen mehr gemacht
+Dieser Durchlauf wird so-oft durchgefï¿½hrt, bis keine Vereinigungen mehr gemacht
 werden konnten.
 
-Somit werden die meisten unnötigen Zustände und leeren Übergänge entfernt.
+Somit werden die meisten unnï¿½tigen Zustï¿½nde und leeren ï¿½bergï¿½nge entfernt.
 
 
