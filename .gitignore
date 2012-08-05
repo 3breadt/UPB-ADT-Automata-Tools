@@ -37,6 +37,7 @@ build/
 
 
 #latex
+*.tmp
 *.aux
 *.bbl
 *.blg
