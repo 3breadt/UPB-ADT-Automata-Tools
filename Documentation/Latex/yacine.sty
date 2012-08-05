@@ -1,0 +1,72 @@
+% Seitenlayout: A4: 210mm x 297mm
+% Kanten: Innen 30mm Aussen 25mm Oben 25mm Unten 25mm 
+\headheight 5mm
+\marginparwidth   0mm % 25mm, but dvidriver gives you an inch anyway
+\oddsidemargin    5mm % 25mm + 5mm = 30mm
+\evensidemargin   0mm
+\textwidth      154mm % 210mm - 25 - 30
+\textheight     225mm % 297mm - 25 - 25  - \headheight - \headsep - \footskip
+\topmargin        0mm
+\headsep          7mm
+\footskip        10.5mm
+\hoffset         -0.4mm
+\voffset         -0.4mm
+\renewcommand{\baselinestretch}{1.1}
+\parindent0mm
+\parskip2mm plus1.5pt minus1.5pt
+
+
+% fuer die farbige Uni-Kralle
+\usepackage[dvips]{color}
+
+% Schrift
+\usepackage{times}
+\usepackage{ngerman}
+\usepackage[TS1,T1]{fontenc}
+\usepackage[latin1]{inputenc}
+\usepackage{ae,aecompl} % zurueckfuehren von EC-Fonts auf CM-Fonts
+\usepackage{url}
+%\usepackage{bibgerm}
+
+% Formeln
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{units}
+
+% Tabellen
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{rotating}
+
+%links
+\usepackage{hyperref}
+
+%euro
+\usepackage[gen]{eurosym}
+
+%include pdf pages
+\usepackage[final]{pdfpages}
+
+
+% Quellcode
+\usepackage{listings}
+\lstloadlanguages{C,VHDL}
+
+% mehrere Bilder auf eine Seite setzen
+\setcounter{topnumber}{5}
+\setcounter{bottomnumber}{5}
+\setcounter{totalnumber}{10}
+
+% vermeidet Witwen und Schusterjungen
+\clubpenalty=10000
+\widowpenalty=10000
+\displaywidowpenalty=10000
+
+% setzen der Tiefe der Bezifferung von Untergliederungen
+\setcounter{secnumdepth}{3}
+% setzen der Aufnahmetiefe ins Inhaltsverzeichnis
+\setcounter{tocdepth}{2}
+
+% Zusätzliche Kommandos
+\newcommand{\exph}[1]{\ensuremath{\mathord{\mathrm{e^{\mathnormal{#1}}}}}}
