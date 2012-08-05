@@ -225,19 +225,29 @@ Falls für den Paar (P,Q), es kann nicht entschieden werden ob die zwei Zuständ
 (dependencies) von die Nachfolgende Zustände (X,Y) hinzugefügt. (P,Q) werden
 dann später die Eigenschaft von (X,Y) haben.
 
+%Workaround um Probleme mit UTF-8 und listings zu beheben
 \lstset{language=C, basicstyle=\footnotesize}
+\lstset{literate=%
+{Ö}{{\"O}}1
+{Ä}{{\"A}}1
+{Ü}{{\"U}}1
+{ß}{{\ss}}2
+{ü}{{\"u}}1
+{ä}{{\"a}}1
+{ö}{{\"o}}1
+}
 \begin{lstlisting}[float=h!, frame=tb, captionpos=b,
-caption={Table-Filling-Algorithmus : Pseudocode}, label=list:TextGrammar]
-1.Initialisiere alle Paare in der Matrix als nicht-markiert,
- und ohne "dependencies".
-2.Markiere alle Paare von akzeptierenden Zuständen und 
-nicht-akzeptierenden Zuständen als nicht-äquvalent.
-3.Für alle nicht markierte Paare (P,Q) und jedes Eingabesymbol a:
-	Sei X = delta(P,a), Y = delta(Q,a).
-	Falls (X,Y) nicht markiert, 
-		füge (P,Q) zu den dependencies von (X,Y) hinzu,
-	Sonst markiere (P,Q), und markiere alle dependencies von (P,Q).
-	
+caption={Table-Filling-Algorithmus : Pseudocode}, label=list:TextGrammar, inputencoding=latin1]
+1. Initialisiere alle Paare in der Matrix als nicht-markiert und ohne
+   dependencies
+2. Markiere alle Paare von akzeptierenden Zuständen und nicht-
+   aktzeptierenden Zuständen als nicht-äquivalent
+3. Für alle nicht markierte Paare (P,Q) und jedes Eingabesymbol a:
+   Sei X = delta(P,a), Y = delta(Q,a)
+     Falls (X,Y) nicht markiert ist,
+       füge (P,Q) zu den dependencies von (X,Y) hinzu
+     Sonst
+       markiere (P,Q) und markiere alle dependencies von (P,Q)
 \end{lstlisting}
 
 \subsection{Implementierung}

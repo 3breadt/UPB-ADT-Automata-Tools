@@ -21,9 +21,11 @@
 
 % Schrift
 \usepackage{times}
-\usepackage{ngerman}
+\usepackage{ucs}
+\usepackage[utf8]{inputenc}
+\usepackage{textcomp}
+\usepackage[ngerman]{babel}
 \usepackage[TS1,T1]{fontenc}
-\usepackage[latin1]{inputenc}
 \usepackage{ae,aecompl} % zurueckfuehren von EC-Fonts auf CM-Fonts
 \usepackage{url}
 %\usepackage{bibgerm}
@@ -68,5 +70,5 @@
 % setzen der Aufnahmetiefe ins Inhaltsverzeichnis
 \setcounter{tocdepth}{2}
 
-% Zusätzliche Kommandos
+% Zusaetzliche Kommandos
 \newcommand{\exph}[1]{\ensuremath{\mathord{\mathrm{e^{\mathnormal{#1}}}}}}
