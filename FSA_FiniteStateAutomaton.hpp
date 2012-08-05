@@ -21,6 +21,9 @@ class Group;
 class Grammar;
 //class RegularExpression;
 
+/**
+ * @brief Finite State Automaton data structure.
+ **/
 class FiniteStateAutomaton {
 private:
 	vector<State*> vecStateList;

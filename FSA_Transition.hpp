@@ -1,9 +1,9 @@
-/*
- * Transition.hpp
- *
- *  Created on: May 25, 2012
- *      Author: fabiani
+/**
+ * @file FSA_Transition.hpp
+ * Contains the definition of the State class.
+ * @author fabiani
  */
+
 
 #ifndef FSA_TRANSITION_HPP_
 #define FSA_TRANSITION_HPP_
@@ -13,6 +13,9 @@
 
 using namespace std;
 
+/**
+ * @brief Transition in a Finite State Automaton
+ **/
 class Transition{
 
 	friend class FiniteStateAutomaton;

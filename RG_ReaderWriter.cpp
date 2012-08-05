@@ -1,5 +1,5 @@
 /**
- * @file RG_Substitution.h
+ * @file RG_ReaderWriter.cpp
  * @author Yacine Smaoui, Florian Hemmelgarn
  *
  * @brief Implementation of the Reader class

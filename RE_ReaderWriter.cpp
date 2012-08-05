@@ -1,5 +1,5 @@
 /**
- * @file REReaderWriter.cpp
+ * @file RE_ReaderWriter.cpp
  * Implementation of the reader and writer class for regular expressions.
  * @author Daniel Dreibrodt, Konstantin Steinmiller
  */

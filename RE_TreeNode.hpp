@@ -1,5 +1,5 @@
 /**
- * @file RETreeNode.hpp
+ * @file RE_TreeNode.hpp
  * Definition of the regular expression tree node class.
  * @author Daniel Dreibrodt, Konstantin Steinmiller
  */

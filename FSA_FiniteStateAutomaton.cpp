@@ -31,8 +31,8 @@ FiniteStateAutomaton::~FiniteStateAutomaton()
 
 /** 
  * Add a new state to FSA.
- * @param: p_szStateName Name of added state.
- * @author: fabiani, andreasb
+ * @param p_szStateName Name of added state.
+ * @author fabiani, andreasb
  */
 void FiniteStateAutomaton::addState(string p_szStateName)
 {
@@ -51,8 +51,8 @@ void FiniteStateAutomaton::addState(State *p_stNewState)
 }
 /** 
  * Remove state from FSA.
- * @param: p_szStateName Name of the removable state.
- * @author: fabiani,andreasb
+ * @param p_szStateName Name of the removable state.
+ * @author fabiani,andreasb
  */
 void FiniteStateAutomaton::removeState(string p_szStateName)
 {

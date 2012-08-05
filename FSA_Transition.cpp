@@ -1,3 +1,7 @@
+/**
+ * @file FSA_Transition.cpp
+ * Contains the implementation of the Transition class.
+ */
 
 #include "FSA_Transition.hpp"
 #include "FSA_State.hpp"

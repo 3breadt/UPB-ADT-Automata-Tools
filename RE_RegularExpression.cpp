@@ -1,5 +1,5 @@
 /**
- * @file RegularExpression.cpp
+ * @file RE_RegularExpression.cpp
  * Implementation of the regular expression class.
  * @author Daniel Dreibrodt, Konstantin Steinmiller
  */

@@ -1,5 +1,5 @@
 /**
- * @file RG_Substitution.h
+ * @file RG_ReaderWriter.h
  * @author Yacine Smaoui, Florian Hemmelgarn
  *
  * @brief Definition of the Reader class. Allows to read from a file.

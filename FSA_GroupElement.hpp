@@ -1,6 +1,7 @@
 /**
  * @file FSA_GroupElement.hpp
- * Contains the definition of the GroupElement class.
+ * @brief Contains the definition of the GroupElement class
+ * used in Moore's minimizing algorithm.
  */
 
 
@@ -12,7 +13,10 @@
 #include "FSA_State.hpp"
 
 using namespace std;
-
+/**
+ * @brief Class for elements stored in Group objects.
+ * Used in Moore's minimizing algorithm
+ **/
 class GroupElement{
 private:
 	State* stState;

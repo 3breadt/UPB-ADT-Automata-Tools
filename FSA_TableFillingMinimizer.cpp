@@ -1,5 +1,5 @@
 /**
- * @file FSA_TableFillingMinimiser.h
+ * @file FSA_TableFillingMinimizer.cpp
  * @author Yacine Smaoui
  *
  * @brief implementation of the Table filling algorithm to minimize a finite states automaton

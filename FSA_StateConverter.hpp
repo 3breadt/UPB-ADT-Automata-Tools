@@ -1,8 +1,7 @@
-/*
- * State.hpp
- *
- *  Created on: May 25, 2012
- *      Author: skowelek
+/**
+ * @file FSA_StateConverter.hpp
+ * Contains the definition of the StateConverter class.
+ * @author skowelek
  */
 
 #ifndef FSA_STATECONVERTER_HPP_
@@ -16,6 +15,9 @@
 
 using namespace std;
 
+/**
+ * Helper class used during conversion from NDA to DFA.
+ **/
 class StateConverter{
 
 	friend class Transition;

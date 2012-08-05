@@ -1,5 +1,5 @@
 /**
- * @file RETreeNode.cpp
+ * @file RE_TreeNode.cpp
  * Implementation of the regular expression tree node class.
  * @author Daniel Dreibrodt, Konstantin Steinmiller
  */
@@ -353,7 +353,6 @@ FiniteStateAutomaton *RETreeNode::toFSA(int *labelNum) {
 /**
  * Converts a regular expression tree to a string by performing
  * an inorder tree walk.
- * @param The node of the regular expression tree.
  * @return The string representation of the regular expression specified by the given node.
  * @author Daniel Dreibrodt, Konstantin Steinmiller
  */

@@ -1,5 +1,5 @@
 /**
- * @file RegularExpression.hpp
+ * @file RE_RegularExpression.hpp
  * Definition of the regular expression class.
  * @author Daniel Dreibrodt, Konstantin Steinmiller
  */

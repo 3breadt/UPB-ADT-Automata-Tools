@@ -19,9 +19,10 @@ using namespace std;
 
 /**
  * @class DynArray
- * @brief a container template class where the different components of a Grammar are stored
- * represents a dynamic array with the possibility of dynamically increase the length.
- * (a self implemented Vector class )
+ * @brief Array of dynamic size.
+ * This is a container template class where the different components of a Grammar are stored.
+ * It represents a dynamic array with the possibility of dynamically increasing the length.
+ * (a self implemented vector class)
  */
 template <class T > class DynArray
 {

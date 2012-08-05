@@ -1,8 +1,7 @@
-/*
- * StateConverter.cpp
- *
- *  Created on: May 25, 2012
- *      Author: skowelek
+/**
+ * @file FSA_StateConverter.cpp
+ * Contains the implementation of the StateConverter class.
+ * @author skowelek
  */
 
 #include "FSA_StateConverter.hpp"
@@ -77,7 +76,7 @@ void StateConverter::addReferencedState(State *p_szReferencedState)
 
 /**
  * Removes a State of the referenced states vector of this StateConverter
- * @param p_szReferencedState State to remove of the referenced states vector.
+ * @param p_szStateName State to remove of the referenced states vector.
  */
 void StateConverter::removeReferencedState(string p_szStateName)
 {

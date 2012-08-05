@@ -1,5 +1,5 @@
 /**
- * @file REReaderWriter.hpp
+ * @file RE_ReaderWriter.hpp
  * Definition of the reader and writer class for regular expressions.
  * @author Daniel Dreibrodt, Konstantin Steinmiller
  */

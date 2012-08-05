@@ -1,8 +1,7 @@
-/*
- * State.cpp
- *
- *  Created on: May 25, 2012
- *      Author: fabiani
+/**
+ * @file FSA_State.cpp
+ * Contains the implementation of the State class.
+ * @author fabiani
  */
 
 #include "FSA_State.hpp"

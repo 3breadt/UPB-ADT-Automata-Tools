@@ -1,6 +1,7 @@
 /**
  * @file FSA_Group.hpp
- * Contains the definition of the Group class.
+ * @brief Contains the definition of the Group class
+ * used in Moore's minimizing algorithm.
  */
 
 #ifndef FSA_GROUP_HPP_
@@ -14,6 +15,9 @@
 
 using namespace std;
 
+/**
+ * @brief Group class used for Moore's minimizing algorithm.
+ **/
 class Group{
 private:
 	string szName;
