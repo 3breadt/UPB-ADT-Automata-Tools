@@ -1,0 +1,29 @@
+\section{Äquivalenzprüfung}
+
+Eine der Anforderungen an das Projekt war es, eine Methode zum Überprüfen der Äquivalenz 
+zwischen verschiedenen Darstellungen einer Regulären Sprache zu finden.
+
+Generell kann jede Darstellungsform in einen Endlichen Automaten überführt werden. Somit
+war es nur notwendig eine Methode zu implementieren, welche die Äquivalenz zweier endlicher
+Automaten überprüft.
+
+Hierzu werden die beiden zu vergleichenden Automaten zunächst minimiert.
+
+Laut Definition müssen minimale Automaten, welche die gleiche Sprache darstellen, die
+gleiche Anzahl an Zuständen haben.
+
+Falls dies gegeben wird, dann sind die beiden endlichen Automaten äquivalent, wenn die
+beiden Startzustände äquivalent sind.
+
+Äquivalenz von Zuständen ist dabei wie folgt definiert:
+
+Seien $A$ und $B$ Zustände. 
+
+Ist $A$ Endzustand und $B$ nicht (oder umgekehrt), so sind $A$ und $B$ nicht äquivalent.
+
+Ansonsten sind $A$ und $B$ genau dann äquivalent, wenn für jedes
+Eingabesymbol $e$ aus dem Eingabealphabet $\Sigma$, mit $\delta(A,e,P)$ und $\delta(B,e,Q)$,
+gilt, dass $P$ und $Q$ äquivalent sind.
+ 
+In der gewählten Implementation wird diese Definition rekursiv von den Starzuständen aus
+angewandt und so die Äquivalenz der Automaten festgestellt.
