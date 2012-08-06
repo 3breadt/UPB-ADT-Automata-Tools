@@ -3,7 +3,7 @@
 \section{Syntax}
 In der gewählten Implementation stehen die Operatoren Konkatenation ($x.y$),
 Alternative ($x|y$) und Kleene-Stern ($x*$) zur Verfügung. Im Unterschied zu den
-meisten gängigen Implementationen (vergl. POSIX\cite{RegExPOSIX}, Perl\cite{RegExPerl}) müssen Konkatenationen
+meisten gängigen Implementationen (vergl. POSIX\cite{RegExPOSIX}, Perl\cite{RegExPERL}) müssen Konkatenationen
 explizit angegeben werden.
 
 Des weiteren können Ausdrücke durch Klammern zusammengefasst sein und so die
@@ -13,7 +13,7 @@ festgelegt, so hat der jeweils am weitesten rechts stehende Operator Präzedenz.
 So entspricht $a|b.c*$ dem geklammerten Ausdruck $(a|(b.(c*)))$.
 
 Die Literale bestehen aus beliebig langen Zeichenketten ohne Leerzeichen und
-Operatoren. Im Gegensatz zu den gängigen Implementation (vergl. POSIX\cite{RegExPOSIX}, Perl\cite{RegExPerl}) wird
+Operatoren. Im Gegensatz zu den gängigen Implementation (vergl. POSIX\cite{RegExPOSIX}, Perl\cite{RegExPERL}) wird
 hier die gesamte Zeichenkette als ein Literal aufgefasst und nicht als Konkatenation
 der einzelnen Zeichen.
 
@@ -46,7 +46,7 @@ Die Nachfolger eines Knotens sind in den Pointern \textit{p\_left} und
 
 \begin{figure}
  \centering
- \includegraphics[keepaspectratio]{objectsToInclude/re_uml_ds.pdf}
+ \includegraphics[keepaspectratio, scale=0.89]{objectsToInclude/re_uml_ds.pdf}
  \caption{UML Diagramm zu \textit{RegularExpression} und \textit{RETreeNode}}
 \label{fig:UMLRegEx}
 \end{figure}

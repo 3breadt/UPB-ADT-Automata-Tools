@@ -22,7 +22,7 @@ N & einer Menge von Nichtterminalsymbolen (kurz Nichtterminale)\\
 \subsection{Definition einer rechtslinearen Grammatik}
 
 Eine Grammatik ist regulär wenn sie entweder eine rechtslineare Grammatik oder
-eine linkslineare Grammatik.
+eine linkslineare Grammatik ist.
 
 Eine Grammatik G=G(T,N,P,S) ist einer rechtslineare Grammatik, wenn sie
 folgenden Anforderungen genügt:
@@ -77,7 +77,7 @@ zugehörigen Symbole. Das Einlesen erfolg zeichenweise.
 
 \lstset{language=C, basicstyle=\footnotesize}
 \begin{lstlisting}[float=h!, frame=tb, captionpos=b, caption={Beispiel zu
-einem Textdatei der einen Grammatik darsttellt.}, label=list:TextGrammar]
+einem Textdatei der einen Grammatik darstellt.}, label=list:TextGrammar]
 [Start]
 <expression>
 [Terminals]
@@ -94,22 +94,41 @@ d
 <expression> --> c d a b <expression>
 <expression> --> d <expression>
 \end{lstlisting}
-
+ 
 \section{Konvertierungen von regulären Grammatiken}
 
-Konvertierungen von eine regulären Grammatik zu einem endlichen Zustandsautomat
-oder einem regulären Ausdruck, sind möglich nur wenn diese Grammatik regulär
-ist. Im Rahmen dieser Projektarbeit, eine rechtslinieare Grammatik ist gewählt.
-(Siehe definition einer rechtslinearen Grammatik).
+Konvertierungen von einer regulären Grammatik zu einem endlichen Zustandsautomat
+oder einem regulären Ausdruck sind nur möglich wenn die vorliegende Grammatik
+regulär ist. Im Rahmen dieser Projektarbeit wurde eine rechtslinieare Grammatik gewählt.
+(Siehe Definition einer rechtslinearen Grammatik).
 
 \subsection{Konvertierung zu einem endlichen Zustandsautomaten}
 
 Eine Transition vom Zustand A zum Zustand B mit a als Eingabe wird in einer
 regulären Grammatik als '' A $\rightarrow$ a B `` gespeichert.
-Um Zustand B als Endzustand zu setzen gibt es mehrere Möglichkeiten, entweder
-durch z.B B $\rightarrow$ a und B $\rightarrow$ a B, also in eine Produktion nur
-ein Terminal auf der rechten Seite und in eine andere Produktion eine Schleife,
-oder durch $\varepsilon$ als rechte Seite.
+Um Zustand B als Endzustand zu setzen gibt es mehrere Möglichkeiten.
+
+1.Fall:
+
+\begin{tabular}{lcr}
+B $\rightarrow$ a & $\Longrightarrow$ & B ist ein Endzustand\\
+B $\rightarrow$ a B\\
+\end{tabular}
+
+Dieser Fall ist aber nicht genau so implementiert: Wird eine Produktion gefunden
+wobei die rechte Seite nur ein Terminal ist, dann wird eine neue Endzustand
+erzeugt (leztes Beispiel in Abbildung \ref{fig:convGrammar}). Diese Entscheidung
+wurde getroffen damit nur eine Produktion pro Bearbeitung betrachtet werden
+muss. Die zusätzlich erzeugten Zustände werden später entfernt durch die
+Konvertierung des Automatens zu einem deterministischen, endlichen
+Zustandsautomaten.
+
+2.Fall:
+
+\begin{tabular}{lcr}
+B $\rightarrow$ $\varepsilon$ & $\Longrightarrow$ & B ist ein Endzustand\\
+\end{tabular}
+
 Ist ein Zustand in einer Transition sowohl Anfang als auch Ende wird dies durch
 A $\rightarrow$ a A realisiert: eine Schleife.
 
@@ -162,12 +181,12 @@ verarbeitet.
 
 Eine direkte Konvertierung von einer reguläre Grammatik zu einer regulären
 Ausdrück ist im Rahmen dieses Projektes nicht implementiert. Diese Konvertierung
-wird aber durch die konvertierung von endlichen Zustandsautomaten zu eine
-regulären Ausdruck realisiert.
+wird aber durch die Konvertierung einer Grammatik zu einem endlichen
+Zustandsautomaten und schließlich zu einem regulären Ausdruck realisiert.
 
 Eine direkte Umwandlung ist aber möglich. Die Idee ist im Folgenden dargestellt:
-\subsubsection{Die Grammatik in einer Kompaktform schreiben}
-Alle Produktionen die dasselbe Linkeseite haben werden zusammengefasst. z.B:
+\subsubsection*{Die Grammatik in einer Kompaktform schreiben}
+Alle Produktionen mit gleicher linker Seite werden zusammengefasst. z.B:
 
 \begin{tabular}{lcr}
 
@@ -178,7 +197,7 @@ X $\rightarrow$ a $\varepsilon$ & &\\
  
 \end{tabular}
 
-\subsubsection{Die Produktionen als gleichungen interpretieren}
+\subsubsection*{Die Produktionen als gleichungen interpretieren}
 
 Dafür werden die $\rightarrow$ zu ``=``  und die ``|'' zu ``+'' umgewandelt.
 z.B:
@@ -191,39 +210,41 @@ X $\rightarrow$ a Y | b Z |$\varepsilon$ & $\Longrightarrow$ & X = a Y + b Z
  
 \end{tabular}
 
-\subsubsection{Das Gleichungssystem lösen}
+\subsubsection*{Das Gleichungssystem lösen}
 
-Gesucht ist eine Gleichung wo die einzige Variable ist das Startsymbol.
+Gesucht ist eine Gleichung die nur das Startsymbol als Variable enthält.
 
 Die Distributivität und Assoziation sind hier zwei verwendbare Eigenschaften der
-gewönlische ``+'' Operation und um Produktionen der Form A = c A + B können in
-dieser Form umgewandelt: A = c* B .
+gewönlischen ``+'' Operation. Zusätzlich, können Produktionen der Form A = c A +
+B können in die Form A = c* B umgewandelt werden.
 
 
 \section{Minimierung eines endlichen Zustandsautomaten mittels den
 Table-Filling-Algorithmus}
 
 \subsection{Der Algorithmus}
-Dieses Algorithmus ist abgeleitet vom Äquvalenzsatz von Myhill und Nerode. 
+\cite{minimization1,minimization2,minimization3}
+Dieser Algorithmus ist abgeleitet vom Äquvalenzsatz von Myhill und Nerode. 
 
-Eine Matrix wo in die Zeilen und Spalten alle Zustände von den Automat stehen.
+Es wird eine Matrix benötigt, in der in den Zeilen und Spalten alle Zustände des
+Automaten vorhanden sind.
 
 Die Grundidee ist, dass in dieser Matrix alle Paare von Zuständen markiert
 werden die nicht äquivalent sind.
 
 {\bf Formal: \\}
-Seien P und Q zwei Zustände, $\omega$ ein Satz (eine folge von Terminale), und X
+Seien P und Q zwei Zustände, $\omega$ ein Satz (eine Folge von Terminale), und X
 = $\delta$(P,$\omega$) und Y = $\delta$(P,$\omega$) die nachfolgende Zustände von P und Q mit eingabe
 $\omega$ .
 
-P und Q sind zwei nicht-äquivalente Zustände wenn nur ein Zustand vom
-Zustandspaar (X,Y) ist ein akzeptierender Zustand und der andere ist ein
-nichtakzeptierender Zustand.
+P und Q sind zwei nicht-äquivalente Zustände, wenn ein Zustand vom
+Zustandspaar (X,Y) ein akzeptierender Zustand und der Andere ein
+nichtakzeptierender Zustand ist.
 
-Falls für den Paar (P,Q), es kann nicht entschieden werden ob die zwei Zustände
-äquivalent oder nicht, diese zustände werden zu die Abhängigkeiten
-(dependencies) von die Nachfolgende Zustände (X,Y) hinzugefügt. (P,Q) werden
-dann später die Eigenschaft von (X,Y) haben.
+Falls für den Paar (P,Q) nicht entschieden werden kann ob die zwei Zustände
+äquivalent sind oder nicht, werden die Zustände zu die Abhängigkeiten
+(dependencies) der Nachfolgenden Zustände (X,Y) hinzugefügt. (P,Q) werden
+später die Eigenschaft von (X,Y) haben.
 
 %Workaround um Probleme mit UTF-8 und listings zu beheben
 \lstset{language=C, basicstyle=\footnotesize}
@@ -237,24 +258,24 @@ dann später die Eigenschaft von (X,Y) haben.
 {ö}{{\"o}}1
 }
 \begin{lstlisting}[float=h!, frame=tb, captionpos=b,
-caption={Table-Filling-Algorithmus : Pseudocode}, label=list:TextGrammar, inputencoding=latin1]
-1. Initialisiere alle Paare in der Matrix als nicht-markiert und ohne
-   dependencies
-2. Markiere alle Paare von akzeptierenden Zuständen und nicht-
-   aktzeptierenden Zuständen als nicht-äquivalent
-3. Für alle nicht markierte Paare (P,Q) und jedes Eingabesymbol a:
-   Sei X = delta(P,a), Y = delta(Q,a)
-     Falls (X,Y) nicht markiert ist,
-       füge (P,Q) zu den dependencies von (X,Y) hinzu
-     Sonst
-       markiere (P,Q) und markiere alle dependencies von (P,Q)
+caption={Table-Filling-Algorithmus : Pseudocode}, label=list:TablefillingCode]
+1.Initialisiere alle Paare in der Matrix als nicht-markiert,
+ und ohne "dependencies".
+2.Markiere alle Paare von akzeptierenden Zuständen und 
+nicht-akzeptierenden Zuständen als nicht-äquvalent.
+3.Für alle nicht markierte Paare (P,Q) und jedes Eingabesymbol a:
+	Sei X = delta(P,a), Y = delta(Q,a).
+	Falls (X,Y) nicht markiert, 
+		füge (P,Q) zu den dependencies von (X,Y) hinzu,
+	Sonst markiere (P,Q), und markiere alle dependencies von (P,Q).
+	
 \end{lstlisting}
 
 \subsection{Implementierung}
-
-Um dieser Algorithmus zu impelementieren, eine neue Klasse
-\textit{TableFillingMinimizer} wurde erstellt. Diese Klasse bietet die Methoden
-nötig um einen endlichen Zustandsautomat zu minimieren.
+\cite{minimization4,minimization5}
+Um diesen Algorithmus zu impelementieren, wurde eine neue Klasse
+\textit{TableFillingMinimizer} erstellt. Diese Klasse bietet die benötigten
+Methoden um einen endlichen Zustandsautomat zu minimieren.
 
 \begin{figure}[h]
   \begin{center}
@@ -265,6 +286,6 @@ nötig um einen endlichen Zustandsautomat zu minimieren.
 \end{figure}
 
 Die verwendete Matrix in diesem Algorithmus ist eine Matrix von
-\textit{StatesPair}, wobei \textit{StatesPair} ist eine Struktur wo gespeichert
-wird ob ein paar nicht-äquivalent ist oder nicht, und die Liste von
-Abhängigkeiten dieses Paar.
+\textit{StatesPair}, wobei jedes \textit{StatesPair} eine Struktur ist in der
+gespeichert wird ob ein Paar nicht-äquivalent ist, und eine Liste mit den
+Abhängigkeiten dieses Paares.
