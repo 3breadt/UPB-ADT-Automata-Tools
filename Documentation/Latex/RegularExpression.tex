@@ -44,12 +44,11 @@ Operanden.
 Die Nachfolger eines Knotens sind in den Pointern \textit{p\_left} und
 \textit{p\_right} gespeichert.
 
-\begin{figure}[H]
-%  \begin{center}
-  \includegraphics{objectsToInclude/re_uml_ds.pdf}
-  \caption{UML Diagramm zu \textit{RegularExpression} und \textit{RETreeNode}}
-  \label{fig:UMLRegEx}
-%  \end{center}
+\begin{figure}
+ \centering
+ \includegraphics[keepaspectratio]{objectsToInclude/re_uml_ds.pdf}
+ \caption{UML Diagramm zu \textit{RegularExpression} und \textit{RETreeNode}}
+\label{fig:UMLRegEx}
 \end{figure}
 
 \section{Einlesen von Regulären Ausdrücken}
@@ -79,12 +78,11 @@ einem Start- und einem Endzustand erzeugt. Der
 Startzustand erhält einen Übergang zum Endzustand
 mit dem Literal als Eingabe.
 
-\begin{figure}[H]
-  \begin{center}
+\begin{figure}[h]
+  \centering
   \includegraphics{objectsToInclude/re_fsa_a.pdf}
   \caption{FSA für $a$}
-  \label{fig:literal}
-  \end{center}
+\label{fig:literal}
 \end{figure}
 
 \subsubsection{Konkatenation}
@@ -98,12 +96,11 @@ Automaten nicht mehr Endzustände und der
 Starzustand des rechten Automaten ist kein
 Startzustand mehr.
 
-\begin{figure}[H]
-  \begin{center}
+\begin{figure}[h]
+  \centering
   \includegraphics{objectsToInclude/re_fsa_aANDb.pdf}
   \caption{FSA für $a.b$}
-  \label{fig:Konkatenation}
-  \end{center}
+\label{fig:Konkatenation}
 \end{figure}
 
 \subsubsection{Alternative}
@@ -114,12 +111,11 @@ Startzustand leere Übergänge zu den
 Startzuständen der Automaten des
 linken und rechten Nachfolgers hat.
 
-\begin{figure}[H]
-  \begin{center}
+\begin{figure}[h]
+  \centering
   \includegraphics{objectsToInclude/re_fsa_aOrb.pdf}
   \caption{FSA für $a|b$}
-  \label{fig:Alternative1}
-  \end{center}
+\label{fig:Alternative1}
 \end{figure}
 
 \subsubsection{Kleene-Stern}
@@ -127,12 +123,11 @@ Enthält ein Knoten einen Kleene-Stern, so wird nur mit dem Automaten des linken
 Nachfolgers gearbeitet. Alle Endzustände des Automaten erhalten leere Übergänge
 zum Startzustand. Der Startzustand wird auch zu einem Endzustand.
 
-\begin{figure}[H]
-  \begin{center}
+\begin{figure}[h]
+  \centering
   \includegraphics{objectsToInclude/re_fsa_(aOrb)STAR.pdf}
   \caption{FSA für $(a|b)*$}
-  \label{fig:Kleene-Stern}
-  \end{center}
+\label{fig:Kleene-Stern}
 \end{figure}
 
 \subsubsection{Entfernung der unnötigen leeren Übergänge}

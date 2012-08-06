@@ -66,3 +66,7 @@ build/
 *.mtc
 *.mtc0
 /tmp
+
+*.mp
+
+*.tui
