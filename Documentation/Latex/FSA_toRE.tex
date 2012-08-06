@@ -1,0 +1,83 @@
+\subsection{Konvertierung zu Regulärem Ausdruck}
+
+Es gibt zahlreiche Methoden um Endliche Automaten zu Regulären Ausdrücken zu konvertieren,
+welche unterschiedliche Ergebnisse liefern. Die Konvertierung von Endlichem Automaten zu
+Regulärem Ausdruck ist nicht eindeutig.
+
+In diesem Projekt wurde die Algebraische Methode nach Brzozowski implementiert.
+
+\subsubsection{Algebraische Methode}
+
+Bei der algebraischen Methode wird der Automat als Gleichungssystem aus Regulären 
+Ausdrücken betrachtet.
+
+Für alle ausgehenden Übergänge eines Zustands $Q_i$ wird eine Gleichung aufgestellt.
+Sei $a$ das Eingabesymbol des Übergangs und $Q_j$ der Zielzustand der Transition. Dann 
+lautet der Reguläre Ausdruck für diese Transition $a.Q_j$.
+
+Für jeden Zustand $Q_i$ werden dann die Regulären Ausdrücke der ausgehenden Transitionen
+mit einer Oder-Verknüpfung zusammengefasst, z.B. $Q_0 = a.Q_1 | b.Q_2 | c.Q_3$.
+
+Es ergibt sich ein Gleichungssystem aus Regulären Ausdrücken für jeden Zustand.
+
+Der Reguläre Ausdruck, welcher die Sprache des Endlichen Automaten beschreibt, ergibt
+sich durch Lösung des Gleichungssystem nach dem Startzustand.
+
+\subsubsection{Lösungsreihenfolge nach Brzozowski}
+
+Je nach Lösungsreihenfolge des Gleichungssystem ergibt sich ein unterschiedlicher
+Regulärer Ausdruck.
+
+Die algebraische Methode nach Brzozowski beschreibt eine solche Lösungsreihenfolge. Der
+folgende Pseudocode beschreibt die Lösung des Gleichungssystems nach Brzozwski.
+
+%Workaround um Probleme mit UTF-8 und listings zu beheben
+\lstset{language=C, basicstyle=\footnotesize}
+\lstset{literate=%
+{Ö}{{\"O}}1
+{Ä}{{\"A}}1
+{Ü}{{\"U}}1
+{ß}{{\ss}}1
+{ü}{{\"u}}1
+{ä}{{\"a}}1
+{ö}{{\"o}}1
+{ε}{{$\epsilon$}}1
+{Σ}{{$\Sigma$}}1
+}
+\lstset{float,frame=lines,language=C,
+caption={Pseudocode für die algebraische Methode nach Brzozowski.},
+label=lst:Jaeger-checkDistance}
+\begin{lstlisting}
+Sei m die Anzahl der Zustände.
+Sei Q der Vektor der Größe m der alle Zustände enthält.
+Sei Q[0] der Startzustand.
+Sei Σ das Eingabealphabet.
+Sei B ein Vektor der Größe m. In ihm werden die Regulären Ausdrücke
+  für jeden Zustand gespeichert
+Sei A eine Matrix der Dimension m x m. In ihr werden alle Transitionen
+  gespeichert.
+Sei e der Reguläre Ausdruck, welcher die Sprache des Automaten beschreibt.
+  
+Für i = 0 bis m
+  Wenn Q[i] Endzustand ist
+    B[i] := ε
+  Sonst
+    B[i] := NULL
+	
+  Für j = 0 bis m
+    Für jedes Eingabesymbol a aus Σ
+      Wenn ein Übergang von Q[0] nach Q[1] mit a existiert
+        a[i,j] := a[i,j] | a
+	
+Für n = m-1 bis 0
+  B[n] = A[n,n]* . B[n]
+  Für j = 1 bis n
+    A[n,j] := A[n,n]* . A[n,j];
+  Für i = 1 bis n
+    B[i] := B[i] | A[i,n] . B[n]
+    Für j = 1 bis n
+      A[i,j] := A[i,j] | A[i,n] . A[n,j]
+      
+e = B[0]
+\end{lstlisting}
+

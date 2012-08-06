@@ -78,9 +78,9 @@ einem Start- und einem Endzustand erzeugt. Der
 Startzustand erhält einen Übergang zum Endzustand
 mit dem Literal als Eingabe.
 
-\begin{figure}[h]
+\begin{figure}[h!]
   \centering
-  \includegraphics{objectsToInclude/re_fsa_a.pdf}
+  \includegraphics[keepaspectratio, scale=0.89]{objectsToInclude/re_fsa_a.pdf}
   \caption{FSA für $a$}
 \label{fig:literal}
 \end{figure}
@@ -155,7 +155,7 @@ Wird eine nicht-leere, ausgehende Kante gefunden so kann der Zustand nicht einfa
 mit anderen Zuständen zu denen er leere Übergänge hat vereint werden, da auch
 dann die akzeptierte Sprache verändert werden würde.
 
-Dieser Durchlauf wird so-oft durchgeführt, bis keine Vereinigungen mehr gemacht
+Dieser Durchlauf wird sooft durchgeführt, bis keine Vereinigungen mehr gemacht
 werden konnten.
 
 Somit werden die meisten unnötigen Zustände und leeren Übergänge entfernt.

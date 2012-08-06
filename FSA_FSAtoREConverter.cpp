@@ -16,8 +16,8 @@ using namespace std;
 
 /**
  * @brief Converts a FSA to a regular expression using Brzozowski's algebraic method.
- * The method was implemented according to information found at
- * http://cs.stackexchange.com/questions/2016/how-to-convert-finite-automata-to-regular-expressions .
+ * The method was implemented according to information found at 
+ * <a href="http://cs.stackexchange.com/questions/2016/how-to-convert-finite-automata-to-regular-expressions">Stack Exchange</a>.
  * This algorithm was then adapted to the existing data structures and improved.
  * @param fsa The FSA to convert.
  * @return A regular expression equivalent to the given automaton.
