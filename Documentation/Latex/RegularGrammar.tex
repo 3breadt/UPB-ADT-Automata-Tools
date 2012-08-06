@@ -21,7 +21,7 @@ N & einer Menge von Nichtterminalsymbolen (kurz Nichtterminale)\\
 
 \subsection{Definition einer rechtslinearen Grammatik}
 
-Eine Grammatik ist regulär wenn sie entweder eine rechtslineare Grammatik oder
+Eine Grammatik ist regulär, wenn sie entweder eine rechtslineare Grammatik oder
 eine linkslineare Grammatik ist.
 
 Eine Grammatik G=G(T,N,P,S) ist einer rechtslineare Grammatik, wenn sie
@@ -45,29 +45,32 @@ mit X,Y $\in$ N und a $\in$ T \\
 \end{figure}
 
 Die Klasse \textit{Grammar} besteht aus zwei \textit{dynArrays}
-\textit{Terminals} und \textit{NonTerminals}, in diesen werden alle Terminal- und Nichtterminalsymbole
-als String gespeichert, einem String \textit{Startsymbol} für das Startsymbol
-der Grammatik, einer Integer Variablen isRegular, die angibt ob die Grammatik
+\textit{Terminals} und \textit{NonTerminals}. In diesen werden alle Terminal- und Nichtterminalsymbole
+als String gespeichert. Des weiteren besteht ein \textit{Grammar}-Objekt aus
+einem String \textit{Startsymbol} für das Startsymbol
+der Grammatik, einer Integer Variablen \textit{isRegular}, die angibt ob die Grammatik
 regulär ist und einem weitern \textit{dynArray} \textit{Productions} für die
 Produktionen. Die Template-Klasse \textit{dynArray} ermöglicht eine unbekannte
 Anzahl von Variablen in einem Feld zu speichern, auf die Inhalte des Feldes
 wird mit dem [ ]-Operator zugegriffen.
 
-Produktionen bestehen aus einem Nichtterminal auf der linken Seite und eine
+Produktionen bestehen aus einem Nichtterminal auf der linken Seite und einer
 Substitution auf der rechten Seite des Pfeils. Die Klasse \textit{Production}
-setzt sich aus einer Stringvariablen für die linke Seite und einer Klasse
-Substitution für die rechte Seite zusammen.
+setzt sich aus einer Stringvariablen für die linke Seite und einem Objekt der Klasse
+\textit{Substitution} für die rechte Seite zusammen.
 
 Die Klasse \textit{Substitution} enthält eine Zeichenkette \textit{rawString}.
-In dieser wird eine unbearbeitet Substitution abgespeichert, also zum Beispiel
+In dieser wird eine unbearbeitete Substitution abgespeichert, also zum Beispiel
 direkt nach dem Einlesen, bevor diese dann weiter verarbeitet wird. In einem
 \textit{dynArray} vom Typ \textit{flaggedString} wird dann die vollständig
-verarbeitete Substitution ,unter dem Namen \textit{decodedSubstitution},
-gespeichert. Der Struct \textit{flaggedString} setzt sich aus einem Integer,
-der angibt ob das Symbol ein Terminal ist oder nicht und einem String, der das
+verarbeitete Substitution, unter dem Namen \textit{decodedSubstitution},
+gespeichert.
+
+Die Struct \textit{flaggedString} setzt sich aus einem Integer,
+der angibt ob das Symbol ein Terminal ist oder nicht, und einem String, der das
 Symbol speichert, zusammen. Die Funktion \textit{decode} wandelt nun den
-\textit{rawString}, eine Folge von Terminalen und Nichtterminalen, in ein
-flaggedString Array um, zur Weiterverarbeitung.
+\textit{rawString}, eine Folge von Terminalen und Nichtterminalen, in einen
+\textit{flaggedString} Array um, zur Weiterverarbeitung.
 
 \section{Einlesen von regulären Grammatiken}
 
@@ -97,8 +100,8 @@ d
  
 \section{Konvertierungen von regulären Grammatiken}
 
-Konvertierungen von einer regulären Grammatik zu einem endlichen Zustandsautomat
-oder einem regulären Ausdruck sind nur möglich wenn die vorliegende Grammatik
+Konvertierungen von einer regulären Grammatik zu einem endlichen Zustandsautomaten
+oder einem regulären Ausdruck sind nur möglich, wenn die vorliegende Grammatik
 regulär ist. Im Rahmen dieser Projektarbeit wurde eine rechtslinieare Grammatik gewählt.
 (Siehe Definition einer rechtslinearen Grammatik).
 
@@ -115,10 +118,10 @@ B $\rightarrow$ a & $\Longrightarrow$ & B ist ein Endzustand\\
 B $\rightarrow$ a B\\
 \end{tabular}
 
-Dieser Fall ist aber nicht genau so implementiert: Wird eine Produktion gefunden
-wobei die rechte Seite nur ein Terminal ist, dann wird eine neue Endzustand
+Dieser Fall ist aber nicht genau so implementiert: Wird eine Produktion gefunden,
+wo die rechte Seite nur ein Terminal ist, dann wird eine neuer Endzustand
 erzeugt (leztes Beispiel in Abbildung \ref{fig:convGrammar}). Diese Entscheidung
-wurde getroffen damit nur eine Produktion pro Bearbeitung betrachtet werden
+wurde getroffen, damit nur eine Produktion pro Bearbeitung betrachtet werden
 muss. Die zusätzlich erzeugten Zustände werden später entfernt durch die
 Konvertierung des Automatens zu einem deterministischen, endlichen
 Zustandsautomaten.
@@ -214,78 +217,6 @@ X $\rightarrow$ a Y | b Z |$\varepsilon$ & $\Longrightarrow$ & X = a Y + b Z
 
 Gesucht ist eine Gleichung die nur das Startsymbol als Variable enthält.
 
-Die Distributivität und Assoziation sind hier zwei verwendbare Eigenschaften der
-gewönlischen ``+'' Operation. Zusätzlich, können Produktionen der Form A = c A +
+Die Distributivität und Assoziativität sind hier zwei verwendbare Eigenschaften der
+gewöhlichen ``+'' Operation. Zusätzlich, können Produktionen der Form A = c A +
 B in die Form A = c* B umgewandelt werden.
-
-
-\section{Minimierung eines endlichen Zustandsautomaten mittels den
-Table-Filling-Algorithmus}
-
-\subsection{Der Algorithmus}
-\cite{minimization1,minimization2,minimization3}
-Dieser Algorithmus ist abgeleitet vom Äquvalenzsatz von Myhill und Nerode. 
-
-Es wird eine Matrix benötigt, in der in den Zeilen und Spalten alle Zustände des
-Automaten vorhanden sind.
-
-Die Grundidee ist, dass in dieser Matrix alle Paare von Zuständen markiert
-werden die nicht äquivalent sind.
-
-{\bf Formal: \\}
-Seien P und Q zwei Zustände, $\omega$ ein Satz (eine Folge von Terminale), und X
-= $\delta$(P,$\omega$) und Y = $\delta$(P,$\omega$) die nachfolgende Zustände von P und Q mit eingabe
-$\omega$ .
-
-P und Q sind zwei nicht-äquivalente Zustände, wenn ein Zustand vom
-Zustandspaar (X,Y) ein akzeptierender Zustand und der Andere ein
-nichtakzeptierender Zustand ist.
-
-Falls für den Paar (P,Q) nicht entschieden werden kann ob die zwei Zustände
-äquivalent sind oder nicht, werden die Zustände zu die Abhängigkeiten
-(dependencies) der Nachfolgenden Zustände (X,Y) hinzugefügt. (P,Q) werden
-später die Eigenschaft von (X,Y) haben.
-
-%Workaround um Probleme mit UTF-8 und listings zu beheben
-\lstset{language=C, basicstyle=\footnotesize}
-\lstset{literate=%
-{Ö}{{\"O}}1
-{Ä}{{\"A}}1
-{Ü}{{\"U}}1
-{ß}{{\ss}}2
-{ü}{{\"u}}1
-{ä}{{\"a}}1
-{ö}{{\"o}}1
-}
-\begin{lstlisting}[float=h!, frame=tb, captionpos=b,
-caption={Table-Filling-Algorithmus : Pseudocode}, label=list:TablefillingCode]
-1.Initialisiere alle Paare in der Matrix als nicht-markiert,
- und ohne "dependencies".
-2.Markiere alle Paare von akzeptierenden Zuständen und 
-nicht-akzeptierenden Zuständen als nicht-äquvalent.
-3.Für alle nicht markierte Paare (P,Q) und jedes Eingabesymbol a:
-	Sei X = delta(P,a), Y = delta(Q,a).
-	Falls (X,Y) nicht markiert, 
-		füge (P,Q) zu den dependencies von (X,Y) hinzu,
-	Sonst markiere (P,Q), und markiere alle dependencies von (P,Q).
-	
-\end{lstlisting}
-
-\subsection{Implementierung}
-\cite{minimization4,minimization5}
-Um diesen Algorithmus zu impelementieren, wurde eine neue Klasse
-\textit{TableFillingMinimizer} erstellt. Diese Klasse bietet die benötigten
-Methoden um einen endlichen Zustandsautomat zu minimieren.
-
-\begin{figure}[h]
-  \begin{center}
-  \includegraphics{objectsToInclude/TableFillingMinimizer.pdf}
-  \caption{UML Diagramm zu \textit{TableFillingMinimizer}}
-  \label{fig:UMLminTable}
-  \end{center}
-\end{figure}
-
-Die verwendete Matrix in diesem Algorithmus ist eine Matrix von
-\textit{StatesPair}, wobei jedes \textit{StatesPair} eine Struktur ist in der
-gespeichert wird ob ein Paar nicht-äquivalent ist, und eine Liste mit den
-Abhängigkeiten dieses Paares.
