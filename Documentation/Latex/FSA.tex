@@ -42,9 +42,9 @@ Die Elemente der Klasse State, welche in der StateList gespeichert werden, entha
 
 \section{Einlesen von endlichen Zustandsautomaten}
 
-Das Einlesen eines endlichen Zustandsautomaten aus einer Textdatei ist als Funktion der Klasse FiniteStateAutomaton realisiert, selbiges gilt für das Schreiben in eine Textdatei. Beim Aufruf der Funktionen $write$ und $read$ ist jeweils der Name der Textdatei, aus der gelesen oder in die geschrieben werden soll, in Stringform zu \"ubergeben.
+Das Einlesen eines endlichen Zustandsautomaten aus einer Textdatei ist als Funktion der Klasse FiniteStateAutomaton realisiert, selbiges gilt f\"ur das Schreiben in eine Textdatei. Beim Aufruf der Funktionen $write$ und $read$ ist jeweils der Name der Textdatei, aus der gelesen oder in die geschrieben werden soll, in Stringform zu \"ubergeben.
 
-Das Einlesen und Schreiben erfolgt Zeilenweise und ist so strukturiert, dass die Objekte durch ihre Entsprechenden Tags gekapselt sind. Beispielhaft ist diese Darstellung im Folgenden für die States dargestellt:
+Das Einlesen und Schreiben erfolgt Zeilenweise und ist so strukturiert, dass die Objekte durch ihre Entsprechenden Tags gekapselt sind. Beispielhaft ist diese Darstellung im Folgenden f\"ur die States dargestellt:
 
 <States> \\
 State1 \\
@@ -72,7 +72,7 @@ Die Konvertierungen zwischen regul\"arem Ausdruck und endlichem Zustandsautomat,
 
 Bei der Minimalisierung nach dem Moore Algorithmus werden zuerst alle States in accepting und rejecting States unterteilt. Accepting sind all diejenigen, die ein Endzustand sind und rejecting alle anderen. Von nun  an werden diese beiden Bereiche getrennt behandelt.
 
-Das Vorgehen ist nun wie folgt. Man stelle eine Tabelle auf, die auf der Vertikalen alle m\"oglichen Eingaben enth\"alt. Dann trage man auf der Horizontalen zwei Gruppen auf. Die eine Gruppe enth\"alt die Namen aller rejecting States (im folgenden Beispiel G\_0 der ersten Zeile), die andere enthält die Namen aller accepting States (im folgenden Beispiel G\_1 der ersten Zeile). Nun f\"ulle man die Elemente der Tabelle, indem man zu jeder Eingabe und jedem Statename angibt, welche Gruppe das Resultat der Transition aus gegebenem State und Eingabe w\"are, \"ahnlich der Vorgehensweise in der Potenzmengenkonstruktion.
+Das Vorgehen ist nun wie folgt. Man stelle eine Tabelle auf, die auf der Vertikalen alle m\"oglichen Eingaben enth\"alt. Dann trage man auf der Horizontalen zwei Gruppen auf. Die eine Gruppe enth\"alt die Namen aller rejecting States (im folgenden Beispiel G\_0 der ersten Zeile), die andere enth\"alt die Namen aller accepting States (im folgenden Beispiel G\_1 der ersten Zeile). Nun f\"ulle man die Elemente der Tabelle, indem man zu jeder Eingabe und jedem Statename angibt, welche Gruppe das Resultat der Transition aus gegebenem State und Eingabe w\"are, \"ahnlich der Vorgehensweise in der Potenzmengenkonstruktion.
  
 Sind alle Elemente ausgef\"ullt, so beginnt man neue Gruppen zu erstellen. Daf\"ur wird wie folgt vorgegangen: Man vergleicht die Elemente, die unter einem State aufgelistet sind, mit den Elementen, die unter den Nachbarstates der gleichen Ausgangsgruppe aufgelistet sind. Haben alle States einer Ausgangsgruppe f\"ur die jeweilige Eingabe die gleiche Folgegruppe, so ist die Ausgangsgruppe minimal. Gibt es jedoch einen State, der f\"ur die gleiche Eingabe eine andere Folgegruppe hat, so wird eine neue Gruppe erstellt und der State in diese Gruppe verschoben.
 
